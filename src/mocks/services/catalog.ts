@@ -194,12 +194,14 @@ export function listCatalog(query: CatalogQuery, { empty = false } = {}): Catalo
   }
 }
 
+/** Two pieces from the same artwork family first, then other families (stable order). */
 export function relatedTo(nft: NftRecord) {
-  const all = Object.values(db().nfts).filter((other) => other.id !== nft.id)
-  const sameArt = all.filter((other) => other.art !== nft.art).slice(0, 2)
-  return [...all.filter((other) => other.art === nft.art), ...sameArt, ...all].filter(
-    (value, index, list) => list.indexOf(value) === index,
+  const others = Object.values(db().nfts).filter(
+    (other) => other.id !== nft.id && !isSoldOut(other),
   )
+  const same = others.filter((other) => other.art === nft.art).slice(0, 2)
+  const different = others.filter((other) => other.art !== nft.art)
+  return [...same, ...different]
 }
 
 /* ------------------------------------------------------------------------------- Mutations */
