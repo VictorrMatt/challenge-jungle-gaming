@@ -3,6 +3,7 @@ import type { io as connectSocket, Socket } from 'socket.io-client'
 import { toast } from 'sonner'
 
 import { sessionStore } from '@/features/auth/session-store'
+import { whenTransportReady } from '@/lib/api/transport'
 import { queryKeys } from '@/lib/query/keys'
 import {
   nftUpdatedEvent,
@@ -92,8 +93,9 @@ export class RealtimeClient {
   private attempt = 0
 
   /**
-   * socket.io-client is imported lazily: it is not needed for first paint, and importing it only
-   * after the mock server is running guarantees it binds to the MSW-patched WebSocket.
+   * socket.io-client is imported lazily, once the transport is ready: it is not needed for first
+   * paint, and importing it only after the mock server is running guarantees it binds to the
+   * MSW-patched WebSocket.
    */
   private connect(token: string | null) {
     this.teardown()
@@ -102,10 +104,12 @@ export class RealtimeClient {
     this.hasConnectedOnce = false
     this.setStatus('connecting')
     const attempt = ++this.attempt
-    void import('socket.io-client').then(({ io }) => {
-      // A newer session (login/logout) superseded this connection while loading.
-      if (attempt === this.attempt) this.open(io, token)
-    })
+    void whenTransportReady()
+      .then(() => import('socket.io-client'))
+      .then(({ io }) => {
+        // A newer session (login/logout) superseded this connection while loading.
+        if (attempt === this.attempt) this.open(io, token)
+      })
   }
 
   private open(io: typeof connectSocket, token: string | null) {

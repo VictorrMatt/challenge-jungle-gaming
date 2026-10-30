@@ -37,12 +37,18 @@ export function syncSession(queryClient: QueryClient, router: typeof appRouter) 
     }
     void router.invalidate()
   })
+}
 
-  // Revalidate a persisted session on boot (expired tokens trigger the 401 flow above).
-  if (sessionStore.getToken()) {
-    api.auth
-      .session()
-      .then((session) => sessionStore.updateUser(session.user))
-      .catch(() => undefined)
-  }
+/**
+ * Revalidates a persisted session against the API (expired tokens trigger the 401 flow above).
+ *
+ * Must run only once the app is bound to the transport (`main.tsx` calls it after evaluating the
+ * app); requests themselves wait for the mock server through the transport gate.
+ */
+export function revalidateSession() {
+  if (!sessionStore.getToken()) return
+  api.auth
+    .session()
+    .then((session) => sessionStore.updateUser(session.user))
+    .catch(() => undefined)
 }

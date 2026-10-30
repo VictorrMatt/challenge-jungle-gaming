@@ -15,12 +15,14 @@ import { MobileTabBar } from '@/components/layout/mobile-tab-bar'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
 import { Toaster } from '@/components/ui/sonner'
+import { whenTransportReady } from '@/lib/api/transport'
 import { cn } from '@/lib/utils'
 
 const ScenarioPanel =
   import.meta.env.VITE_ENABLE_MOCKS !== 'false' &&
   import.meta.env.VITE_SHOW_SCENARIO_PANEL !== 'false'
-    ? lazy(() => import('@/mocks/devtools/scenario-panel'))
+    ? // Loaded once the mock server runs, so it sees the `?panel=` flag it already recorded.
+      lazy(() => whenTransportReady().then(() => import('@/mocks/devtools/scenario-panel')))
     : null
 
 /** Screens that show the mobile bottom tab bar (per the mobile Figma frames). */
