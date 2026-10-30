@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { Search } from 'lucide-react'
 import { useId, useState, type FormEvent } from 'react'
 
@@ -15,7 +15,20 @@ export function SearchDialog({
   onOpenChange: (open: boolean) => void
 }) {
   const navigate = useNavigate()
-  const [term, setTerm] = useState('')
+  const urlQuery = useRouterState({
+    select: (state) => {
+      const q = (state.location.search as { q?: unknown }).q
+      return typeof q === 'string' ? q : ''
+    },
+  })
+  const [term, setTerm] = useState(urlQuery)
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open && !wasOpen) {
+    setWasOpen(true)
+    setTerm(urlQuery)
+  } else if (!open && wasOpen) {
+    setWasOpen(false)
+  }
   const inputId = useId()
 
   function submit(event: FormEvent) {
