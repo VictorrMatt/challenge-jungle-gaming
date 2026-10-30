@@ -192,7 +192,7 @@ export class RealtimeClient {
     const cartKey = userId ? queryKeys.user.cart(userId) : queryKeys.guestCart
     const currentCart = this.queryClient.getQueryData<Cart>(cartKey)
     const line = currentCart?.items.find((item) => item.nftId === id)
-    if (line) {
+    if (line && line.nftVersion < version) {
       void this.queryClient.invalidateQueries({ queryKey: cartKey })
       toast.warning(
         payload.soldOut
