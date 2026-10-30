@@ -8,6 +8,7 @@ import { lazy, Suspense } from 'react'
 
 import type { RouterContext } from '@/app/router'
 import { ConnectionStatus } from '@/components/feedback/connection-status'
+import { NavigationProgress } from '@/components/feedback/navigation-progress'
 import { MobileTabBar } from '@/components/layout/mobile-tab-bar'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
@@ -43,6 +44,7 @@ function RootLayout() {
       >
         Pular para o conteúdo
       </a>
+      <NavigationProgress />
       <ConnectionStatus />
       <SiteHeader />
       <main
