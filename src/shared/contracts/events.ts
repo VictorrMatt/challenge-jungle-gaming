@@ -65,8 +65,8 @@ export type ServerToClientEvents = {
   'order.updated': (event: OrderUpdatedEvent) => void
 }
 
-/** Client → server: subscribe to the NFT rooms currently on screen. */
-export type ClientToServerEvents = {
-  'nft.subscribe': (nftIds: string[]) => void
-  'nft.unsubscribe': (nftIds: string[]) => void
-}
+/**
+ * Socket.IO path. A dedicated path keeps the MSW WebSocket handler from matching unrelated
+ * sockets (e.g. Vite HMR on `/`). Clients must use `{ path: SOCKET_PATH, transports: ['websocket'] }`.
+ */
+export const SOCKET_PATH = '/realtime/'
