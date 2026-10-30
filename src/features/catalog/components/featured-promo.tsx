@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 import { ResponsiveImage } from '@/components/responsive-image'
-import { Skeleton } from '@/components/ui/skeleton'
+import { ON_CARD_SKELETON, Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
 import { featuredQueryOptions } from '../queries'
@@ -44,7 +44,7 @@ export function FeaturedPromo({ className }: { className?: string }) {
             />
           </Link>
         ) : (
-          <Skeleton className="size-full rounded-[20px]" />
+          <Skeleton className={cn('size-full rounded-[20px]', ON_CARD_SKELETON)} />
         )}
       </div>
     </section>

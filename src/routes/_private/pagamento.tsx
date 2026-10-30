@@ -12,7 +12,7 @@ import { FormField } from '@/components/form/form-field'
 import { FormSelect } from '@/components/form/form-select'
 import { MobileTopBar } from '@/components/layout/mobile-top-bar'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { FieldSkeleton, Skeleton, SkeletonSurface } from '@/components/ui/skeleton'
 import { useProfile, useWallets } from '@/features/account/hooks'
 import { CartNotices } from '@/features/cart/components/cart-notices'
 import { SummaryRows } from '@/features/cart/components/cart-summary'
@@ -504,14 +504,29 @@ function CheckoutSkeleton() {
     >
       <div className="grid gap-[18px] md:grid-cols-2">
         {Array.from({ length: 10 }, (_, index) => (
-          <Skeleton key={index} className="h-[69px]" />
+          <FieldSkeleton key={index} index={index} />
         ))}
       </div>
       <div className="space-y-3">
         {Array.from({ length: 3 }, (_, index) => (
-          <Skeleton key={index} className="h-[70px]" />
+          <SkeletonSurface key={index} className="flex h-[70px] items-center gap-4 pr-4">
+            <Skeleton className="size-[70px] rounded-none" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-1/2 rounded-sm" />
+              <Skeleton className="h-3 w-1/3 rounded-sm" />
+            </div>
+            <Skeleton className="h-4 w-16 rounded-sm" />
+          </SkeletonSurface>
         ))}
-        <Skeleton className="h-40" />
+        <div className="space-y-4 pt-4">
+          {['w-20', 'w-36', 'w-28', 'w-14'].map((width) => (
+            <div key={width} className="flex justify-between">
+              <Skeleton className={`h-4 rounded-sm ${width}`} />
+              <Skeleton className="h-4 w-20 rounded-sm" />
+            </div>
+          ))}
+          <Skeleton className="h-[46px] w-full rounded-md" />
+        </div>
       </div>
     </div>
   )

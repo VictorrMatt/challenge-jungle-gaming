@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Heart } from 'lucide-react'
 
 import { ResponsiveImage } from '@/components/responsive-image'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton, SkeletonSurface } from '@/components/ui/skeleton'
 import { useFavorites, useToggleFavorite } from '@/features/favorites/hooks'
 import { cn } from '@/lib/utils'
 import type { NftSummary } from '@/shared/contracts'
@@ -105,14 +105,24 @@ export function NftCard({
 
 export function NftCardSkeleton() {
   return (
-    <div
-      aria-hidden="true"
-      className="rounded-2xl bg-card p-1 pb-3 md:rounded-none md:bg-transparent md:p-0"
-    >
-      <Skeleton className="aspect-square w-full rounded-xl md:aspect-[258/300] md:rounded-none" />
-      <div className="px-2 pt-2 md:px-0 md:pt-5">
-        <Skeleton className="h-[22px] w-3/4" />
-        <Skeleton className="mt-1 h-[25px] w-1/3" />
+    <div aria-hidden="true" className="relative">
+      {/* Mobile: one card surface with the art and the text inside (same box as NftCard). */}
+      <SkeletonSurface className="rounded-2xl p-1 pb-3 md:hidden">
+        <Skeleton className="aspect-square w-full rounded-xl" />
+        <div className="px-2 pt-2">
+          <Skeleton className="my-[3px] h-4 w-3/4 rounded-sm" />
+          <Skeleton className="mt-2 h-5 w-1/2 rounded-sm" />
+        </div>
+      </SkeletonSurface>
+      {/* Desktop: framed artwork (258×300 frame, square art inset) with name/price below. */}
+      <div className="hidden md:block">
+        <SkeletonSurface className="flex aspect-[258/300] items-center px-1">
+          <Skeleton className="aspect-square w-full rounded-2xl" />
+        </SkeletonSurface>
+        <div className="pt-5">
+          <Skeleton className="my-[3px] h-4 w-2/3 rounded-sm" />
+          <Skeleton className="mt-2.5 h-5 w-2/5 rounded-sm" />
+        </div>
       </div>
     </div>
   )

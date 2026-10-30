@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
 import { ResponsiveImage } from '@/components/responsive-image'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton, SkeletonSurface } from '@/components/ui/skeleton'
 import { relatedQueryOptions } from '@/features/catalog/queries'
 import type { NftSummary } from '@/shared/contracts'
 import { formatEth } from '@/shared/money/eth'
@@ -52,9 +52,11 @@ export function RelatedNfts({ nftId, title }: { nftId: string; title: string }) 
         {isPending
           ? Array.from({ length: 5 }, (_, index) => (
               <li key={index} aria-hidden="true">
-                <Skeleton className="aspect-[219/255] w-full rounded-none" />
-                <Skeleton className="mt-5 h-5 w-3/4" />
-                <Skeleton className="mt-1 h-5 w-1/3" />
+                <SkeletonSurface className="grid aspect-[219/255] place-items-center px-[10px]">
+                  <Skeleton className="aspect-square w-full rounded-[16px]" />
+                </SkeletonSurface>
+                <Skeleton className="mt-6 h-4 w-3/4 rounded-sm" />
+                <Skeleton className="mt-2 h-4 w-1/3 rounded-sm" />
               </li>
             ))
           : data?.items.map((nft) => (

@@ -154,15 +154,30 @@ export function CartTotal({ cart }: { cart: Cart }) {
   )
 }
 
+function SummaryRowSkeleton({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <Skeleton className={cn('h-4 rounded-sm', label)} />
+      <Skeleton className={cn('h-4 rounded-sm', value)} />
+    </div>
+  )
+}
+
+/** Mirrors the desktop summary: coupon field, three label/value rows, total and CTA. */
 export function SummarySkeleton() {
   return (
-    <div aria-hidden="true" className="space-y-3">
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-6 w-full" />
-      <Skeleton className="h-6 w-full" />
-      <Skeleton className="h-6 w-full" />
-      <Skeleton className="h-7 w-full" />
-      <Skeleton className="h-10 w-full" />
+    <div aria-hidden="true">
+      <Skeleton className="h-4 w-36 rounded-sm" />
+      <Skeleton className="mt-3 h-10 w-full rounded-sm" />
+      <div className="mt-6 space-y-4">
+        <SummaryRowSkeleton label="w-20" value="w-24" />
+        <SummaryRowSkeleton label="w-40" value="w-16" />
+        <SummaryRowSkeleton label="w-28" value="w-20" />
+      </div>
+      <div className="mt-8">
+        <SummaryRowSkeleton label="w-14" value="w-28" />
+      </div>
+      <Skeleton className="mt-4 h-10 w-full rounded-md" />
     </div>
   )
 }

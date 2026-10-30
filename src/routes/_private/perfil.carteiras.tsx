@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { ErrorState } from '@/components/feedback/error-state'
-import { Skeleton } from '@/components/ui/skeleton'
+import { FieldSkeleton } from '@/components/ui/skeleton'
 import { WalletForm } from '@/features/account/components/wallet-form'
 import { EMPTY_WALLET } from '@/features/account/wallet-defaults'
 import { useWallets } from '@/features/account/hooks'
@@ -37,7 +37,7 @@ function WalletsPage() {
     return (
       <div role="status" aria-label="Carregando carteiras" className="grid gap-6 md:grid-cols-2">
         {Array.from({ length: 10 }, (_, index) => (
-          <Skeleton key={index} className="h-[69px]" />
+          <FieldSkeleton key={index} index={index} />
         ))}
       </div>
     )

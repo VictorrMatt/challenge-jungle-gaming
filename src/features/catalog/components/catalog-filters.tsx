@@ -1,7 +1,7 @@
 import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { ON_CARD_SKELETON, Skeleton } from '@/components/ui/skeleton'
 import { Slider } from '@/components/ui/slider'
 import { cn } from '@/lib/utils'
 import type { CatalogFacets, CategoryId, NetworkId } from '@/shared/contracts'
@@ -136,10 +136,28 @@ export function CatalogFilters({
 
   if (!facets) {
     return (
-      <div className={cn('space-y-3', className)} aria-hidden="true">
-        {Array.from({ length: 10 }, (_, index) => (
-          <Skeleton key={index} className="h-7 w-full" />
+      <div className={cn('space-y-[34px]', ON_CARD_SKELETON, className)} aria-hidden="true">
+        {[5, 3].map((rows, group) => (
+          <div key={group}>
+            <Skeleton className="h-5 w-28 rounded-sm" />
+            <div className="mt-[17px] space-y-[18px]">
+              {Array.from({ length: rows }, (_, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <Skeleton className={cn('h-3.5 rounded-sm', index % 2 ? 'w-24' : 'w-32')} />
+                  <Skeleton className="h-3.5 w-6 rounded-sm" />
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
+        <div>
+          <Skeleton className="h-5 w-20 rounded-sm" />
+          <Skeleton className="mt-5 h-1.5 w-full rounded-full" />
+          <div className="mt-4 flex justify-between">
+            <Skeleton className="h-3.5 w-14 rounded-sm" />
+            <Skeleton className="h-3.5 w-14 rounded-sm" />
+          </div>
+        </div>
       </div>
     )
   }

@@ -8,7 +8,7 @@ import { ErrorState } from '@/components/feedback/error-state'
 import { applyFieldErrors } from '@/components/form/field-errors'
 import { FormField, PasswordField } from '@/components/form/form-field'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { FieldSkeleton } from '@/components/ui/skeleton'
 import { AvatarField } from '@/features/account/components/avatar-field'
 import { useChangePassword, useProfile, useUpdateProfile } from '@/features/account/hooks'
 import { errorMessage, isApiClientError } from '@/lib/api/errors'
@@ -39,7 +39,7 @@ function ProfilePage() {
     return (
       <div role="status" aria-label="Carregando perfil" className="grid gap-7 md:grid-cols-2">
         {Array.from({ length: 6 }, (_, index) => (
-          <Skeleton key={index} className="h-[69px]" />
+          <FieldSkeleton key={index} index={index} />
         ))}
       </div>
     )

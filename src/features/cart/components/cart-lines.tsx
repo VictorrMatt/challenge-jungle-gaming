@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 
 import { QuantityStepper } from '@/components/commerce/quantity-stepper'
 import { ResponsiveImage } from '@/components/responsive-image'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton, SkeletonSurface } from '@/components/ui/skeleton'
 import { errorMessage } from '@/lib/api/errors'
 import { cn } from '@/lib/utils'
 import type { CartItem } from '@/shared/contracts'
@@ -164,15 +164,54 @@ export function CartCard({ item }: { item: CartItem }) {
   )
 }
 
+/** Mirrors CartRow (desktop, below the table header) and CartCard (mobile) box-for-box. */
 export function CartLinesSkeleton() {
   return (
-    <div role="status" aria-label="Carregando carrinho" className="space-y-3">
-      {Array.from({ length: 3 }, (_, index) => (
-        <Skeleton
-          key={index}
-          className="h-[70px] w-full rounded-none max-md:h-[100px] max-md:rounded-xl"
-        />
-      ))}
+    <div role="status" aria-label="Carregando carrinho">
+      <div aria-hidden="true" className="hidden md:block">
+        <div className="grid grid-cols-[311px_138px_136px_150px_1fr] border-b border-border-accent pb-2 text-base font-bold text-foreground/40">
+          <span>NFTs</span>
+          <span>Preço</span>
+          <span>Edições</span>
+          <span>Total</span>
+        </div>
+        {Array.from({ length: 3 }, (_, index) => (
+          <SkeletonSurface
+            key={index}
+            className="mt-3 grid h-[70px] grid-cols-[311px_138px_136px_150px_1fr] items-center"
+          >
+            <div className="flex items-center gap-4">
+              <Skeleton className="size-[70px] rounded-none" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-36 rounded-sm" />
+                <Skeleton className="h-3 w-44 rounded-sm" />
+              </div>
+            </div>
+            <Skeleton className="h-4 w-20 rounded-sm" />
+            <Skeleton className="h-8 w-[104px] rounded-sm" />
+            <Skeleton className="h-4 w-24 rounded-sm" />
+            <Skeleton className="mr-6 size-6 justify-self-end rounded-sm" />
+          </SkeletonSurface>
+        ))}
+      </div>
+      <div aria-hidden="true" className="space-y-4 md:hidden">
+        {Array.from({ length: 3 }, (_, index) => (
+          <SkeletonSurface key={index} className="flex gap-2 overflow-hidden rounded-xl pr-3">
+            <Skeleton className="size-[100px] shrink-0 rounded-none" />
+            <div className="flex flex-1 flex-col py-2">
+              <div className="flex justify-between gap-2">
+                <Skeleton className="h-4 w-3/5 rounded-sm" />
+                <Skeleton className="size-4 rounded-sm" />
+              </div>
+              <Skeleton className="mt-2 h-3 w-2/5 rounded-sm" />
+              <div className="mt-auto flex items-end justify-between">
+                <Skeleton className="h-4 w-20 rounded-sm" />
+                <Skeleton className="h-7 w-[88px] rounded-full" />
+              </div>
+            </div>
+          </SkeletonSurface>
+        ))}
+      </div>
     </div>
   )
 }
