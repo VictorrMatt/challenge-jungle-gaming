@@ -76,6 +76,8 @@ export function presentCart(cart: CartRecord, network: NetworkId = 'ethereum'): 
     if (!found) continue
     const { nft, edition: current } = found
     const maxQuantity = Math.min(current.available, current.maxPerOrder)
+    const effectiveQuantity =
+      current.available === 0 ? item.quantity : Math.min(item.quantity, maxQuantity)
 
     if (current.available === 0) {
       notices.push({
@@ -83,14 +85,23 @@ export function presentCart(cart: CartRecord, network: NetworkId = 'ethereum'): 
         itemId: item.id,
         message: `${nft.name} (${current.label}) esgotou.`,
       })
-    } else if (!isEqual(current.price, item.acknowledgedUnitPrice)) {
-      notices.push({
-        kind: 'PRICE_CHANGED',
-        itemId: item.id,
-        message: `O preço de ${nft.name} mudou de ${item.acknowledgedUnitPrice} para ${current.price} ETH.`,
-        previousPrice: item.acknowledgedUnitPrice,
-        currentPrice: current.price,
-      })
+    } else {
+      if (!isEqual(current.price, item.acknowledgedUnitPrice)) {
+        notices.push({
+          kind: 'PRICE_CHANGED',
+          itemId: item.id,
+          message: `O preço de ${nft.name} mudou de ${item.acknowledgedUnitPrice} para ${current.price} ETH.`,
+          previousPrice: item.acknowledgedUnitPrice,
+          currentPrice: current.price,
+        })
+      }
+      if (item.quantity > maxQuantity) {
+        notices.push({
+          kind: 'QUANTITY_REDUCED',
+          itemId: item.id,
+          message: `A disponibilidade de ${nft.name} (${current.label}) caiu para ${maxQuantity} ${maxQuantity === 1 ? 'unidade' : 'unidades'}.`,
+        })
+      }
     }
 
     items.push({
@@ -102,10 +113,10 @@ export function presentCart(cart: CartRecord, network: NetworkId = 'ethereum'): 
       tokenId: nft.tokenId,
       image: artPath(nft.art),
       imageAlt: artAlt(nft.art, nft.name),
-      quantity: item.quantity,
+      quantity: effectiveQuantity,
       unitPrice: current.price,
       acknowledgedUnitPrice: item.acknowledgedUnitPrice,
-      lineTotal: multiply(current.price, item.quantity),
+      lineTotal: multiply(current.price, effectiveQuantity),
       available: current.available,
       maxQuantity,
       nftVersion: nft.version,

@@ -52,10 +52,16 @@ test.describe('9. Alteração de preço/disponibilidade via Socket.IO durante o 
   test('edição esgota durante a navegação e o checkout é bloqueado', async ({ page, mock }) => {
     await mock.boot()
     await login(page)
-    await addToCart(page, 'violet-nomad-314', { edition: '1-10' })
+    await addToCart(page, 'violet-nomad-314', { edition: '1-10', quantity: 2 })
     await page.goto('/carrinho')
     await expect(
       page.getByText('Violet Nomad #314').filter({ visible: true }).first(),
+    ).toBeVisible()
+    await mock.control((m) => m.setAvailability('violet-nomad-314', '1-10', 1))
+    await expect(
+      page.getByRole('alert').filter({
+        hasText: 'A disponibilidade de Violet Nomad #314 (1/10) caiu para 1 unidade.',
+      }),
     ).toBeVisible()
     await mock.control((m) => m.setAvailability('violet-nomad-314', '1-10', 0))
     await expect(
