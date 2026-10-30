@@ -38,6 +38,21 @@ export const checkoutStorage = {
   clear(userId: string) {
     sessionStorage.removeItem(key(userId))
   },
+  /**
+   * Drops the drafts of every account except `keepUserId` (all of them when null). Drafts hold
+   * personal data (name, e-mail, wallet), so they are cleared on logout and when another
+   * collector signs in on the same tab. Session expiry keeps them: that is what lets the same
+   * collector resume the checkout after signing in again.
+   */
+  clearOthers(keepUserId: string | null) {
+    const prefix = key('')
+    for (let index = sessionStorage.length - 1; index >= 0; index--) {
+      const storageKey = sessionStorage.key(index)
+      if (storageKey?.startsWith(prefix) && storageKey !== (keepUserId && key(keepUserId))) {
+        sessionStorage.removeItem(storageKey)
+      }
+    }
+  },
 }
 
 export function newIdempotencyKey() {
