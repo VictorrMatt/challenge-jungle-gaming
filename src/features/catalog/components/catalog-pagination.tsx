@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
+import { smooth } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 import { useCatalogSearch } from '../use-catalog-search'
@@ -19,7 +20,7 @@ export function CatalogPagination({ page, totalPages }: { page: number; totalPag
 
   const go = (target: number) => {
     update({ page: target === 1 ? undefined : target })
-    document.getElementById('catalogo')?.scrollIntoView({ block: 'start' })
+    document.getElementById('catalogo')?.scrollIntoView({ behavior: smooth(), block: 'start' })
   }
 
   return (
