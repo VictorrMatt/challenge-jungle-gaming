@@ -1,0 +1,214 @@
+{
+  "environment": {
+    "date": "2026-10-30T03:12:16.424Z",
+    "lighthouse": "13.6.0",
+    "node": "v22.23.4",
+    "os": "Linux 6.18.44-fc-v185 (x64)",
+    "cpus": 2,
+    "baseUrl": "http://localhost:4173",
+    "runsPerPage": 3,
+    "scenario": "default (MSW)",
+    "throttling": {
+      "mobile": "Lighthouse default (simulated Slow 4G, 4x CPU)",
+      "desktop": "Lighthouse desktop preset"
+    }
+  },
+  "results": [
+    {
+      "page": "inicio",
+      "path": "/",
+      "profile": "mobile",
+      "median": {
+        "performance": 62,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 4886,
+      "cls": 0,
+      "tbtMs": 625,
+      "runs": [
+        {
+          "scores": {
+            "performance": 61,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 4886.379750000003,
+          "cls": 0,
+          "tbt": 945.0000000000023
+        },
+        {
+          "scores": {
+            "performance": 62,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 4813.44525,
+          "cls": 0,
+          "tbt": 581.0000000000005
+        },
+        {
+          "scores": {
+            "performance": 66,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 4974.440549999999,
+          "cls": 0,
+          "tbt": 624.9999999999995
+        }
+      ]
+    },
+    {
+      "page": "inicio",
+      "path": "/",
+      "profile": "desktop",
+      "median": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1259,
+      "cls": 0,
+      "tbtMs": 63,
+      "runs": [
+        {
+          "scores": {
+            "performance": 97,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 1247.4726,
+          "cls": 0.0001407516244187952,
+          "tbt": 63
+        },
+        {
+          "scores": {
+            "performance": 96,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 1258.58665,
+          "cls": 0.0001407516244187952,
+          "tbt": 119
+        },
+        {
+          "scores": {
+            "performance": 97,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 1274.1410500000002,
+          "cls": 0.0001407516244187952,
+          "tbt": 10
+        }
+      ]
+    },
+    {
+      "page": "detalhe",
+      "path": "/nft/emerald-ape-042",
+      "profile": "mobile",
+      "median": {
+        "performance": 62,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 4831,
+      "cls": 0,
+      "tbtMs": 903,
+      "runs": [
+        {
+          "scores": {
+            "performance": 59,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 4834.316150000001,
+          "cls": 0,
+          "tbt": 1135.9999999999995
+        },
+        {
+          "scores": {
+            "performance": 62,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 4831.034,
+          "cls": 0,
+          "tbt": 903
+        },
+        {
+          "scores": {
+            "performance": 64,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 4816.840499999999,
+          "cls": 0,
+          "tbt": 796.4999999999982
+        }
+      ]
+    },
+    {
+      "page": "detalhe",
+      "path": "/nft/emerald-ape-042",
+      "profile": "desktop",
+      "median": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1335,
+      "cls": 0,
+      "tbtMs": 51,
+      "runs": [
+        {
+          "scores": {
+            "performance": 96,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 1348.6632999999997,
+          "cls": 0,
+          "tbt": 27
+        },
+        {
+          "scores": {
+            "performance": 97,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 1335.2366500000003,
+          "cls": 0,
+          "tbt": 51
+        },
+        {
+          "scores": {
+            "performance": 98,
+            "accessibility": 100,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "lcp": 1090.4225000000001,
+          "cls": 0,
+          "tbt": 68.5
+        }
+      ]
+    }
+  ]
+}
