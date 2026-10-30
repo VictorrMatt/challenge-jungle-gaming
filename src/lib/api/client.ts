@@ -4,6 +4,7 @@ import type { z } from 'zod'
 import { HEADERS } from '@/shared/contracts'
 
 import { ApiClientError, contractError, toApiClientError } from './errors'
+import { whenTransportReady } from './transport'
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api'
 
@@ -32,7 +33,8 @@ export const http = axios.create({
   headers: { Accept: 'application/json' },
 })
 
-http.interceptors.request.use((config) => {
+http.interceptors.request.use(async (config) => {
+  await whenTransportReady()
   const token = bindings.getToken()
   if (token) {
     config.headers.set(HEADERS.authorization, `Bearer ${token}`)

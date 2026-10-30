@@ -19,10 +19,8 @@ import { mockControls } from '../controls'
 
 const HIDE_KEY = 'kurio:scenario-panel'
 
+/** `?panel=off|on` is recorded by `startMockServer` (from the first URL, before routing). */
 function isHidden() {
-  const param = new URLSearchParams(location.search).get('panel')
-  if (param === 'off') sessionStorage.setItem(HIDE_KEY, 'off')
-  if (param === 'on') sessionStorage.removeItem(HIDE_KEY)
   return sessionStorage.getItem(HIDE_KEY) === 'off'
 }
 
