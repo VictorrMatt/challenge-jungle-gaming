@@ -5,3 +5,4 @@ public/mockServiceWorker.js
 playwright-report
 test-results
 lighthouse/reports
+src/routeTree.gen.ts

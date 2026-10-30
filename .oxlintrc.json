@@ -1,6 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc", "jsx-a11y", "import", "unicorn"],
+  "plugins": [
+    "react",
+    "typescript",
+    "oxc",
+    "jsx-a11y",
+    "import",
+    "unicorn"
+  ],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -21,13 +28,18 @@
     "import/no-unassigned-import": [
       "warn",
       {
-        "allow": ["**/*.css", "@fontsource*/**"]
+        "allow": [
+          "**/*.css",
+          "@fontsource*/**"
+        ]
       }
     ],
     "eslint/no-underscore-dangle": [
       "warn",
       {
-        "allow": ["__kurioMock"]
+        "allow": [
+          "__kurioMock"
+        ]
       }
     ],
     "jsx-a11y/prefer-tag-over-role": "off",
@@ -35,7 +47,9 @@
   },
   "overrides": [
     {
-      "files": ["src/components/ui/**"],
+      "files": [
+        "src/components/ui/**"
+      ],
       "rules": {
         "react/only-export-components": "off",
         "jsx-a11y/prefer-tag-over-role": "off",
@@ -44,17 +58,27 @@
       }
     },
     {
-      "files": ["src/routes/**"],
+      "files": [
+        "src/routes/**"
+      ],
       "rules": {
         "react/only-export-components": "off"
       }
     },
     {
-      "files": ["e2e/**"],
+      "files": [
+        "e2e/**"
+      ],
       "rules": {
         "react/rules-of-hooks": "off"
       }
     }
   ],
-  "ignorePatterns": ["dist", "public/mockServiceWorker.js", "playwright-report", "test-results"]
+  "ignorePatterns": [
+    "dist",
+    "public/mockServiceWorker.js",
+    "playwright-report",
+    "test-results",
+    "src/routeTree.gen.ts"
+  ]
 }
