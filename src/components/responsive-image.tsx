@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes } from 'react'
+import { type ImgHTMLAttributes, useLayoutEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
@@ -22,6 +22,9 @@ function srcSet(base: string, format: 'avif' | 'webp') {
 /**
  * `<picture>` with AVIF/WebP renditions. Width/height must be provided (or the parent must
  * reserve the box with `aspect-ratio`) so the layout never shifts while images load.
+ *
+ * Lazy images that are not in the cache yet fade in once decoded instead of painting top-down;
+ * cached and priority (LCP) images render immediately, untouched.
  */
 export function ResponsiveImage({
   src,
@@ -29,8 +32,20 @@ export function ResponsiveImage({
   sizes,
   priority = false,
   className,
+  onLoad,
+  onError,
   ...props
 }: ResponsiveImageProps) {
+  const ref = useRef<HTMLImageElement>(null)
+  const [phase, setPhase] = useState<'static' | 'loading' | 'revealed'>('static')
+
+  // Runs before paint: an image still downloading starts transparent, so it never flashes.
+  useLayoutEffect(() => {
+    if (!priority && ref.current && !ref.current.complete) setPhase('loading')
+  }, [priority])
+
+  const reveal = () => setPhase((current) => (current === 'loading' ? 'revealed' : current))
+
   return (
     <picture className="contents">
       <source type="image/avif" srcSet={srcSet(src, 'avif')} sizes={sizes} className="hidden" />
@@ -42,7 +57,22 @@ export function ResponsiveImage({
         loading={priority ? 'eager' : 'lazy'}
         decoding={priority ? 'sync' : 'async'}
         fetchPriority={priority ? 'high' : 'auto'}
-        className={cn('object-cover', className)}
+        ref={ref}
+        onLoad={(event) => {
+          reveal()
+          onLoad?.(event)
+        }}
+        onError={(event) => {
+          reveal()
+          onError?.(event)
+        }}
+        className={cn(
+          'object-cover',
+          className,
+          // After `className` so tailwind-merge keeps it over a caller's own opacity.
+          phase === 'loading' && 'opacity-0',
+          phase === 'revealed' && 'animate-image-in',
+        )}
         {...props}
       />
     </picture>

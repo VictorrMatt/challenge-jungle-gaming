@@ -201,6 +201,17 @@
   animation: kurio-fade-in-up 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Lazy artwork reveal: fade + a hint of focus pull. */
+@utility animate-image-in {
+  animation: kurio-image-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes kurio-image-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
 /* Small "pop" for state changes (favorite toggled, cart count changed). */
 @utility animate-pop {
   animation: kurio-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
