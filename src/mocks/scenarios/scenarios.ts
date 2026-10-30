@@ -47,7 +47,8 @@ const BASE: ScenarioConfig = {
   failures: [],
   sessionTtlMs: Number(import.meta.env.VITE_SESSION_TTL_MINUTES ?? 30) * 60_000,
   paymentOutcome: 'confirmed',
-  paymentSettleMs: 2500,
+  // Long enough to drop the connection or reload manually while the order is pending.
+  paymentSettleMs: 5000,
 }
 
 export const SCENARIOS = {
