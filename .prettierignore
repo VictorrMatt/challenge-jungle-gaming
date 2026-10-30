@@ -1,0 +1,7 @@
+dist
+coverage
+pnpm-lock.yaml
+public/mockServiceWorker.js
+playwright-report
+test-results
+lighthouse/reports
