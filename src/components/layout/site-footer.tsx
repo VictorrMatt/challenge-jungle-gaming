@@ -142,7 +142,7 @@ export function SiteFooter({ className }: { className?: string }) {
         {/* Figma: 250px card, flex-1 + 264.67 + 264.67 + 357 columns split by 1px primary rules. */}
         <section
           aria-label="Por que a Kurio"
-          className="grid gap-8 bg-card p-8 md:grid-cols-2 lg:h-[250px] lg:grid-cols-[1fr_264.67px_264.67px_357px] lg:items-end lg:gap-0"
+          className="grid gap-8 bg-card p-8 md:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_minmax(0,357px)] lg:items-end lg:gap-0 xl:h-[250px] xl:grid-cols-[1fr_264.67px_264.67px_357px]"
         >
           {FEATURES.map((feature) => (
             <div
@@ -166,9 +166,9 @@ export function SiteFooter({ className }: { className?: string }) {
           </div>
         </section>
 
-        <div className="grid gap-3 bg-surface-strong p-8 text-sm leading-[22px] text-foreground sm:grid-cols-2 lg:h-[88px] lg:grid-cols-[1fr_1fr_1fr_228px] lg:items-center lg:gap-[92px] lg:py-0">
+        <div className="grid gap-3 bg-surface-strong p-8 text-sm leading-[22px] text-foreground sm:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_228px] lg:items-center lg:gap-10 lg:py-0 xl:h-[88px] xl:gap-[92px]">
           <span className="font-bold tracking-[1.4px]">KURIO</span>
-          <span className="lg:whitespace-nowrap">
+          <span className="xl:whitespace-nowrap">
             Feito para colecionadores,
             <br className="max-lg:hidden" /> criadores e cultura
           </span>
@@ -180,7 +180,7 @@ export function SiteFooter({ className }: { className?: string }) {
           </a>
         </div>
 
-        <div className="grid gap-8 bg-card p-8 sm:grid-cols-2 lg:h-[236px] lg:grid-cols-[1fr_1fr_1fr_228px] lg:gap-[124px]">
+        <div className="grid gap-8 bg-card p-8 sm:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_228px] lg:gap-10 xl:h-[236px] xl:gap-[124px]">
           {COLUMNS.map((column) => (
             <nav key={column.title} aria-label={column.title}>
               <Heading>{column.title}</Heading>

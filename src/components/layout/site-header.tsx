@@ -50,7 +50,7 @@ export function SiteHeader() {
 
           <nav
             aria-label="Principal"
-            className="absolute left-1/2 flex -translate-x-1/2 gap-4 lg:left-[376px] lg:translate-x-0 lg:gap-10"
+            className="absolute left-1/2 flex -translate-x-1/2 gap-4 lg:gap-8 xl:left-[376px] xl:translate-x-0 xl:gap-10"
           >
             {NAV.map((item) => {
               const active = item.match(pathname)
