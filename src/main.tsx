@@ -5,16 +5,17 @@ import './index.css'
 
 /**
  * The mock backend (MSW) is enabled by configuration and ships in the demo build.
- * It must be running before the first request AND before the app modules are evaluated:
- * engine.io-client captures the global `WebSocket` at import time, so the app is imported only
- * after MSW has patched it (otherwise Socket.IO would bypass the interception).
+ * It must be running before the first request is made, so the first render waits for it.
+ * The app code is downloaded and evaluated in parallel; it is safe because no request is sent
+ * during module evaluation and socket.io-client (which captures the global WebSocket at import
+ * time) is imported lazily by the realtime client, after the mocks are running.
  */
 async function bootstrap() {
-  if (import.meta.env.VITE_ENABLE_MOCKS !== 'false') {
-    const { startMockServer } = await import('./mocks/browser')
-    await startMockServer()
-  }
-  const { App } = await import('./App')
+  const mocks =
+    import.meta.env.VITE_ENABLE_MOCKS !== 'false'
+      ? import('./mocks/browser').then(({ startMockServer }) => startMockServer())
+      : Promise.resolve()
+  const [{ App }] = await Promise.all([import('./App'), mocks])
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <App />

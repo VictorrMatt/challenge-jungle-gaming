@@ -1,5 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query'
-import { io, type Socket } from 'socket.io-client'
+import type { io as connectSocket, Socket } from 'socket.io-client'
 import { toast } from 'sonner'
 
 import { sessionStore } from '@/features/auth/session-store'
@@ -58,6 +58,7 @@ export class RealtimeClient {
 
   stop() {
     this.unsubscribeSession?.()
+    this.attempt++
     this.teardown()
   }
 
@@ -88,13 +89,26 @@ export class RealtimeClient {
     this.socket = null
   }
 
+  private attempt = 0
+
+  /**
+   * socket.io-client is imported lazily: it is not needed for first paint, and importing it only
+   * after the mock server is running guarantees it binds to the MSW-patched WebSocket.
+   */
   private connect(token: string | null) {
     this.teardown()
     this.gate.reset()
     this.token = token
     this.hasConnectedOnce = false
     this.setStatus('connecting')
+    const attempt = ++this.attempt
+    void import('socket.io-client').then(({ io }) => {
+      // A newer session (login/logout) superseded this connection while loading.
+      if (attempt === this.attempt) this.open(io, token)
+    })
+  }
 
+  private open(io: typeof connectSocket, token: string | null) {
     const socket: Socket<ServerToClientEvents> = io(SOCKET_URL, {
       path: SOCKET_PATH,
       // MSW can only intercept WebSockets; long-polling is disabled on purpose.
