@@ -2,6 +2,9 @@
 @import 'tw-animate-css';
 @import '@fontsource-variable/roboto-mono/wght.css';
 
+/* The product is dark-only: pin shadcn's dark: variants to the .dark class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Kurio design tokens — values sampled from the Figma exports (docs/figma).
  * Components consume the semantic shadcn/ui variables only; see docs/DESIGN_TOKENS.md.

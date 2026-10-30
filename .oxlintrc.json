@@ -1,6 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc", "jsx-a11y", "import", "unicorn"],
+  "plugins": [
+    "react",
+    "typescript",
+    "oxc",
+    "jsx-a11y",
+    "import",
+    "unicorn"
+  ],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -21,17 +28,38 @@
     "import/no-unassigned-import": [
       "warn",
       {
-        "allow": ["**/*.css", "@fontsource*/**"]
+        "allow": [
+          "**/*.css",
+          "@fontsource*/**"
+        ]
       }
     ]
   },
   "overrides": [
     {
-      "files": ["src/components/ui/**", "src/routes/**"],
+      "files": [
+        "src/components/ui/**"
+      ],
+      "rules": {
+        "react/only-export-components": "off",
+        "jsx-a11y/prefer-tag-over-role": "off",
+        "jsx-a11y/anchor-has-content": "off",
+        "eslint/no-underscore-dangle": "off"
+      }
+    },
+    {
+      "files": [
+        "src/routes/**"
+      ],
       "rules": {
         "react/only-export-components": "off"
       }
     }
   ],
-  "ignorePatterns": ["dist", "public/mockServiceWorker.js", "playwright-report", "test-results"]
+  "ignorePatterns": [
+    "dist",
+    "public/mockServiceWorker.js",
+    "playwright-report",
+    "test-results"
+  ]
 }
