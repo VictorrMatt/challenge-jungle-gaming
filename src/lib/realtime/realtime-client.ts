@@ -102,6 +102,8 @@ export class RealtimeClient {
       query: token ? { token } : {},
       reconnectionDelay: 500,
       reconnectionDelayMax: 4000,
+      // Fail a hanging connection attempt quickly and retry, instead of the 20 s default.
+      timeout: 5000,
     })
     this.socket = socket
 

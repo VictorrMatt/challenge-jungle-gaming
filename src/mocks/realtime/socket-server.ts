@@ -53,8 +53,9 @@ const realtime = ws.link(`${SOCKET_URL}${SOCKET_PATH}`)
 
 export const socketHandler = realtime.addEventListener('connection', (connection) => {
   if (Date.now() < blockedUntil) {
-    // Simulated outage: refuse the connection so the client keeps retrying with backoff.
-    connection.client.close(1011, 'Simulated outage')
+    // Simulated outage: refuse the connection (after it opens, so the client observes the close)
+    // and let socket.io-client keep retrying with backoff.
+    setTimeout(() => connection.client.close(3001, 'Simulated outage'), 0)
     return
   }
 
@@ -130,7 +131,7 @@ export function sendStaleNftEvent() {
 /** Drops every socket and refuses reconnections for `ms` (simulated connection loss). */
 export function interruptConnections(ms = 0) {
   blockedUntil = Date.now() + ms
-  for (const client of clients.values()) client.connection.client.close(1012, 'Simulated drop')
+  for (const client of clients.values()) client.connection.client.close(3000, 'Simulated drop')
 }
 
 export function connectedClients() {
