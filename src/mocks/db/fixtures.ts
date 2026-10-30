@@ -299,8 +299,13 @@ export function buildNfts(): NftRecord[] {
       network: figma?.network ?? NETWORKS[index % NETWORKS.length]!,
       basePrice,
       compareAtPrice,
-      rarity:
-        figma?.rarity ?? (index % 9 === 4 ? 'rare' : index % 17 === 0 ? 'legendary' : 'common'),
+      rarity: figma
+        ? (figma.rarity ?? 'common')
+        : index % 9 === 4
+          ? 'rare'
+          : index % 17 === 0
+            ? 'legendary'
+            : 'common',
       ratingAverage: Math.round((3.6 + random.next() * 1.4) * 10) / 10,
       ratingCount: random.int(3, 48),
       // Figma order first: the most recent listing is index 0.
