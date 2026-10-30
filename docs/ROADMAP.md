@@ -55,7 +55,7 @@ usuários, eventos nunca simulados direto na UI e E2E executáveis.
 ### F4 — Backend simulado (MSW + Socket.IO) ✅
 
 - Banco em memória com persistência em `localStorage` e reset para cenário conhecido.
-- Fixtures: ~48 NFTs (filtros/paginação com variedade), 2+ usuários, cupons válido/expirado.
+- Fixtures: 36 NFTs (filtros/paginação com variedade), 2 usuários, cupons válido/expirado.
 - Handlers REST de sessão, NFTs, favoritos, carrinho, cotação, pedidos, perfil e carteiras.
 - Motor de cenários configurável por `?scenario=`, variável de ambiente e painel de dev:
   latência fixa/variável, respostas fora de ordem, timeout, offline, 4xx/5xx, sessão expirada,
