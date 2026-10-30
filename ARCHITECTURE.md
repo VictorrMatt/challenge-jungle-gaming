@@ -69,7 +69,9 @@ rotas privadas reabrem o modal sobre a página de `redirect` quando ela é públ
   `X-Cart-Id`). Ao autenticar, `POST /cart/merge` soma os itens do visitante ao carrinho do usuário,
   respeitando a disponibilidade. O merge é idempotente; o id do carrinho de visitante só é
   esquecido depois de um merge bem-sucedido — se falhar, os itens ficam no servidor, o colecionador
-  é avisado e o merge é refeito no próximo boot.
+  é avisado e o merge é refeito no próximo boot. Coberto por teste unitário (`merge-guest-cart.test.ts`): o
+  Playwright não intercepta requisições atendidas pelo Service Worker do MSW, então a falha é
+  simulada na fronteira da API.
 - Subtotal, desconto, taxa de rede e total **sempre vêm da API** (`cart.summary`); a UI não recalcula.
 - Mutations do carrinho compartilham `scope: { id: 'cart' }` no TanStack Query: rodam em série, então
   cliques rápidos nunca resolvem fora de ordem.
