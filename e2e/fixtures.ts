@@ -56,6 +56,9 @@ export async function login(
   await page.getByPlaceholder('***********').fill(user.password)
   await page.getByRole('button', { name: 'Entrar', exact: true }).click()
   await expect(page.getByText(`Bem-vindo de volta, ${user.name}!`)).toBeVisible()
+  // Route changes cross-fade (View Transitions): wait until the login form has left the DOM
+  // so the next locator never resolves against the outgoing page.
+  await expect(page.getByPlaceholder('contato@email.com')).toHaveCount(0)
 }
 
 /** Adds an NFT to the cart through the detail page (as a collector would). */
