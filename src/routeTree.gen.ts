@@ -290,7 +290,8 @@ const PrivateRouteChildren: PrivateRouteChildren = {
   PrivatePedidoOrderIdRoute: PrivatePedidoOrderIdRoute,
 }
 
-const PrivateRouteWithChildren = PrivateRoute._addFileChildren(PrivateRouteChildren)
+const PrivateRouteWithChildren =
+  PrivateRoute._addFileChildren(PrivateRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
