@@ -56,6 +56,7 @@ test.describe('3. Cadastro, login, expiração, logout e troca de usuário', () 
   }) => {
     await mock.boot()
     await login(page, USERS.nova, '/perfil')
+    await expect(page.getByRole('main').getByLabel('Nome de exibição')).toHaveValue('Nova Sato')
     await mock.control((m) => m.expireSessions())
     await page
       .getByRole('navigation', { name: 'Meu perfil' })
