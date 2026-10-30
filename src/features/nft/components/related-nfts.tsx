@@ -10,8 +10,9 @@ import { formatEth } from '@/shared/money/eth'
 export function MiniNftCard({ nft }: { nft: NftSummary }) {
   return (
     <article className="group relative">
-      <div className="grid aspect-[219/255] place-items-center bg-card px-[10px]">
-        <div className="aspect-square w-full overflow-hidden rounded-[16px]">
+      {/* Figma: 219×255 card frame, 4px side inset, artwork top-aligned with 13px corners. */}
+      <div className="aspect-[219/255] bg-card px-1 pt-4">
+        <div className="aspect-square w-full overflow-hidden rounded-[13px]">
           <ResponsiveImage
             src={nft.image}
             alt={nft.imageAlt}
@@ -22,7 +23,7 @@ export function MiniNftCard({ nft }: { nft: NftSummary }) {
           />
         </div>
       </div>
-      <h3 className="mt-5 truncate text-base leading-[1.3] text-foreground">
+      <h3 className="mt-3 truncate text-[15px] leading-[normal] text-foreground">
         <Link
           to="/nft/$nftId"
           params={{ nftId: nft.id }}
@@ -31,7 +32,7 @@ export function MiniNftCard({ nft }: { nft: NftSummary }) {
           {nft.name}
         </Link>
       </h3>
-      <p className="text-base leading-[1.2] font-bold text-highlight">{formatEth(nft.price)}</p>
+      <p className="text-base leading-4 font-bold text-highlight">{formatEth(nft.price)}</p>
     </article>
   )
 }
@@ -41,10 +42,10 @@ export function RelatedNfts({ nftId, title }: { nftId: string; title: string }) 
   const { data, isPending } = useQuery(relatedQueryOptions(nftId))
 
   return (
-    <section aria-labelledby={`related-${nftId}`} className="mt-20 md:mt-[100px]">
+    <section aria-labelledby={`related-${nftId}`} className="mt-20 md:mt-24">
       <h2
         id={`related-${nftId}`}
-        className="border-b border-border-accent pb-2.5 text-lg leading-[1.4] font-bold text-highlight"
+        className="border-b border-border-accent pb-3 text-[17px] leading-4 font-bold text-highlight"
       >
         {title}
       </h2>
@@ -52,10 +53,10 @@ export function RelatedNfts({ nftId, title }: { nftId: string; title: string }) 
         {isPending
           ? Array.from({ length: 5 }, (_, index) => (
               <li key={index} aria-hidden="true">
-                <SkeletonSurface className="grid aspect-[219/255] place-items-center px-[10px]">
-                  <Skeleton className="aspect-square w-full rounded-[16px]" />
+                <SkeletonSurface className="aspect-[219/255] px-1 pt-4">
+                  <Skeleton className="aspect-square w-full rounded-[13px]" />
                 </SkeletonSurface>
-                <Skeleton className="mt-6 h-4 w-3/4 rounded-sm" />
+                <Skeleton className="mt-4 h-4 w-3/4 rounded-sm" />
                 <Skeleton className="mt-2 h-4 w-1/3 rounded-sm" />
               </li>
             ))

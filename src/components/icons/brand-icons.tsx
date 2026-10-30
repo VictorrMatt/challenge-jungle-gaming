@@ -123,3 +123,14 @@ export function ThankYouIllustration(props: IconProps) {
     </svg>
   )
 }
+
+/** Filled shopping cart (Figma "Shop" glyph on the mobile add-to-cart button). */
+export function CartFilledIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M2.25 3.5a.75.75 0 0 1 .75-.75h1.6c.83 0 1.55.58 1.72 1.39l.2.86h13.2c1 0 1.73.95 1.47 1.92l-1.55 5.8a2.5 2.5 0 0 1-2.41 1.85H8.6l.3 1.3h9.35a.75.75 0 0 1 0 1.5H8.7c-.82 0-1.54-.57-1.71-1.38L4.86 4.53a.25.25 0 0 0-.25-.28H3a.75.75 0 0 1-.75-.75Z" />
+      <circle cx="9.25" cy="19.75" r="1.75" />
+      <circle cx="17" cy="19.75" r="1.75" />
+    </svg>
+  )
+}

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useNavigate, useRouter } from '@tanstack/react-router'
-import { Check, ChevronLeft, Mail, ShoppingCart } from 'lucide-react'
+import { Check, ChevronLeft, Mail } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -9,7 +9,7 @@ import { FavoriteHeart } from '@/components/commerce/favorite-heart'
 import { QuantityStepper } from '@/components/commerce/quantity-stepper'
 import { ErrorState } from '@/components/feedback/error-state'
 import { NotFoundPage } from '@/components/feedback/not-found'
-import { LinkedinIcon, TwitterIcon } from '@/components/icons/brand-icons'
+import { CartFilledIcon, LinkedinIcon, TwitterIcon } from '@/components/icons/brand-icons'
 import { ResponsiveImage } from '@/components/responsive-image'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -43,7 +43,7 @@ const NETWORK_TEXT: Record<NftDetail['network'], string> = {
 }
 
 const TAB_TRIGGER =
-  'h-auto flex-none rounded-none border-0 px-0 pb-2 text-lg font-normal text-foreground shadow-none dark:text-foreground data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-highlight data-[state=active]:shadow-[inset_0_-3px_0_var(--primary)] dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-transparent dark:data-[state=active]:text-highlight'
+  'h-auto flex-none rounded-none border-0 px-0 pt-0 pb-3 text-[17px] leading-4 font-normal text-foreground shadow-none dark:text-foreground data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-highlight data-[state=active]:shadow-[inset_0_-3px_0_var(--primary)] dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-transparent dark:data-[state=active]:text-highlight'
 
 function defaultEdition(nft: NftDetail): EditionId | null {
   const preferred = nft.editions.find((edition) => edition.id === '1-50' && edition.available > 0)
@@ -162,7 +162,7 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
   const buyDisabled = unavailable || maxQuantity === 0 || addToCart.isPending
 
   const details = (
-    <dl className="space-y-0 text-base leading-[32px] text-muted-foreground">
+    <dl className="flex flex-col gap-3 text-[15px] leading-[normal] text-subtle-foreground">
       <div>
         <dt className="inline">ID do token: </dt>
         <dd className="inline">{nft.tokenId}</dd>
@@ -178,49 +178,50 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
     </dl>
   )
 
+  const hint = availabilityHint && <p className="text-sm text-warning">{availabilityHint}</p>
+
   return (
     <article aria-labelledby="nft-titulo">
       {/* ------------------------------------------------------------------ Mobile hero */}
-      <div className="relative md:hidden">
-        <div className="absolute inset-x-0 top-0 z-10 flex justify-between px-6 pt-5">
+      {/* Figma: 23px top inset, 35px round actions, 8px gap, 361×356 artwork; the sheet overlaps 30px. */}
+      <div className="bg-[linear-gradient(137.64deg,var(--kurio-900)_12%,var(--kurio-850)_106.59%)] px-7 pt-[23px] pb-[84px] md:hidden">
+        <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={() =>
               router.history.length > 1 ? router.history.back() : void navigate({ to: '/' })
             }
             aria-label="Voltar"
-            className="grid size-[34px] place-items-center rounded-full bg-background/70 text-foreground"
+            className="grid size-[35px] place-items-center rounded-full border border-border bg-secondary text-muted-foreground"
           >
-            <ChevronLeft className="size-5" aria-hidden="true" />
+            <ChevronLeft className="size-5" strokeWidth={1.75} aria-hidden="true" />
           </button>
           <button
             type="button"
             onClick={() => favorite.toggle(nft.id, nft.name, !isFavorite)}
             aria-pressed={isFavorite}
             aria-label={isFavorite ? 'Remover da lista de interesse' : 'Favoritar'}
-            className="grid size-[34px] place-items-center rounded-full bg-background/70 text-foreground"
+            className="grid size-[35px] place-items-center rounded-full border border-border bg-secondary text-primary"
           >
-            <FavoriteHeart active={isFavorite} className="size-5" />
+            <FavoriteHeart active={isFavorite} className="size-4" />
           </button>
         </div>
-        <div className="px-7 pt-16">
-          <div className="aspect-[361/330] overflow-hidden rounded-[24px]">
-            <ResponsiveImage
-              src={nft.image}
-              alt={nft.imageAlt}
-              sizes="100vw"
-              width={361}
-              height={330}
-              priority
-              className="size-full"
-            />
-          </div>
+        <div className="mt-2 aspect-[361/356] overflow-hidden rounded-[24px]">
+          <ResponsiveImage
+            src={nft.image}
+            alt={nft.imageAlt}
+            sizes="100vw"
+            width={361}
+            height={356}
+            priority
+            className="size-full"
+          />
         </div>
       </div>
 
-      <div className="container-page max-md:-mt-6 max-md:rounded-t-[28px] max-md:bg-card max-md:pt-6 max-md:pb-48 md:pt-6">
+      <div className="container-page max-md:relative max-md:-mt-[114px] max-md:rounded-t-[31px] max-md:bg-card max-md:pt-8 max-md:pb-[188px] md:pt-8">
         <nav aria-label="Trilha de navegação" className="hidden md:block">
-          <ol className="flex gap-2 text-base leading-[1.4] font-bold text-foreground">
+          <ol className="flex gap-2 text-[15px] leading-4 font-bold text-foreground">
             <li>
               <Link to="/" className="hover:text-highlight">
                 Início
@@ -235,7 +236,7 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
           </ol>
         </nav>
 
-        <div className="grid gap-8 md:mt-1.5 lg:grid-cols-[572px_1fr] lg:gap-[33px]">
+        <div className="grid gap-8 md:mt-3 lg:grid-cols-[573px_1fr]">
           <div className="hidden lg:block">
             <NftGallery nft={nft} />
           </div>
@@ -251,109 +252,112 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
             />
           </div>
 
-          <div className="min-w-0">
-            <div className="flex items-start justify-between gap-3 md:block">
-              <h1
-                id="nft-titulo"
-                className="text-xl leading-[1.4] font-bold text-foreground md:text-[28px]"
-              >
-                {nft.name}
-              </h1>
-              <div className="md:hidden">
-                <RatingChip average={nft.rating.average} count={nft.rating.count} />
+          {/* Figma: five groups spread over the 448px gallery height (justify-between). */}
+          <div className="flex min-w-0 flex-col gap-3 md:gap-5 lg:justify-between lg:gap-0">
+            <div>
+              <div className="flex items-center justify-between gap-3 md:block">
+                <h1
+                  id="nft-titulo"
+                  className="text-xl leading-4 font-bold text-foreground md:text-[28px] md:leading-[normal]"
+                >
+                  {nft.name}
+                </h1>
+                <div className="shrink-0 md:hidden">
+                  <RatingChip average={nft.rating.average} count={nft.rating.count} />
+                </div>
               </div>
-            </div>
-            <div className="hidden items-center justify-between gap-4 border-b border-border-accent pb-1.5 md:mt-1 md:flex">
-              <p className="text-[22px] leading-[1.5] font-bold text-highlight">
-                <span className="sr-only">Preço: </span>
-                {edition ? formatEth(edition.price) : formatEth(nft.price)}
+              <div className="hidden items-center justify-between gap-4 border-b border-border-accent pb-3 md:mt-3 md:flex">
+                <p className="text-[22px] leading-4 font-bold text-highlight">
+                  <span className="sr-only">Preço: </span>
+                  {edition ? formatEth(edition.price) : formatEth(nft.price)}
+                </p>
+                <RatingStars average={nft.rating.average} count={nft.rating.count} />
+              </div>
+              <p
+                role="status"
+                aria-live="polite"
+                className={cn('text-sm text-warning', priceChanged ? 'mt-2' : 'sr-only')}
+              >
+                {priceChanged
+                  ? `Preço atualizado em tempo real: ${formatEth(firstPrice)} → ${formatEth(currentPrice)}.`
+                  : ''}
               </p>
-              <RatingStars average={nft.rating.average} count={nft.rating.count} />
             </div>
 
-            <p
-              role="status"
-              aria-live="polite"
-              className={cn('text-sm text-warning', priceChanged ? 'mt-2' : 'sr-only')}
-            >
-              {priceChanged
-                ? `Preço atualizado em tempo real: ${formatEth(firstPrice)} → ${formatEth(currentPrice)}.`
-                : ''}
-            </p>
+            <div>
+              <h2 className="mb-3 hidden text-[15px] leading-4 font-bold text-foreground md:block">
+                Sobre este NFT:
+              </h2>
+              <p className="text-sm leading-6 text-muted-foreground">{nft.description}</p>
+            </div>
 
-            <h2 className="mt-4 hidden text-sm leading-[1.4] font-bold text-foreground md:block">
-              Sobre este NFT:
-            </h2>
-            <p className="mt-3 text-sm leading-[24px] text-muted-foreground md:mt-2">
-              {nft.description}
-            </p>
-
-            <EditionPicker
-              editions={nft.editions}
-              value={selectedId}
-              onChange={selectEdition}
-              className="mt-3 md:mt-2"
-            />
+            <EditionPicker editions={nft.editions} value={selectedId} onChange={selectEdition} />
+            <div className="md:hidden">{hint}</div>
 
             {/* Desktop buy row */}
-            <div className="mt-5 hidden items-center justify-between gap-4 md:flex">
-              <QuantityStepper
-                value={effectiveQuantity}
-                max={Math.max(maxQuantity, 1)}
-                onChange={setQuantity}
-                disabled={buyDisabled}
-                label="Quantidade de edições"
-              />
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => add({ goToCart: true })}
+            <div className="hidden md:block">
+              <div className="flex items-center justify-between gap-4">
+                <QuantityStepper
+                  value={effectiveQuantity}
+                  max={Math.max(maxQuantity, 1)}
+                  onChange={setQuantity}
                   disabled={buyDisabled}
-                  className="w-[130px] uppercase"
-                >
-                  {addToCart.isPending ? 'Adicionando…' : 'Comprar'}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => favorite.toggle(nft.id, nft.name, !isFavorite)}
-                  aria-pressed={isFavorite}
-                  className="w-[130px] font-normal"
-                >
-                  <FavoriteHeart active={isFavorite} className="size-5" />
-                  {isFavorite ? 'Favoritado' : 'Favoritar'}
-                </Button>
+                  label="Quantidade de edições"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => add({ goToCart: true })}
+                    disabled={buyDisabled}
+                    className="w-[130px] uppercase"
+                  >
+                    {addToCart.isPending ? 'Adicionando…' : 'Comprar'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => favorite.toggle(nft.id, nft.name, !isFavorite)}
+                    aria-pressed={isFavorite}
+                    className="w-[130px] font-medium"
+                  >
+                    <FavoriteHeart active={isFavorite} className="size-5" />
+                    {isFavorite ? 'Favoritado' : 'Favoritar'}
+                  </Button>
+                </div>
               </div>
+              {hint && <div className="mt-2">{hint}</div>}
             </div>
-            {availabilityHint && <p className="mt-2 text-sm text-warning">{availabilityHint}</p>}
 
-            <div className="mt-4">{details}</div>
-
-            <div className="mt-1 hidden items-center gap-3 md:flex">
-              <p className="text-base font-bold text-foreground">Compartilhar este NFT:</p>
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Compartilhar no LinkedIn (abre em nova aba)"
-                className="text-foreground hover:text-highlight"
-              >
-                <LinkedinIcon className="size-5" />
-              </a>
-              <a
-                href={`mailto:?subject=${encodeURIComponent(nft.name)}&body=${encodeURIComponent(shareUrl)}`}
-                aria-label="Compartilhar por e-mail"
-                className="text-foreground hover:text-highlight"
-              >
-                <Mail className="size-5" aria-hidden="true" />
-              </a>
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(nft.name)}&url=${encodeURIComponent(shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Compartilhar no Twitter (abre em nova aba)"
-                className="text-foreground hover:text-highlight"
-              >
-                <TwitterIcon className="size-5" />
-              </a>
+            <div className="flex flex-col gap-3">
+              {details}
+              <div className="hidden items-center gap-2 md:flex">
+                <p className="text-[15px] leading-4 font-bold text-foreground">
+                  Compartilhar este NFT:
+                </p>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Compartilhar no LinkedIn (abre em nova aba)"
+                  className="text-foreground hover:text-highlight"
+                >
+                  <LinkedinIcon className="size-[15px]" />
+                </a>
+                <a
+                  href={`mailto:?subject=${encodeURIComponent(nft.name)}&body=${encodeURIComponent(shareUrl)}`}
+                  aria-label="Compartilhar por e-mail"
+                  className="text-foreground hover:text-highlight"
+                >
+                  <Mail className="size-[18px]" aria-hidden="true" />
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(nft.name)}&url=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Compartilhar no Twitter (abre em nova aba)"
+                  className="text-foreground hover:text-highlight"
+                >
+                  <TwitterIcon className="size-4" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -368,12 +372,12 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
               Avaliações de colecionadores ({nft.rating.count})
             </TabsTrigger>
           </TabsList>
-          <TabsContent
-            value="detalhes"
-            className="pt-3 text-sm leading-[24px] text-muted-foreground"
-          >
-            {nft.story.map((paragraph) => (
-              <p key={paragraph.slice(0, 24)} className="mb-6">
+          <TabsContent value="detalhes" className="pt-3 text-sm leading-6 text-muted-foreground">
+            {nft.story.map((paragraph, index) => (
+              <p
+                key={paragraph.slice(0, 24)}
+                className={index === nft.story.length - 1 ? 'mb-3' : 'mb-6'}
+              >
                 {paragraph}
               </p>
             ))}
@@ -410,14 +414,18 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
       </div>
 
       {/* ------------------------------------------------------------------ Mobile buy bar */}
-      <div className="fixed inset-x-0 bottom-0 z-30 rounded-t-[28px] bg-[#1d120e] px-6 pt-5 pb-[max(20px,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.4)] md:hidden">
+      {/* Figma: 164px sheet, 40px top radius, 20/36 vertical padding, 196×60 CTA + 60px cart. */}
+      <div className="fixed inset-x-0 bottom-0 z-30 rounded-t-[40px] bg-card px-6 pt-5 pb-[max(36px,env(safe-area-inset-bottom))] shadow-[0_0_10px_rgba(10,6,4,0.45)] md:hidden">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-base text-muted-foreground" aria-hidden="true">
+          <div className="flex items-center gap-2">
+            <span
+              className="text-[15px] leading-4 font-medium text-muted-foreground"
+              aria-hidden="true"
+            >
               Qtd.
             </span>
             <QuantityStepper
-              variant="compact"
+              variant="bar"
               value={effectiveQuantity}
               max={Math.max(maxQuantity, 1)}
               onChange={setQuantity}
@@ -425,16 +433,15 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
               label="Quantidade de edições"
             />
           </div>
-          <p className="text-xl font-bold text-highlight">
+          <p className="text-xl leading-4 font-bold text-highlight">
             <span className="sr-only">Preço unitário: </span>
             {edition ? formatEth(edition.price) : formatEth(nft.price)}
           </p>
         </div>
-        <div className="mt-4 flex gap-3">
+        <div className="mt-5 flex gap-3">
           <Button
             variant="gradient"
-            size="xl"
-            className="flex-1"
+            className="h-[60px] w-[196px] rounded-[40px] text-base leading-5"
             onClick={() => add({ goToCart: true })}
             disabled={buyDisabled}
           >
@@ -443,15 +450,15 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
           <Button
             variant="secondary"
             size="icon-lg"
-            className="size-[60px] rounded-full border-border bg-card text-highlight"
+            className="size-[60px] rounded-full border-border bg-secondary text-subtle-foreground hover:text-highlight"
             onClick={() => add({ goToCart: false })}
             disabled={buyDisabled}
             aria-label="Adicionar ao carrinho"
           >
             {justAdded ? (
-              <Check className="animate-pop" aria-hidden="true" />
+              <Check className="animate-pop text-highlight" aria-hidden="true" />
             ) : (
-              <ShoppingCart aria-hidden="true" />
+              <CartFilledIcon className="size-5" />
             )}
           </Button>
         </div>

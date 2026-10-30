@@ -13,8 +13,8 @@ export function RatingStars({
 }) {
   const rounded = Math.round(average)
   return (
-    <p className={cn('flex items-center gap-1 text-base text-foreground', className)}>
-      <span className="flex gap-0.5 text-highlight" aria-hidden="true">
+    <p className={cn('flex items-center gap-1 text-[15px] text-foreground', className)}>
+      <span className="flex gap-1 text-amber" aria-hidden="true">
         {Array.from({ length: 5 }, (_, index) => (
           <Star
             key={index}
@@ -33,16 +33,16 @@ export function RatingStars({
 /** Mobile pill: ★ 4.8 (19). */
 export function RatingChip({ average, count }: { average: number; count: number }) {
   return (
-    <p className="inline-flex h-[26px] items-center gap-1 rounded-full border border-primary px-2 text-sm text-foreground">
+    <p className="inline-flex h-[27px] items-center gap-1 rounded-[32px] border border-primary px-1.5 text-sm leading-4 font-medium text-foreground">
       <Star
-        className="size-3.5 text-highlight"
+        className="size-3.5 text-amber"
         fill="currentColor"
         strokeWidth={0}
         aria-hidden="true"
       />
       <span className="sr-only">Nota</span>
       {average.toFixed(1)}
-      <span className="text-muted-foreground">
+      <span className="font-normal text-muted-foreground">
         ({count}
         <span className="sr-only"> avaliações</span>)
       </span>

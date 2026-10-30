@@ -1,4 +1,4 @@
-import { ZoomIn } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { useState } from 'react'
 
 import { ResponsiveImage } from '@/components/responsive-image'
@@ -28,8 +28,8 @@ export function NftGallery({ nft }: { nft: NftDetail }) {
               aria-label={`Ver imagem ${index + 1} de ${nft.gallery.length}`}
               aria-current={index === active ? 'true' : undefined}
               className={cn(
-                'block size-[100px] overflow-hidden rounded-sm ring-offset-2 ring-offset-background transition',
-                index === active ? 'ring-2 ring-primary' : 'opacity-80 hover:opacity-100',
+                'block size-[100px] overflow-hidden rounded-[8px] border transition-colors',
+                index === active ? 'border-primary' : 'border-transparent hover:border-primary/50',
               )}
             >
               <ResponsiveImage
@@ -45,8 +45,8 @@ export function NftGallery({ nft }: { nft: NftDetail }) {
         ))}
       </ul>
 
-      <div className="relative grid size-[444px] place-items-center rounded-sm bg-card">
-        <div className="size-[404px] overflow-hidden rounded-[20px]">
+      <div className="relative grid size-[444px] place-items-center rounded-[6px] bg-card">
+        <div className="size-[404px] overflow-hidden rounded-[24px]">
           <ResponsiveImage
             src={current.src}
             alt={current.alt}
@@ -59,10 +59,10 @@ export function NftGallery({ nft }: { nft: NftDetail }) {
         </div>
         <Dialog>
           <DialogTrigger
-            className="absolute top-[18px] right-[14px] grid size-[30px] place-items-center rounded-full bg-background text-foreground hover:text-highlight"
+            className="absolute top-[15px] right-3 grid size-[30px] place-items-center rounded-full bg-background text-foreground hover:text-highlight"
             aria-label="Ampliar imagem"
           >
-            <ZoomIn className="size-5" aria-hidden="true" />
+            <Search className="size-[18px]" strokeWidth={2} aria-hidden="true" />
           </DialogTrigger>
           <DialogContent className="max-w-[min(92vw,820px)] border-border bg-card p-4 sm:max-w-[min(92vw,820px)]">
             <DialogTitle className="sr-only">{nft.name}</DialogTitle>

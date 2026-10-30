@@ -19,20 +19,18 @@ export function NftDetailSkeleton() {
   return (
     <div role="status" aria-label="Carregando NFT">
       {/* ------------------------------------------------------------ Mobile hero */}
-      <div aria-hidden="true" className="relative md:hidden">
-        <div className="absolute inset-x-0 top-0 flex justify-between px-6 pt-5">
-          <Skeleton className="size-[34px] rounded-full" />
-          <Skeleton className="size-[34px] rounded-full" />
+      <div aria-hidden="true" className="px-7 pt-[23px] pb-[84px] md:hidden">
+        <div className="flex justify-between">
+          <Skeleton className="size-[35px] rounded-full" />
+          <Skeleton className="size-[35px] rounded-full" />
         </div>
-        <div className="px-7 pt-16">
-          <Skeleton className="aspect-[361/330] rounded-[24px]" />
-        </div>
+        <Skeleton className="mt-2 aspect-[361/356] rounded-[24px]" />
       </div>
 
       <div
         aria-hidden="true"
         className={cn(
-          'container-page max-md:-mt-6 max-md:rounded-t-[28px] max-md:bg-card max-md:pt-6 max-md:pb-48 md:pt-6',
+          'container-page max-md:relative max-md:-mt-[114px] max-md:rounded-t-[31px] max-md:bg-card max-md:pt-8 max-md:pb-[188px] md:pt-8',
           'max-md:[--shimmer-base:var(--kurio-850)]',
         )}
       >
@@ -81,12 +79,15 @@ export function NftDetailSkeleton() {
       </div>
 
       {/* ------------------------------------------------------------ Mobile buy bar */}
-      <SkeletonSurface className="fixed inset-x-0 bottom-0 z-30 rounded-t-[28px] bg-[#1d120e] px-6 pt-5 pb-[max(20px,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.4)] md:hidden">
+      <SkeletonSurface className="fixed inset-x-0 bottom-0 z-30 rounded-t-[40px] px-6 pt-5 pb-[max(36px,env(safe-area-inset-bottom))] shadow-[0_0_10px_rgba(10,6,4,0.45)] md:hidden">
         <div className="flex items-center justify-between">
-          <Skeleton className="h-8 w-32 rounded-full" />
-          <Skeleton className="h-6 w-24 rounded-sm" />
+          <Skeleton className="h-[30px] w-32 rounded-full" />
+          <Skeleton className="h-5 w-24 rounded-sm" />
         </div>
-        <Skeleton className="mt-4 h-[52px] w-full rounded-full" />
+        <div className="mt-5 flex gap-3">
+          <Skeleton className="h-[60px] w-[196px] rounded-[40px]" />
+          <Skeleton className="size-[60px] rounded-full" />
+        </div>
       </SkeletonSurface>
     </div>
   )

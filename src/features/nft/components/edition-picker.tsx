@@ -21,10 +21,14 @@ export function EditionPicker({
   const labelId = useId()
   return (
     <div className={className}>
-      <p id={labelId} className="text-sm leading-[1.4] font-bold text-foreground">
+      <p id={labelId} className="text-[15px] leading-4 font-bold text-foreground">
         Edição:
       </p>
-      <div role="radiogroup" aria-labelledby={labelId} className="mt-3 flex flex-wrap gap-2.5">
+      <div
+        role="radiogroup"
+        aria-labelledby={labelId}
+        className="mt-2 flex flex-wrap gap-3 md:mt-3 md:gap-1.5"
+      >
         {editions.map((edition) => {
           const soldOut = edition.available === 0
           const selected = edition.id === value
@@ -37,10 +41,11 @@ export function EditionPicker({
               disabled={soldOut}
               onClick={() => onChange(edition.id)}
               className={cn(
-                'h-[26px] rounded-full border px-2 text-sm leading-none transition-colors',
+                // Figma draws the chips as ellipses (28px tall) around the label.
+                'h-7 min-w-9 rounded-[50%] border px-[5px] text-sm leading-4 transition-colors',
                 selected
-                  ? 'border-primary font-bold text-highlight'
-                  : 'border-input text-muted-foreground hover:border-primary/70',
+                  ? 'border-primary font-medium text-highlight'
+                  : 'border-border-soft text-muted-foreground hover:border-primary/70',
                 soldOut && 'cursor-not-allowed line-through opacity-50',
               )}
             >
