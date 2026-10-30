@@ -11,17 +11,18 @@ import { resumePendingOrders } from './services/checkout'
 export const handlers = [...accountHandlers, ...commerceHandlers, socketHandler]
 
 /**
- * Boots the simulated backend in the browser (dev, demo build and E2E):
+ * Boots the simulated backend in the browser (dev, demo build and E2E). `initialSearch` is the
+ * query string of the first load, captured before the router normalizes the URL:
  * restores the persisted database, selects the scenario and starts MSW
  * (REST through the Service Worker, Socket.IO through WebSocket interception).
  */
-export async function startMockServer() {
-  const panelParam = new URLSearchParams(location.search).get('panel')
+export async function startMockServer(initialSearch = location.search) {
+  const panelParam = new URLSearchParams(initialSearch).get('panel')
   if (panelParam === 'off') sessionStorage.setItem('kurio:scenario-panel', 'off')
   if (panelParam === 'on') sessionStorage.removeItem('kurio:scenario-panel')
 
   await initDatabase()
-  saveScenario(resolveInitialScenario(location.search, import.meta.env.VITE_MOCK_SCENARIO))
+  saveScenario(resolveInitialScenario(initialSearch, import.meta.env.VITE_MOCK_SCENARIO))
   resumePendingOrders()
 
   const worker = setupWorker(...handlers)

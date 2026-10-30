@@ -74,7 +74,15 @@ test.describe('3. Cadastro, login, expiração, logout e troca de usuário', () 
     await expect(page).toHaveURL(/\/entrar\?redirect=/)
     await login(page, USERS.nova)
     await page.goto('/perfil/carteiras')
+    // On boot the persisted session is revalidated through the mock API — never sent to the
+    // static host before MSW is running.
+    const revalidation = page.waitForResponse((response) =>
+      response.url().endsWith('/api/auth/session'),
+    )
     await page.reload()
+    const response = await revalidation
+    expect(response.status()).toBe(200)
+    expect(await response.json()).toMatchObject({ user: { email: USERS.nova.email } })
     await expect(page.getByRole('heading', { name: 'Carteira principal' })).toBeVisible()
   })
 
