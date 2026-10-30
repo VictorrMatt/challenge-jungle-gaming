@@ -32,23 +32,27 @@ export function HomePromos() {
       <ul className="grid gap-7 lg:grid-cols-2">
         {PROMOS.map((promo) => (
           <li key={promo.id} id={promo.id} className="scroll-mt-6">
-            <article className="grid h-[250px] grid-cols-[287px_1fr] overflow-hidden rounded-[20px] bg-card">
+            {/* 586×250 at full width (287px art = 49%); narrower cards shrink the art and grow
+                in height instead of clipping the CTA. */}
+            <article className="grid min-h-[250px] grid-cols-[49%_1fr] overflow-hidden rounded-[20px] bg-card">
               <ResponsiveImage
                 src={promo.image}
                 alt={promo.alt}
-                sizes="287px"
+                sizes="(min-width: 1264px) 287px, 25vw"
                 width={287}
                 height={250}
-                className="h-full w-[287px] rounded-[20px]"
+                className="h-full min-h-[250px] w-full rounded-[20px]"
               />
-              <div className="flex flex-col items-end px-[30px] pt-[38px] text-right">
+              <div className="flex flex-col items-end px-5 pt-[38px] pb-[46px] text-right xl:px-[30px]">
                 <h2 className="text-lg leading-[24px] font-bold text-foreground">{promo.title}</h2>
-                <p className="mt-2 text-sm leading-[24px] text-muted-foreground">{promo.text}</p>
+                <p className="mt-2 mb-6 text-sm leading-[24px] text-muted-foreground">
+                  {promo.text}
+                </p>
                 <Link
                   to="/"
                   search={promo.search}
                   hash="catalogo"
-                  className="mt-auto mb-[46px] inline-flex h-10 w-[140px] shrink-0 items-center justify-center gap-1 rounded-sm bg-primary text-sm font-bold text-primary-foreground transition-colors hover:bg-highlight"
+                  className="mt-auto inline-flex h-10 w-[140px] shrink-0 items-center justify-center gap-1 rounded-sm bg-primary text-sm font-bold text-primary-foreground transition-colors hover:bg-highlight"
                 >
                   Explorar <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>

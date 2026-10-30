@@ -52,14 +52,14 @@ export function CatalogSection() {
     <section
       id="catalogo"
       aria-labelledby="catalogo-titulo"
-      className="container-page scroll-mt-6 pt-6 md:pt-24"
+      className="container-page scroll-mt-6 pt-4 md:pt-24"
     >
       <h2 id="catalogo-titulo" className="sr-only">
         Catálogo de NFTs
       </h2>
       <div className="grid gap-12 lg:grid-cols-[310px_1fr]">
         <aside aria-label="Filtros do catálogo" className="hidden lg:block">
-          <div className="bg-card px-5 pt-4 pb-6">
+          <div className="bg-card p-5">
             <CatalogFilters facets={data?.facets} />
           </div>
           <FeaturedPromo className="mt-6" />
@@ -85,7 +85,7 @@ export function CatalogSection() {
             {data && !isPlaceholderData ? `${data.total} NFTs encontrados` : ''}
           </p>
 
-          <div className="mt-6 md:mt-[22px]" aria-busy={isFetching}>
+          <div className="mt-4 md:mt-8" aria-busy={isFetching}>
             {isPending ? (
               <CatalogGridSkeleton />
             ) : isError ? (
@@ -110,7 +110,7 @@ export function CatalogSection() {
               <>
                 <ul
                   className={cn(
-                    'grid grid-cols-2 gap-x-3 gap-y-4 transition-opacity sm:grid-cols-3 md:gap-x-[34px] md:gap-y-[48px]',
+                    'grid grid-cols-2 gap-x-3 gap-y-4 transition-opacity sm:grid-cols-3 md:gap-x-[34px] md:gap-y-[72px]',
                     isPlaceholderData && 'opacity-60',
                   )}
                 >
@@ -135,7 +135,7 @@ export function CatalogSection() {
 function CatalogGridSkeleton() {
   return (
     <div role="status" aria-label="Carregando NFTs">
-      <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3 md:gap-x-[34px] md:gap-y-[48px]">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3 md:gap-x-[34px] md:gap-y-[72px]">
         {Array.from({ length: CATALOG_PAGE_SIZE }, (_, index) => (
           <div key={index} className={cn(index % 2 === 1 && 'max-sm:mt-8')}>
             <NftCardSkeleton />

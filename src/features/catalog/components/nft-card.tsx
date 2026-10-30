@@ -31,12 +31,14 @@ export function NftCard({
   return (
     <article
       className={cn(
-        'group relative rounded-2xl bg-card p-1 pb-3 transition-transform duration-300 ease-out md:rounded-none md:bg-transparent md:p-0 md:hover:-translate-y-1',
+        'group relative transition-transform duration-300 ease-out md:hover:-translate-y-1',
         className,
       )}
     >
-      <div className="relative overflow-hidden rounded-xl transition-shadow duration-300 md:flex md:aspect-[258/300] md:items-center md:justify-center md:rounded-none md:bg-card md:px-1 md:group-hover:shadow-[0_18px_40px_-20px_rgba(232,155,85,0.45)]">
-        <div className="aspect-square w-full overflow-hidden rounded-xl md:rounded-2xl">
+      {/* Mobile (Figma): 20px-radius gradient frame, 4px sides, 12/20 vertical padding, 16px art.
+          Desktop (Figma): 258×300 card frame with the 250px artwork centered. */}
+      <div className="relative overflow-hidden rounded-[20px] bg-[linear-gradient(139.55deg,var(--kurio-900)_12%,var(--kurio-850)_106.59%)] px-1 pt-3 pb-5 transition-shadow duration-300 md:flex md:aspect-[258/300] md:items-center md:justify-center md:rounded-none md:bg-card md:bg-none md:py-0 md:group-hover:shadow-[0_18px_40px_-20px_rgba(232,155,85,0.45)]">
+        <div className="aspect-square w-full overflow-hidden rounded-[16px] md:rounded-2xl">
           <ResponsiveImage
             src={nft.image}
             alt={nft.imageAlt}
@@ -51,7 +53,7 @@ export function NftCard({
           />
         </div>
         {nft.rarity !== 'common' && (
-          <span className="absolute top-0 left-0 bg-primary px-3 py-0.5 text-sm font-bold text-primary-foreground uppercase md:h-[26px] md:w-[78px] md:px-[14px] md:py-0 md:text-base md:leading-[26px]">
+          <span className="absolute top-3 left-0 bg-primary px-3 py-0.5 text-sm font-bold text-primary-foreground uppercase md:hidden">
             {nft.rarity === 'legendary' ? 'Lendário' : 'Raro'}
           </span>
         )}
@@ -78,17 +80,17 @@ export function NftCard({
         <FavoriteHeart active={isFavorite} className="size-4" />
       </button>
 
-      <div className="px-2 pt-2 md:px-0 md:pt-5">
-        <h3 className="truncate text-[15px] leading-[1.4] text-foreground min-[400px]:text-base">
+      <div className="pt-2 pl-2 md:pt-3 md:pl-0">
+        <h3 className="truncate text-[15px] leading-[normal] text-foreground md:text-base md:leading-4">
           <Link
             to="/nft/$nftId"
             params={{ nftId: nft.id }}
-            className="outline-none after:absolute after:inset-0 after:rounded-2xl focus-visible:after:ring-2 focus-visible:after:ring-ring"
+            className="outline-none after:absolute after:inset-0 after:rounded-[20px] focus-visible:after:ring-2 focus-visible:after:ring-ring md:after:rounded-none"
           >
             {nft.name}
           </Link>
         </h3>
-        <p className="text-lg leading-[1.4] font-bold text-highlight">
+        <p className="text-base leading-4 font-bold text-highlight md:mt-3 md:text-lg">
           <span className="sr-only">Preço: </span>
           {formatEth(nft.price)}
           {nft.compareAtPrice && (
@@ -107,21 +109,23 @@ export function NftCardSkeleton() {
   return (
     <div aria-hidden="true" className="relative">
       {/* Mobile: one card surface with the art and the text inside (same box as NftCard). */}
-      <SkeletonSurface className="rounded-2xl p-1 pb-3 md:hidden">
-        <Skeleton className="aspect-square w-full rounded-xl" />
-        <div className="px-2 pt-2">
-          <Skeleton className="my-[3px] h-4 w-3/4 rounded-sm" />
-          <Skeleton className="mt-2 h-5 w-1/2 rounded-sm" />
+      <div className="md:hidden">
+        <SkeletonSurface className="rounded-[20px] px-1 pt-3 pb-5">
+          <Skeleton className="aspect-square w-full rounded-[16px]" />
+        </SkeletonSurface>
+        <div className="pt-2 pl-2">
+          <Skeleton className="my-0.5 h-4 w-3/4 rounded-sm" />
+          <Skeleton className="mt-1.5 h-4 w-1/2 rounded-sm" />
         </div>
-      </SkeletonSurface>
+      </div>
       {/* Desktop: framed artwork (258×300 frame, square art inset) with name/price below. */}
       <div className="hidden md:block">
         <SkeletonSurface className="flex aspect-[258/300] items-center px-1">
           <Skeleton className="aspect-square w-full rounded-2xl" />
         </SkeletonSurface>
-        <div className="pt-5">
-          <Skeleton className="my-[3px] h-4 w-2/3 rounded-sm" />
-          <Skeleton className="mt-2.5 h-5 w-2/5 rounded-sm" />
+        <div className="pt-3">
+          <Skeleton className="h-4 w-2/3 rounded-sm" />
+          <Skeleton className="mt-3 h-4 w-2/5 rounded-sm" />
         </div>
       </div>
     </div>

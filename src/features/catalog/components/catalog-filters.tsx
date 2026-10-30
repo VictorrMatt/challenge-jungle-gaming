@@ -42,10 +42,10 @@ function FacetList<T extends string>({
   const headingId = useId()
   return (
     <section aria-labelledby={headingId}>
-      <h2 id={headingId} className="text-lg leading-[1.4] font-bold text-foreground">
+      <h2 id={headingId} className="text-lg leading-4 font-bold text-foreground">
         {title}
       </h2>
-      <ul className="mt-[13px]">
+      <ul className="mt-3">
         {items.map((item) => {
           const active = selected?.includes(item.id) ?? false
           return (
@@ -55,13 +55,14 @@ function FacetList<T extends string>({
                 aria-pressed={active}
                 onClick={() => onToggle(item.id)}
                 className={cn(
-                  'flex h-10 w-full items-center justify-between rounded-sm pr-3 pl-3 text-left leading-[1.4] transition-colors hover:text-highlight',
-                  dense ? 'text-[15px]' : 'text-base',
-                  active ? 'font-bold text-highlight' : 'text-muted-foreground',
+                  'flex h-10 w-full items-center justify-between rounded-sm px-3 text-left text-[15px] leading-10 transition-colors hover:text-highlight',
+                  active ? 'text-highlight' : 'text-muted-foreground',
                 )}
               >
                 <span>{item.label}</span>
-                <span aria-label={`${item.count} itens`}>({item.count})</span>
+                <span className={cn(!dense && 'font-bold')} aria-label={`${item.count} itens`}>
+                  ({item.count})
+                </span>
               </button>
             </li>
           )
@@ -92,11 +93,11 @@ function PriceRange({
 
   return (
     <section aria-labelledby={headingId}>
-      <h2 id={headingId} className="text-lg leading-[1.4] font-bold text-foreground">
+      <h2 id={headingId} className="text-lg leading-4 font-bold text-foreground">
         Faixa de preço
       </h2>
       <Slider
-        className="mt-4 px-3"
+        className="mt-4 pl-3"
         min={floor}
         max={ceil}
         step={0.01}
@@ -106,12 +107,12 @@ function PriceRange({
         aria-label="Faixa de preço"
         thumbLabels={['Preço mínimo', 'Preço máximo']}
       />
-      <p className="mt-4 px-3 text-sm text-foreground" aria-live="polite">
+      <p className="mt-3 pl-3 text-[15px] leading-[normal] text-foreground" aria-live="polite">
         Preço: {priceFormatter.format(range[0])} - {priceFormatter.format(range[1])} ETH
       </p>
       <Button
         size="sm"
-        className="mt-3 ml-3 h-9 px-3 text-base"
+        className="mt-3 ml-3 h-9 px-3 text-base leading-5"
         onClick={() =>
           onApply(
             range[0] > floor ? toBound(range[0]) : undefined,
@@ -136,7 +137,7 @@ export function CatalogFilters({
 
   if (!facets) {
     return (
-      <div className={cn('space-y-[34px]', ON_CARD_SKELETON, className)} aria-hidden="true">
+      <div className={cn('space-y-10', ON_CARD_SKELETON, className)} aria-hidden="true">
         {[5, 3].map((rows, group) => (
           <div key={group}>
             <Skeleton className="h-5 w-28 rounded-sm" />
@@ -163,7 +164,7 @@ export function CatalogFilters({
   }
 
   return (
-    <div className={cn('space-y-[34px]', className)}>
+    <div className={cn('space-y-10', className)}>
       <FacetList<CategoryId>
         title="Coleções"
         items={facets.categories}

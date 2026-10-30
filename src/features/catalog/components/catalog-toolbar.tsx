@@ -17,7 +17,7 @@ export function CatalogTabs({ className }: { className?: string }) {
   return (
     <nav
       aria-label="Filtrar por destaque"
-      className={cn('flex gap-4 overflow-x-auto md:gap-[21px]', className)}
+      className={cn('flex gap-4 overflow-x-auto md:gap-5', className)}
     >
       {catalogTab.options.map((tab) => {
         const active = tab === current
@@ -28,7 +28,8 @@ export function CatalogTabs({ className }: { className?: string }) {
             aria-pressed={active}
             onClick={() => update({ tab: tab === 'all' ? undefined : tab })}
             className={cn(
-              'relative shrink-0 pb-1 text-sm leading-[1.4] font-bold whitespace-nowrap transition-colors md:text-base',
+              'relative shrink-0 pb-1 text-sm leading-4 whitespace-nowrap transition-colors md:pb-[7px] md:text-[15px] md:font-medium',
+              active ? 'max-md:font-bold' : 'max-md:font-normal',
               active
                 ? 'text-highlight after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:rounded-full after:bg-primary'
                 : 'text-foreground hover:text-highlight',
@@ -45,7 +46,7 @@ export function CatalogTabs({ className }: { className?: string }) {
 export function CatalogSortSelect({ className }: { className?: string }) {
   const { search, update } = useCatalogSearch()
   return (
-    <div className={cn('flex items-center gap-1 text-base', className)}>
+    <div className={cn('flex items-center gap-1 text-[15px]', className)}>
       <span id="sort-label" className="text-foreground">
         Ordenar por:
       </span>
@@ -57,7 +58,7 @@ export function CatalogSortSelect({ className }: { className?: string }) {
       >
         <SelectTrigger
           aria-labelledby="sort-label"
-          className="!h-[22px] gap-1 border-0 bg-transparent p-0 text-base text-foreground shadow-none focus-visible:ring-2 dark:bg-transparent dark:hover:bg-transparent"
+          className="!h-[22px] gap-1 border-0 bg-transparent p-0 text-[15px] text-foreground shadow-none focus-visible:ring-2 dark:bg-transparent dark:hover:bg-transparent"
         >
           <SelectValue />
         </SelectTrigger>
