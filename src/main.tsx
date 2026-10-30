@@ -21,6 +21,17 @@ async function bootstrap() {
       <App />
     </StrictMode>,
   )
+  hideBootSplash()
+}
+
+/** Fades out the inline splash from index.html once the first frame of the app is painted. */
+function hideBootSplash() {
+  const splash = document.getElementById('boot-splash')
+  if (!splash) return
+  requestAnimationFrame(() => {
+    splash.classList.add('is-done')
+    window.setTimeout(() => splash.remove(), 400)
+  })
 }
 
 void bootstrap()
