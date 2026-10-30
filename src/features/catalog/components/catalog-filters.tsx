@@ -153,6 +153,7 @@ export function CatalogFilters({
         onToggle={(id) => update({ categories: toggle(search.categories, id) })}
       />
       <PriceRange
+        key={`${search.minPrice ?? ''}-${search.maxPrice ?? ''}-${facets.priceRange.min}-${facets.priceRange.max}`}
         facets={facets}
         search={search}
         onApply={(minPrice, maxPrice) => update({ minPrice, maxPrice })}
