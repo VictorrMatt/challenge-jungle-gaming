@@ -3,6 +3,9 @@ import { expect, test } from './fixtures'
 test.describe('12. Skeletons em carregamento lento, falha e nova tentativa', () => {
   test('skeletons com shimmer no catálogo durante rede lenta', async ({ page, mock }) => {
     await mock.boot({ scenarios: ['slow'], keepLatency: true })
+    // A fresh page load with an uncached catalog query keeps the skeleton up for the whole 2.5 s
+    // response (the boot above may already have resolved the default query).
+    await page.goto('/?sort=name')
     const skeleton = page.getByRole('status', { name: 'Carregando NFTs' })
     await expect(skeleton).toBeVisible()
     await expect(skeleton.locator('[data-slot=skeleton]').first()).toHaveClass(/animate-shimmer/)
