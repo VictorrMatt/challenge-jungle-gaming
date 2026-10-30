@@ -1,0 +1,36 @@
+name: E2E (production)
+
+# Runs the whole Playwright suite against the public deployment, proving that direct access,
+# refresh, the MSW mocks and Socket.IO realtime work in the published build.
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Deployment URL
+        default: https://challenge-jungle-gaming.vercel.app
+  schedule:
+    - cron: '17 9 * * *'
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      E2E_BASE_URL: ${{ inputs.base_url || 'https://challenge-jungle-gaming.vercel.app' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-production
+          path: |
+            playwright-report
+            test-results
+          retention-days: 14
