@@ -4,6 +4,7 @@ import { createRouter } from '@tanstack/react-router'
 import { RouteErrorFallback } from '@/components/feedback/route-error'
 import { NotFoundPage } from '@/components/feedback/not-found'
 import { PageSpinner } from '@/components/feedback/page-spinner'
+import { rememberResolvedHref } from '@/features/auth/auth-modal'
 import { smooth } from '@/lib/motion'
 import { queryClient } from '@/lib/query/client'
 import { routeTree } from '@/routeTree.gen'
@@ -29,6 +30,9 @@ export const router = createRouter({
   defaultErrorComponent: RouteErrorFallback,
   defaultNotFoundComponent: () => <NotFoundPage />,
 })
+
+// Guards keep the page the visitor was on behind the sign-in modal (see auth-modal.ts).
+router.subscribe('onResolved', ({ toLocation }) => rememberResolvedHref(toLocation.href))
 
 declare module '@tanstack/react-router' {
   interface Register {

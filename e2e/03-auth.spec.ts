@@ -41,6 +41,34 @@ test.describe('3. Cadastro, login, expiração, logout e troca de usuário', () 
     await expect(page.getByRole('main').getByLabel('Nome de exibição')).toHaveValue('Nova Sato')
   })
 
+  test('desktop: login abre como modal sobre a página atual e volta para ela', async ({
+    page,
+    mock,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'No mobile o login é uma tela cheia (Figma mobile)')
+    await mock.boot({ path: '/nft/emerald-ape-042' })
+    await page.getByRole('banner').getByRole('link', { name: 'Entrar' }).click()
+
+    const dialog = page.getByRole('dialog', { name: 'Entrar na Kurio' })
+    await expect(dialog).toBeVisible()
+    await expect(page).toHaveURL(/\/entrar\?redirect=%2Fnft%2Femerald-ape-042/)
+    // The detail page stays mounted underneath (aria-hidden while the modal is open).
+    await expect(page.locator('h1', { hasText: 'Emerald Ape #042' })).toBeAttached()
+
+    await page.keyboard.press('Escape')
+    await expect(dialog).toBeHidden()
+    await expect(page).toHaveURL(/\/nft\/emerald-ape-042$/)
+
+    await page.getByRole('banner').getByRole('link', { name: 'Entrar' }).click()
+    await dialog.getByPlaceholder('contato@email.com').fill(USERS.nova.email)
+    await dialog.getByPlaceholder('***********').fill(USERS.nova.password)
+    await dialog.getByRole('button', { name: 'Entrar', exact: true }).click()
+    await expect(dialog).toBeHidden()
+    await expect(page).toHaveURL(/\/nft\/emerald-ape-042$/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Emerald Ape #042' })).toBeVisible()
+  })
+
   test('rota privada redireciona e sessão sobrevive ao refresh', async ({ page, mock }) => {
     await mock.boot({ path: '/perfil/carteiras' })
     await expect(page).toHaveURL(/\/entrar\?redirect=/)

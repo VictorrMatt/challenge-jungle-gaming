@@ -3,6 +3,7 @@ import { LogOut, Search, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 
 import { useCurrentUser } from '@/features/auth/session-store'
+import { authModalLocation } from '@/features/auth/auth-modal'
 import { useCartCount } from '@/features/cart/hooks'
 import { useBump } from '@/lib/use-bump'
 import { cn } from '@/lib/utils'
@@ -27,6 +28,7 @@ const NAV = [
 /** Desktop/tablet header (≥ 768px). Mobile screens use their own top bars + tab bar (Figma). */
 export function SiteHeader() {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const href = useRouterState({ select: (state) => state.location.href })
   const user = useCurrentUser()
   const count = useCartCount()
   const bump = useBump(count)
@@ -107,12 +109,9 @@ export function SiteHeader() {
             {user ? (
               <UserMenu user={user} />
             ) : (
+              // Opens the sign-in modal over this page; the link itself reads /entrar?redirect=….
               <Link
-                to="/entrar"
-                search={{
-                  redirect:
-                    pathname === '/entrar' || pathname === '/cadastro' ? undefined : pathname,
-                }}
+                {...authModalLocation('entrar', href, href)}
                 className="flex h-[35px] w-[100px] items-center justify-center gap-1 rounded-md bg-primary text-base font-medium text-primary-foreground transition-colors hover:bg-highlight"
               >
                 <LogOut className="size-5" strokeWidth={2} aria-hidden="true" />

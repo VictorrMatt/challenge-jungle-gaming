@@ -50,7 +50,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
       onSuccess: (session) => {
         sessionStore.clearExpiredNotice()
         toast.success(`Bem-vindo de volta, ${session.user.displayName}!`)
-        void navigate({ to: target, replace: true })
+        void navigate({ href: target, replace: true })
       },
       onError: (error) => {
         if (
@@ -137,7 +137,7 @@ export function RegisterForm({ redirect }: { redirect?: string }) {
       onSuccess: (session) => {
         sessionStore.clearExpiredNotice()
         toast.success(`Conta criada! Bem-vindo à Kurio, ${session.user.displayName}.`)
-        void navigate({ to: target, replace: true })
+        void navigate({ href: target, replace: true })
       },
       onError: (error) => {
         if (

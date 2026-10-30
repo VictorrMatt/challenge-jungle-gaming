@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
+import { authModalLocation, isDesktopViewport } from '@/features/auth/auth-modal'
 import { useCurrentUser } from '@/features/auth/session-store'
 import { api } from '@/lib/api/endpoints'
 import { errorMessage } from '@/lib/api/errors'
@@ -71,7 +72,11 @@ export function useToggleFavorite() {
     toggle(nftId: string, name: string, favorite: boolean) {
       if (!user) {
         toast.info('Entre para salvar NFTs na sua lista de interesse.', { id: 'favorite-auth' })
-        void navigate({ to: '/entrar', search: { redirect: href } })
+        void navigate(
+          isDesktopViewport()
+            ? authModalLocation('entrar', href, href)
+            : { to: '/entrar', search: { redirect: href } },
+        )
         return
       }
       mutation.mutate({ nftId, favorite, name })

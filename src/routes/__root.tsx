@@ -7,6 +7,8 @@ import {
 import { lazy, Suspense } from 'react'
 
 import type { RouterContext } from '@/app/router'
+import { AuthModal } from '@/features/auth/components/auth-modal'
+import { authModalSearch } from '@/features/auth/auth-modal'
 import { ConnectionStatus } from '@/components/feedback/connection-status'
 import { NavigationProgress } from '@/components/feedback/navigation-progress'
 import { MobileTabBar } from '@/components/layout/mobile-tab-bar'
@@ -25,6 +27,8 @@ const ScenarioPanel =
 const TAB_BAR_ROUTES = [/^\/$/, /^\/favoritos/, /^\/perfil/]
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  // `auth` / `redirect` open the desktop sign-in modal over any page (see AuthModal).
+  validateSearch: authModalSearch,
   component: RootLayout,
   head: () => ({
     meta: [{ title: 'Kurio — Marketplace de NFTs' }],
@@ -57,6 +61,7 @@ function RootLayout() {
       <SiteFooter className={cn('hidden md:block')} />
       {withTabBar && <MobileTabBar />}
       {/* On mobile, toasts sit below the screen top bars so they never cover back/favorite actions. */}
+      <AuthModal />
       <Toaster position="top-center" richColors={false} closeButton mobileOffset={{ top: 72 }} />
       {ScenarioPanel && (
         <Suspense fallback={null}>
