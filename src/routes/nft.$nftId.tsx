@@ -292,7 +292,6 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
             </div>
 
             <EditionPicker editions={nft.editions} value={selectedId} onChange={selectEdition} />
-            <div className="md:hidden">{hint}</div>
 
             {/* Desktop buy row */}
             <div className="hidden md:block">
@@ -323,8 +322,10 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
                   </Button>
                 </div>
               </div>
-              {hint && <div className="mt-2">{hint}</div>}
             </div>
+
+            {/* One hint for both layouts: on mobile it follows the editions (buy row is hidden). */}
+            {hint}
 
             <div className="flex flex-col gap-3">
               {details}
