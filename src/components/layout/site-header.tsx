@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { useCurrentUser } from '@/features/auth/session-store'
 import { useCartCount } from '@/features/cart/hooks'
+import { useBump } from '@/lib/use-bump'
 import { cn } from '@/lib/utils'
 
 import { Logo } from './logo'
@@ -28,6 +29,7 @@ export function SiteHeader() {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const user = useCurrentUser()
   const count = useCartCount()
+  const bump = useBump(count)
   const [searchOpen, setSearchOpen] = useState(false)
   const showDivider =
     pathname === '/' ||
@@ -91,8 +93,12 @@ export function SiteHeader() {
               <ShoppingCart className="size-6" strokeWidth={2} />
               {count > 0 && (
                 <span
+                  key={bump}
                   aria-hidden="true"
-                  className="absolute -top-1.5 -right-2 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] leading-4 font-bold text-primary-foreground"
+                  className={cn(
+                    'absolute -top-1.5 -right-2 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] leading-4 font-bold text-primary-foreground',
+                    bump > 0 && 'animate-pop',
+                  )}
                 >
                   {count > 99 ? '99+' : count}
                 </span>

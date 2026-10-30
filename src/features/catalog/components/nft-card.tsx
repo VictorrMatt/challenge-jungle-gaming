@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { Heart } from 'lucide-react'
 
+import { FavoriteHeart } from '@/components/commerce/favorite-heart'
 import { ResponsiveImage } from '@/components/responsive-image'
 import { Skeleton, SkeletonSurface } from '@/components/ui/skeleton'
 import { useFavorites, useToggleFavorite } from '@/features/favorites/hooks'
@@ -31,11 +31,11 @@ export function NftCard({
   return (
     <article
       className={cn(
-        'group relative rounded-2xl bg-card p-1 pb-3 md:rounded-none md:bg-transparent md:p-0',
+        'group relative rounded-2xl bg-card p-1 pb-3 transition-transform duration-300 ease-out md:rounded-none md:bg-transparent md:p-0 md:hover:-translate-y-1',
         className,
       )}
     >
-      <div className="relative overflow-hidden rounded-xl md:flex md:aspect-[258/300] md:items-center md:justify-center md:rounded-none md:bg-card md:px-1">
+      <div className="relative overflow-hidden rounded-xl transition-shadow duration-300 md:flex md:aspect-[258/300] md:items-center md:justify-center md:rounded-none md:bg-card md:px-1 md:group-hover:shadow-[0_18px_40px_-20px_rgba(232,155,85,0.45)]">
         <div className="aspect-square w-full overflow-hidden rounded-xl md:rounded-2xl">
           <ResponsiveImage
             src={nft.image}
@@ -75,7 +75,7 @@ export function NftCard({
           isFavorite && 'md:opacity-100',
         )}
       >
-        <Heart className="size-4" fill={isFavorite ? 'currentColor' : 'none'} aria-hidden="true" />
+        <FavoriteHeart active={isFavorite} className="size-4" />
       </button>
 
       <div className="px-2 pt-2 md:px-0 md:pt-5">

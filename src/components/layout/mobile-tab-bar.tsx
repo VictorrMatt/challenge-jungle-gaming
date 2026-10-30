@@ -2,6 +2,7 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import { Heart, House, ScanLine, ShoppingCart, User } from 'lucide-react'
 
 import { useCartCount } from '@/features/cart/hooks'
+import { useBump } from '@/lib/use-bump'
 import { cn } from '@/lib/utils'
 
 const ITEMS = [
@@ -30,6 +31,7 @@ const ITEMS = [
 export function MobileTabBar() {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   const count = useCartCount()
+  const bump = useBump(count)
   const [first, second, third, fourth] = ITEMS
 
   const renderItem = (item: (typeof ITEMS)[number]) => {
@@ -50,8 +52,12 @@ export function MobileTabBar() {
         <item.Icon className="size-6" fill={active ? 'currentColor' : 'none'} aria-hidden="true" />
         {item.to === '/carrinho' && count > 0 && (
           <span
+            key={bump}
             aria-hidden="true"
-            className="absolute top-1 right-0 min-w-4 rounded-full bg-primary px-1 text-center text-[10px] leading-4 font-bold text-primary-foreground"
+            className={cn(
+              'absolute top-1 right-0 min-w-4 rounded-full bg-primary px-1 text-center text-[10px] leading-4 font-bold text-primary-foreground',
+              bump > 0 && 'animate-pop',
+            )}
           >
             {count}
           </span>

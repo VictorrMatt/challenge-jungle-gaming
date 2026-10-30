@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useNavigate, useRouter } from '@tanstack/react-router'
-import { ChevronLeft, Heart, Mail, ShoppingCart } from 'lucide-react'
+import { Check, ChevronLeft, Mail, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { FavoriteHeart } from '@/components/commerce/favorite-heart'
 import { QuantityStepper } from '@/components/commerce/quantity-stepper'
 import { ErrorState } from '@/components/feedback/error-state'
 import { NotFoundPage } from '@/components/feedback/not-found'
@@ -94,6 +95,8 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
   const favorites = useFavorites()
   const favorite = useToggleFavorite()
   const [quantity, setQuantity] = useState(1)
+  // Brief check-mark confirmation on the mobile add-to-cart button.
+  const [justAdded, setJustAdded] = useState(false)
   // Prices seen when the page opened; realtime updates are compared against the selected edition.
   const [initialPrices] = useState<{ base: string; editions: Record<string, string> }>(() => ({
     base: nft.price,
@@ -135,7 +138,12 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
             { id: 'cart-add' },
           )
           setQuantity(1)
-          if (goToCart) void navigate({ to: '/carrinho' })
+          if (goToCart) {
+            void navigate({ to: '/carrinho' })
+          } else {
+            setJustAdded(true)
+            window.setTimeout(() => setJustAdded(false), 1600)
+          }
         },
         onError: (mutationError) =>
           toast.error(errorMessage(mutationError, 'Não foi possível adicionar ao carrinho.')),
@@ -192,11 +200,7 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
             aria-label={isFavorite ? 'Remover da lista de interesse' : 'Favoritar'}
             className="grid size-[34px] place-items-center rounded-full bg-background/70 text-foreground"
           >
-            <Heart
-              className="size-5"
-              fill={isFavorite ? 'currentColor' : 'none'}
-              aria-hidden="true"
-            />
+            <FavoriteHeart active={isFavorite} className="size-5" />
           </button>
         </div>
         <div className="px-7 pt-16">
@@ -314,11 +318,7 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
                   aria-pressed={isFavorite}
                   className="w-[130px] font-normal"
                 >
-                  <Heart
-                    className="size-5"
-                    fill={isFavorite ? 'currentColor' : 'none'}
-                    aria-hidden="true"
-                  />
+                  <FavoriteHeart active={isFavorite} className="size-5" />
                   {isFavorite ? 'Favoritado' : 'Favoritar'}
                 </Button>
               </div>
@@ -448,7 +448,11 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
             disabled={buyDisabled}
             aria-label="Adicionar ao carrinho"
           >
-            <ShoppingCart aria-hidden="true" />
+            {justAdded ? (
+              <Check className="animate-pop" aria-hidden="true" />
+            ) : (
+              <ShoppingCart aria-hidden="true" />
+            )}
           </Button>
         </div>
       </div>
