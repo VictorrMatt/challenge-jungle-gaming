@@ -81,8 +81,10 @@ test.describe('3. Cadastro, login, expiração, logout e troca de usuário', () 
     )
     await page.reload()
     const response = await revalidation
+    // Answered by the mock API (JSON), not by the static host (404 locally, index.html on Vercel).
+    // Only status and headers are read: the body may be gone once the router updates the URL.
     expect(response.status()).toBe(200)
-    expect(await response.json()).toMatchObject({ user: { email: USERS.nova.email } })
+    expect(await response.headerValue('content-type')).toContain('application/json')
     await expect(page.getByRole('heading', { name: 'Carteira principal' })).toBeVisible()
   })
 
