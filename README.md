@@ -24,6 +24,7 @@ regressão visual com Playwright e auditoria Lighthouse versionada.
 - [Cenários de simulação](#cenários-de-simulação)
 - [Como reproduzir os fluxos de falha](#como-reproduzir-os-fluxos-de-falha)
 - [Telas e fluxos](#telas-e-fluxos)
+- [Experiência e movimento](#experiência-e-movimento)
 - [Testes](#testes)
 - [Performance (Lighthouse)](#performance-lighthouse)
 - [Deploy](#deploy)
@@ -184,6 +185,25 @@ O painel também dispara eventos Socket.IO reais a partir do servidor simulado: 
 Capturas reais da aplicação (baselines de regressão visual):
 [desktop](e2e/__screenshots__/desktop/visual.spec.ts) · [mobile](e2e/__screenshots__/mobile/visual.spec.ts).
 Referências do Figma: [docs/figma](docs/figma).
+
+## Experiência e movimento
+
+Camada de acabamento sobre o layout do Figma, sem alterar composição, cores ou conteúdo:
+
+- **Skeletons fiéis à tela:** cada placeholder reproduz a composição real caixa a caixa (moldura do
+  card com a arte inset, linhas do carrinho com miniatura e seletor, hero/sheet/barra de compra do
+  detalhe mobile, campos de formulário). Um único brilho diagonal percorre todos ao mesmo tempo e
+  há um pequeno atraso de entrada para que respostas rápidas não pisquem.
+- **Navegação:** barra de progresso no topo para carregamento de rotas e mudanças do catálogo
+  (filtros, ordenação, paginação); transição cruzada entre páginas (View Transitions API, com
+  fallback natural); rolagem suave para âncoras e paginação, e topo instantâneo ao trocar de página.
+- **Imagens:** artes ainda não carregadas surgem com fade suave em vez de desenhar de cima para
+  baixo; imagens em cache e a imagem LCP não são afetadas.
+- **Microinterações:** cursor de clique em todo elemento interativo (e `not-allowed` quando
+  desabilitado), botão com efeito de pressão, card com leve elevação no hover, coração com "pop" ao
+  favoritar, contador do carrinho que pulsa ao mudar e confirmação visual no botão de adicionar.
+- **Movimento reduzido:** tudo respeita `prefers-reduced-motion` (animações, transições de rota e
+  rolagem programática).
 
 ## Testes
 
