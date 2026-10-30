@@ -54,7 +54,8 @@ function RootLayout() {
       </main>
       <SiteFooter className={cn('hidden md:block')} />
       {withTabBar && <MobileTabBar />}
-      <Toaster position="top-center" richColors={false} closeButton />
+      {/* On mobile, toasts sit below the screen top bars so they never cover back/favorite actions. */}
+      <Toaster position="top-center" richColors={false} closeButton mobileOffset={{ top: 72 }} />
       {ScenarioPanel && (
         <Suspense fallback={null}>
           <ScenarioPanel />

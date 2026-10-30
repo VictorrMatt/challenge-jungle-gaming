@@ -37,8 +37,8 @@ function ProfileLayout() {
 
   return (
     <div className="container-page pt-6 md:pt-8">
-      <div className="grid gap-7 lg:grid-cols-[310px_1fr]">
-        <nav aria-label="Meu perfil" className="bg-card pt-4 lg:self-start">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-7 lg:grid-cols-[310px_minmax(0,1fr)]">
+        <nav aria-label="Meu perfil" className="min-w-0 bg-card pt-4 lg:self-start">
           <h1 className="px-2.5 text-xl font-bold text-foreground">Meu perfil</h1>
           <ul className="mt-1 flex gap-1 overflow-x-auto px-2 pb-2 lg:block lg:px-0 lg:pb-0">
             {ITEMS.map(({ label, Icon, to }) => {
