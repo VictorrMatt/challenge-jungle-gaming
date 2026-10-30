@@ -18,7 +18,8 @@
     "test:e2e": "playwright test",
     "test:e2e:desktop": "playwright test --project=desktop",
     "test:e2e:mobile": "playwright test --project=mobile",
-    "test:e2e:update": "playwright test --update-snapshots",
+    "test:e2e:docker": "node scripts/e2e-docker.mjs",
+    "test:e2e:update": "node scripts/e2e-docker.mjs --update-snapshots e2e/visual.spec.ts",
     "test:e2e:report": "playwright show-report",
     "audit:lighthouse": "node scripts/lighthouse.mjs"
   },
