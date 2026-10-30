@@ -16,6 +16,10 @@ export const handlers = [...accountHandlers, ...commerceHandlers, socketHandler]
  * (REST through the Service Worker, Socket.IO through WebSocket interception).
  */
 export async function startMockServer() {
+  const panelParam = new URLSearchParams(location.search).get('panel')
+  if (panelParam === 'off') sessionStorage.setItem('kurio:scenario-panel', 'off')
+  if (panelParam === 'on') sessionStorage.removeItem('kurio:scenario-panel')
+
   await initDatabase()
   saveScenario(resolveInitialScenario(location.search, import.meta.env.VITE_MOCK_SCENARIO))
   resumePendingOrders()

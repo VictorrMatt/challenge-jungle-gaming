@@ -1,3 +1,4 @@
+import { useRouterState } from '@tanstack/react-router'
 import { FlaskConical } from 'lucide-react'
 import { useId, useState } from 'react'
 import { toast } from 'sonner'
@@ -11,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { cn } from '@/lib/utils'
 import type { EditionId } from '@/shared/contracts'
 
 import { mockControls } from '../controls'
@@ -38,6 +40,7 @@ function run(label: string, action: () => unknown) {
  */
 export default function ScenarioPanel() {
   const [hidden] = useState(isHidden)
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
   const [active, setActive] = useState<string[]>(mockControls.getScenario())
   const [nftId, setNftId] = useState('emerald-ape-042')
   const [price, setPrice] = useState('1.49')
@@ -45,6 +48,14 @@ export default function ScenarioPanel() {
   const ids = { nft: useId(), price: useId(), edition: useId() }
 
   if (hidden) return null
+
+  const mobileBottom = pathname.startsWith('/carrinho')
+    ? 'bottom-60'
+    : pathname.startsWith('/nft/')
+      ? 'bottom-40'
+      : pathname.startsWith('/pagamento')
+        ? 'bottom-36'
+        : 'bottom-24'
 
   const toggle = (name: string) => {
     const next = active.includes(name)
@@ -58,7 +69,10 @@ export default function ScenarioPanel() {
       <SheetTrigger asChild>
         <button
           type="button"
-          className="fixed bottom-24 left-3 z-40 flex items-center gap-2 rounded-full border border-primary bg-card px-3 py-2 text-xs font-bold text-highlight shadow-lg md:bottom-4"
+          className={cn(
+            'fixed left-3 z-40 flex items-center gap-2 rounded-full border border-primary bg-card px-3 py-2 text-xs font-bold text-highlight shadow-lg md:bottom-4',
+            mobileBottom,
+          )}
           aria-label="Abrir painel de cenários de simulação"
         >
           <FlaskConical className="size-4" aria-hidden="true" /> Cenários
