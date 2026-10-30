@@ -70,7 +70,8 @@ function ProfileForms({ profile }: { profile: Profile }) {
     resolver: zodResolver(changePasswordRequest),
     defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
   })
-  const pErrors = profileForm.formState.errors
+  // Read during render so react-hook-form subscribes to these formState fields.
+  const { errors: pErrors, isDirty: profileIsDirty } = profileForm.formState
   const wErrors = passwordForm.formState.errors
   const saving = updateProfile.isPending || changePassword.isPending
 
@@ -84,7 +85,7 @@ function ProfileForms({ profile }: { profile: Profile }) {
       return
     }
 
-    const profileDirty = profileForm.formState.isDirty
+    const profileDirty = profileIsDirty
     if (profileDirty) {
       try {
         const saved = await updateProfile.mutateAsync(profileForm.getValues())
