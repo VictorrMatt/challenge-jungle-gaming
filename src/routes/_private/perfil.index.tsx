@@ -133,15 +133,14 @@ function ProfileForms({ profile }: { profile: Profile }) {
 
   return (
     <form onSubmit={save} noValidate aria-labelledby="perfil-titulo" aria-busy={saving}>
-      <h2 id="perfil-titulo" className="text-base font-bold text-foreground">
+      <h2 id="perfil-titulo" className="text-base leading-4 font-bold text-foreground">
         Perfil do colecionador
       </h2>
-      <div className="mt-[34px] grid gap-x-7 gap-y-[34px] md:grid-cols-2">
+      <div className="mt-8 grid gap-x-7 gap-y-[42px] md:grid-cols-2">
         <FormField
           label="Nome de exibição"
           required
           error={pErrors.displayName?.message}
-          inputClassName="rounded-none"
           {...profileForm.register('displayName')}
         />
         <FormField
@@ -149,7 +148,6 @@ function ProfileForms({ profile }: { profile: Profile }) {
           required
           autoComplete="username"
           error={pErrors.username?.message}
-          inputClassName="rounded-none"
           {...profileForm.register('username')}
         />
         <FormField
@@ -158,18 +156,17 @@ function ProfileForms({ profile }: { profile: Profile }) {
           type="email"
           autoComplete="email"
           error={pErrors.email?.message}
-          inputClassName="rounded-none"
           {...profileForm.register('email')}
         />
         <FormField
           label="Nome ENS"
           required
           error={pErrors.ensName?.message}
-          inputClassName="rounded-none pl-[96px]"
+          inputClassName="ml-[88px] w-[calc(100%-88px)]"
           leading={
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 left-0 flex w-[78px] items-center justify-between border border-input px-3 text-base whitespace-nowrap text-foreground"
+              className="pointer-events-none absolute inset-y-0 left-0 flex w-[78px] items-center justify-between rounded-[3px] border border-input px-2.5 text-[15px] whitespace-nowrap text-foreground"
             >
               .eth <ChevronDown className="size-4" />
             </span>
@@ -180,20 +177,18 @@ function ProfileForms({ profile }: { profile: Profile }) {
           label="Apelido da carteira"
           required
           error={pErrors.walletNickname?.message}
-          inputClassName="rounded-none"
           {...profileForm.register('walletNickname')}
         />
         <AvatarField profile={profile} />
       </div>
 
-      <fieldset className="mt-10 max-w-[417px]">
-        <legend className="text-base font-bold text-foreground">Alterar senha</legend>
-        <div className="mt-5 space-y-5">
+      <fieldset className="mt-8 max-w-[417px]">
+        <legend className="text-base leading-4 font-medium text-foreground">Alterar senha</legend>
+        <div className="mt-6 space-y-6">
           <PasswordField
             label="Senha atual"
             autoComplete="current-password"
             error={wErrors.currentPassword?.message}
-            inputClassName="rounded-none"
             {...passwordForm.register('currentPassword')}
           />
           <PasswordField
@@ -201,20 +196,18 @@ function ProfileForms({ profile }: { profile: Profile }) {
             autoComplete="new-password"
             hint="Mínimo de 8 caracteres, com letras e números."
             error={wErrors.newPassword?.message}
-            inputClassName="rounded-none"
             {...passwordForm.register('newPassword')}
           />
           <PasswordField
             label="Confirmar nova senha"
             autoComplete="new-password"
             error={wErrors.confirmPassword?.message}
-            inputClassName="rounded-none"
             {...passwordForm.register('confirmPassword')}
           />
         </div>
       </fieldset>
 
-      <Button type="submit" className="mt-8 w-[131px]" disabled={saving}>
+      <Button type="submit" className="mt-8 h-10 w-[131px] rounded-[3px] text-sm" disabled={saving}>
         {saving ? 'Salvando…' : 'Salvar'}
       </Button>
     </form>

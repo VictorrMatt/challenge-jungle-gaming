@@ -48,13 +48,18 @@ export const FormField = forwardRef<HTMLInputElement, FieldProps>(function FormF
       <label
         htmlFor={inputId}
         className={cn(
-          'mb-[7px] block text-base leading-[1.4] text-foreground',
+          // Figma: 15px label; the 22px coral asterisk makes required labels 29px tall.
+          'flex items-center text-[15px] leading-[15px] text-foreground',
+          required ? 'mb-1.5' : 'mb-3',
           hideLabel && 'sr-only',
         )}
       >
         {label}
         {required && (
-          <span className="ml-0.5 text-lg text-destructive" aria-hidden="true">
+          <span
+            className="-my-1 ml-0.5 text-[22px] leading-none text-destructive"
+            aria-hidden="true"
+          >
             *
           </span>
         )}
@@ -69,7 +74,7 @@ export const FormField = forwardRef<HTMLInputElement, FieldProps>(function FormF
           aria-describedby={describedBy}
           aria-required={required || undefined}
           className={cn(
-            'h-10 w-full min-w-0 rounded-sm border border-input bg-transparent px-3 text-base text-foreground transition-colors outline-none placeholder:text-subtle-foreground focus-visible:border-primary aria-invalid:border-destructive',
+            'h-10 w-full min-w-0 rounded-[3px] border border-input bg-transparent px-3 text-[15px] text-foreground transition-colors outline-none placeholder:text-subtle-foreground focus-visible:border-primary aria-invalid:border-destructive',
             adornment && 'pr-11',
             inputClassName,
           )}

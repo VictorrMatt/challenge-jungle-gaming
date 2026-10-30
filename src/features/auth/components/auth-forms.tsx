@@ -28,8 +28,8 @@ function useResumeTarget(redirect?: string) {
   return safeRedirect(redirect ?? expiredFrom)
 }
 
-const mobileInput = 'h-[50px] rounded-lg bg-transparent px-4'
-const desktopInput = 'h-10 rounded-none'
+const mobileInput = 'h-[50px] rounded-[10px] bg-transparent px-4 text-sm leading-4'
+const desktopInput = 'h-10 rounded-[5px] px-4 text-sm leading-4'
 
 export function LoginForm({ redirect }: { redirect?: string }) {
   const login = useLogin()
@@ -92,14 +92,19 @@ export function LoginForm({ redirect }: { redirect?: string }) {
               id: 'forgot',
             })
           }
-          className="text-sm text-highlight hover:underline md:text-sm"
+          className="text-sm leading-4 text-highlight hover:underline"
         >
           Esqueceu a senha?
         </button>
       </p>
       <Button
         type="submit"
-        className={cn('w-full text-base', isDesktop ? 'mt-2 h-[45px]' : 'mt-6 h-[60px] rounded-lg')}
+        className={cn(
+          'w-full text-base',
+          isDesktop
+            ? 'mt-3 h-[45px] rounded-[5px] leading-4'
+            : 'mt-7 h-[60px] rounded-[10px] leading-4',
+        )}
         disabled={login.isPending}
       >
         {login.isPending ? 'Entrando…' : 'Entrar'}
@@ -197,7 +202,12 @@ export function RegisterForm({ redirect }: { redirect?: string }) {
       />
       <Button
         type="submit"
-        className={cn('w-full text-base', isDesktop ? 'mt-3 h-[45px]' : 'mt-6 h-[60px] rounded-lg')}
+        className={cn(
+          'w-full text-base',
+          isDesktop
+            ? 'mt-3 h-[45px] rounded-[5px] leading-4'
+            : 'mt-7 h-[60px] rounded-[10px] leading-4',
+        )}
         disabled={register.isPending}
       >
         {register.isPending ? 'Criando…' : isDesktop ? 'Criar conta' : 'Criar perfil'}

@@ -23,11 +23,20 @@ export const FormSelect = forwardRef<
   const errorId = `${selectId}-error`
   return (
     <div className={className}>
-      <label htmlFor={selectId} className="mb-[7px] block text-base leading-[1.4] text-foreground">
+      <label
+        htmlFor={selectId}
+        className={cn(
+          'flex items-center text-[15px] leading-[15px] text-foreground',
+          required ? 'mb-1.5' : 'mb-3',
+        )}
+      >
         {label}
         {required && (
           <>
-            <span className="ml-1 text-lg text-destructive" aria-hidden="true">
+            <span
+              className="-my-1 ml-1 text-[22px] leading-none text-destructive"
+              aria-hidden="true"
+            >
               *
             </span>
             <span className="sr-only"> (obrigatório)</span>

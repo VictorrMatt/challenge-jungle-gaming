@@ -25,23 +25,35 @@ function unavailable(provider: string) {
   })
 }
 
-export function SocialButtons({ className }: { className?: string }) {
+export function SocialButtons({
+  className,
+  variant = 'desktop',
+}: {
+  className?: string
+  variant?: 'desktop' | 'mobile'
+}) {
+  const mobile = variant === 'mobile'
+  // Figma "Social Button": 40px, 5px radius, 13px medium label, 20px mark, 12px gap.
+  const button =
+    'flex h-10 w-full items-center justify-center gap-3 rounded-[5px] border border-input text-[13px] leading-4 font-medium text-muted-foreground hover:border-primary/60'
   return (
     <div className={cn('space-y-3', className)}>
-      <div className="flex items-center gap-3 text-sm text-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+      <div
+        className={cn(
+          'flex items-center text-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border',
+          'text-[13px] leading-4',
+          mobile ? 'gap-2.5' : 'gap-3',
+        )}
+      >
         Ou continue com
       </div>
-      <button
-        type="button"
-        onClick={() => unavailable('Google')}
-        className="flex h-10 w-full items-center justify-center gap-2 rounded-sm border border-input text-sm font-bold text-muted-foreground hover:border-primary/60"
-      >
+      <button type="button" onClick={() => unavailable('Google')} className={button}>
         <GoogleIcon className="size-5" /> Continuar com Google
       </button>
       <button
         type="button"
         onClick={() => unavailable('Facebook')}
-        className="flex h-10 w-full items-center justify-center gap-2 rounded-sm border border-input text-sm font-bold text-muted-foreground hover:border-primary/60"
+        className={cn(button, mobile && '!mt-4')}
       >
         <FacebookColorIcon className="size-5" /> Continuar com Facebook
       </button>
@@ -51,25 +63,24 @@ export function SocialButtons({ className }: { className?: string }) {
 
 function ModeSwitch({ mode, redirect }: { mode: Mode; redirect?: string }) {
   return (
-    <nav aria-label="Acesso" className="flex items-center justify-center text-xl font-bold">
+    <nav
+      aria-label="Acesso"
+      className="flex items-center justify-center gap-2 text-xl leading-4 font-medium"
+    >
       <Link
         to="/entrar"
         search={{ redirect }}
         aria-current={mode === 'login' ? 'page' : undefined}
-        className={cn(
-          'pr-2',
-          mode === 'login' ? 'text-highlight' : 'text-foreground hover:text-highlight',
-        )}
+        className={cn(mode === 'login' ? 'text-highlight' : 'text-foreground hover:text-highlight')}
       >
         Entrar
       </Link>
-      <span aria-hidden="true" className="h-6 w-px bg-primary" />
+      <span aria-hidden="true" className="h-4 w-px bg-destructive" />
       <Link
         to="/cadastro"
         search={{ redirect }}
         aria-current={mode === 'register' ? 'page' : undefined}
         className={cn(
-          'pl-2',
           mode === 'register' ? 'text-highlight' : 'text-foreground hover:text-highlight',
         )}
       >
@@ -107,19 +118,25 @@ export function AuthShell({
 
   if (!isDesktop) {
     return (
-      <section aria-labelledby="auth-title" className="mx-auto max-w-[414px] px-7 pt-[110px] pb-12">
-        <div className="text-center">
+      // Figma mobile auth: 80px top, 28px sides, 40px rhythm between logo, title, form and social.
+      <section
+        aria-labelledby="auth-title"
+        className="mx-auto flex max-w-[414px] flex-col gap-10 px-7 pt-20 pb-6"
+      >
+        <div className="grid h-[136px] place-items-center">
           <Logo size="lg" />
         </div>
         <h1
           id="auth-title"
-          className="mt-[78px] text-center text-lg font-bold text-foreground min-[400px]:text-xl"
+          className="text-center text-lg leading-4 font-bold text-foreground min-[400px]:text-xl"
         >
           {mobileTitle}
         </h1>
-        <div className="mt-8">{children}</div>
-        <SocialButtons className="mt-10" />
-        <div className="mt-12 text-center text-base text-muted-foreground">{mobileFooter}</div>
+        <div>{children}</div>
+        <SocialButtons variant="mobile" />
+        <div className="text-center text-[15px] leading-[normal] text-muted-foreground">
+          {mobileFooter}
+        </div>
       </section>
     )
   }
@@ -134,23 +151,23 @@ export function AuthShell({
           showCloseButton={false}
           className="top-[160px] w-[500px] max-w-[calc(100vw-2rem)] translate-y-0 gap-0 overflow-hidden rounded-none border-0 bg-card p-0 pb-0 shadow-2xl sm:max-w-[500px]"
         >
-          <div className="px-20 pt-12 pb-10">
+          <div className="pt-12">
             <DialogTitle className="sr-only">
               {mode === 'login' ? 'Entrar na Kurio' : 'Criar conta na Kurio'}
             </DialogTitle>
             <ModeSwitch mode={mode} redirect={redirect} />
-            <DialogDescription className="mt-8 text-center text-sm leading-[1.2] text-foreground">
+            <DialogDescription className="mt-10 px-12 text-center text-[13px] leading-4 text-foreground">
               {description}
             </DialogDescription>
-            <div className="mt-6">{children}</div>
+            <div className="px-20 pt-6">{children}</div>
           </div>
-          <SocialButtons className="px-20 pb-[94px] [&>div:first-child]:-mx-20" />
+          <SocialButtons className="px-20 pt-6 pb-[94px] [&>div:first-child]:-mx-20" />
           <div aria-hidden="true" className="h-2.5 bg-primary" />
           <DialogClose
-            className="absolute top-3 right-4 grid size-8 place-items-center text-highlight hover:text-foreground"
+            className="absolute top-1.5 right-[7px] grid size-8 place-items-center text-highlight hover:text-foreground"
             aria-label="Fechar"
           >
-            <X className="size-5" aria-hidden="true" />
+            <X className="size-[18px]" aria-hidden="true" />
           </DialogClose>
         </DialogContent>
       </Dialog>

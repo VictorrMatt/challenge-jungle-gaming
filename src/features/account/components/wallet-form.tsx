@@ -73,19 +73,17 @@ export function WalletForm({
 
   return (
     <form onSubmit={onSubmit} noValidate aria-busy={save.isPending} className="mt-[22px]">
-      <div className="grid gap-x-7 gap-y-[22px] md:grid-cols-2">
+      <div className="grid gap-x-7 gap-y-7 md:grid-cols-2">
         <FormField
           label="Nome de exibição"
           required
           error={errors.displayName?.message}
-          inputClassName="rounded-none"
           {...form.register('displayName')}
         />
         <FormField
           label="Apelido da carteira"
           required
           error={errors.nickname?.message}
-          inputClassName="rounded-none"
           {...form.register('nickname')}
         />
         <FormSelect
@@ -100,7 +98,6 @@ export function WalletForm({
           label="Nome do perfil"
           required
           error={errors.profileName?.message}
-          inputClassName="rounded-none"
           {...form.register('profileName')}
         />
         <FormField
@@ -110,7 +107,7 @@ export function WalletForm({
           autoComplete="off"
           spellCheck={false}
           error={errors.address?.message}
-          inputClassName="rounded-none font-mono text-sm"
+          inputClassName="font-mono text-sm"
           {...form.register('address')}
         />
         <FormField
@@ -120,7 +117,7 @@ export function WalletForm({
           spellCheck={false}
           error={errors.secondaryAddress?.message}
           className="md:[&>label]:invisible"
-          inputClassName="rounded-none text-sm"
+          inputClassName="text-sm"
           {...form.register('secondaryAddress')}
         />
         <FormSelect
@@ -135,7 +132,7 @@ export function WalletForm({
           label="Código de indicação"
           required
           error={errors.referralCode?.message}
-          inputClassName="rounded-none uppercase"
+          inputClassName="uppercase"
           {...form.register('referralCode')}
         />
         <FormField
@@ -144,14 +141,13 @@ export function WalletForm({
           type="email"
           autoComplete="email"
           error={errors.email?.message}
-          inputClassName="rounded-none"
           {...form.register('email')}
         />
         <FormField
           label="Nome ENS"
           required
           error={errors.ensName?.message}
-          inputClassName="rounded-none pl-[96px]"
+          inputClassName="pl-[96px]"
           leading={
             <span
               aria-hidden="true"

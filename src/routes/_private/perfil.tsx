@@ -38,9 +38,9 @@ function ProfileLayout() {
   return (
     <div className="container-page pt-6 md:pt-8">
       <div className="grid grid-cols-[minmax(0,1fr)] gap-7 lg:grid-cols-[310px_minmax(0,1fr)]">
-        <nav aria-label="Meu perfil" className="min-w-0 bg-card pt-4 lg:self-start">
-          <h1 className="px-2.5 text-xl font-bold text-foreground">Meu perfil</h1>
-          <ul className="mt-1 flex gap-1 overflow-x-auto px-2 pb-2 lg:block lg:px-0 lg:pb-0">
+        <nav aria-label="Meu perfil" className="min-w-0 bg-card py-2 lg:self-start">
+          <h1 className="p-2.5 text-lg leading-4 font-bold text-foreground">Meu perfil</h1>
+          <ul className="flex gap-1 overflow-x-auto px-2 pb-2 lg:block lg:px-0 lg:pb-0">
             {ITEMS.map(({ label, Icon, to }) => {
               const active =
                 to !== undefined &&
@@ -54,7 +54,7 @@ function ProfileLayout() {
                 </>
               )
               const base =
-                'flex h-[45px] shrink-0 items-center gap-3 border-l-[6px] px-2.5 text-base whitespace-nowrap lg:pl-3'
+                'flex h-[45px] shrink-0 items-center gap-3 border-l-[6px] px-2.5 text-[15px] whitespace-nowrap lg:pl-2.5'
               return (
                 <li key={label}>
                   {to ? (
@@ -64,15 +64,18 @@ function ProfileLayout() {
                       className={cn(
                         base,
                         active
-                          ? 'border-primary text-highlight'
-                          : 'border-transparent text-highlight/90 hover:text-foreground',
+                          ? 'border-primary text-highlight lg:gap-4'
+                          : 'border-transparent text-highlight hover:text-foreground',
                       )}
                     >
                       {content}
                     </Link>
                   ) : (
                     <span
-                      className={cn(base, 'border-transparent text-highlight/50 max-lg:hidden')}
+                      className={cn(
+                        base,
+                        'cursor-not-allowed border-transparent text-highlight max-lg:hidden',
+                      )}
                       title="Em breve"
                     >
                       {content}
@@ -82,12 +85,12 @@ function ProfileLayout() {
                 </li>
               )
             })}
-            <li className="lg:mt-0 lg:border-t lg:border-border">
+            <li className="lg:mt-0 lg:border-t lg:border-border-accent">
               <button
                 type="button"
                 onClick={() => logout.mutate()}
                 disabled={logout.isPending}
-                className="flex h-[45px] w-full shrink-0 items-center gap-3 px-2.5 text-base font-bold whitespace-nowrap text-highlight hover:text-foreground lg:pl-4"
+                className="flex h-10 w-full shrink-0 items-center gap-2 px-2.5 text-[15px] leading-[15px] font-bold whitespace-nowrap text-highlight hover:text-foreground lg:pl-4"
               >
                 <LogOut className="size-5" aria-hidden="true" /> Sair
               </button>
