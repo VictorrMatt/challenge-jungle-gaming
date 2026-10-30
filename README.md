@@ -202,6 +202,12 @@ Camada de acabamento sobre o layout do Figma, sem alterar composição, cores ou
 - **Microinterações:** cursor de clique em todo elemento interativo (e `not-allowed` quando
   desabilitado), botão com efeito de pressão, card com leve elevação no hover, coração com "pop" ao
   favoritar, contador do carrinho que pulsa ao mudar e confirmação visual no botão de adicionar.
+- **Sem "pulo" de layout:** abrir o select de ordenação, um modal ou a gaveta de filtros não desloca
+  mais a página (a compensação da barra de rolagem do Radix foi neutralizada, já que o espaço da barra
+  é reservado com `scrollbar-gutter`); a barra de rolagem segue a paleta.
+- **Marca:** favicon e ícones de app próprios (monograma "K" âmbar), manifest e uma tela de abertura
+  leve, embutida no `index.html`, que aparece só se o carregamento passar de 150ms e some com fade no
+  primeiro render.
 - **Movimento reduzido:** tudo respeita `prefers-reduced-motion` (animações, transições de rota e
   rolagem programática).
 
