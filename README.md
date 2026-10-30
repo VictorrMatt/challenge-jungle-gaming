@@ -177,7 +177,7 @@ O painel também dispara eventos Socket.IO reais a partir do servidor simulado: 
 | Carrinho         | `/carrinho`            | Quantidades, remoção, cupom, resumo da API, avisos em tempo real                |
 | Pagamento        | `/pagamento`           | Dados do colecionador, carteiras, rede, conexão simulada, revisão, idempotência |
 | Confirmação      | `/pedido/$id`          | Recibo (snapshot imutável), transação e link de explorador simulados            |
-| Login / Cadastro | `/entrar`, `/cadastro` | Modal no desktop, tela cheia no mobile, retorno ao fluxo                        |
+| Login / Cadastro | `/entrar`, `/cadastro` | Desktop: modal sobre a página atual (URL mascarada); mobile: tela cheia         |
 | Perfil           | `/perfil`              | Dados, avatar, alteração de senha                                               |
 | Carteiras        | `/perfil/carteiras`    | Principal e secundária                                                          |
 | Favoritos        | `/favoritos`           | Lista de interesse persistida por usuário                                       |

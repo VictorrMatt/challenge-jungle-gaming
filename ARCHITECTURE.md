@@ -56,6 +56,13 @@ Contratos detalhados: [docs/API.md](docs/API.md).
 Rotas privadas (`_private`: pagamento, pedido, perfil, carteiras, favoritos) usam `beforeLoad` com
 `redirect`, preservando o destino.
 
+**Login/cadastro no desktop.** O modal abre sobre a página em que o colecionador está (a página
+continua montada), dirigido pelo parâmetro `auth` declarado na rota raiz. Com _route masking_ a
+barra de endereço mostra `/entrar?redirect=…`; recarregar essa URL, um link direto ou o guard de
+rotas privadas reabrem o modal sobre a página de `redirect` quando ela é pública (ou sobre a
+última página resolvida / início). Fechar remove o parâmetro sem rolar a página; entrar retoma o
+`redirect`. No mobile, `/entrar` e `/cadastro` continuam telas cheias (Figma mobile).
+
 ## 4. Carrinho
 
 - **Vive no servidor.** Visitantes recebem um `cart.id` (guardado em `localStorage` e enviado em
