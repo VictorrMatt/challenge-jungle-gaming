@@ -133,17 +133,17 @@ usuários, eventos nunca simulados direto na UI e E2E executáveis.
 
 ## Extras assumidos para elevar a nota
 
-| Extra                                                                  | Critério reforçado       | Status                                                        |
-| ---------------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------- |
-| Painel de cenários visível no deploy (cenários, eventos, reset)        | Mocking, Documentação    | ✅                                                            |
-| Validação de contratos em runtime com Zod na borda do Axios            | Integração e estado      | ✅                                                            |
-| Testes unitários (Vitest) de ETH decimal e versionamento de eventos    | Arquitetura, Tempo real  | ✅                                                            |
-| `@axe-core/playwright` + checagem de overflow horizontal               | Acessibilidade, Testes   | ✅                                                            |
-| GitHub Actions: typecheck, lint, format, unit, build, E2E e Lighthouse | Testes, Documentação     | ✅                                                            |
-| Commitlint (Conventional Commits) no CI                                | Arquitetura              | ✅                                                            |
-| Code splitting por rota, preload por intenção, imagens AVIF/WebP       | Performance              | ✅                                                            |
-| Pipeline de imagens com placeholders substituíveis pelo mesmo nome     | Fidelidade, Documentação | ✅                                                            |
-| Referências do Figma versionadas em `docs/figma`                       | Fidelidade               | ✅                                                            |
-| Deploy público na Vercel                                               | Entrega                  | ⏳ depende da conta do autor (config pronta em `vercel.json`) |
-| Substituir placeholders pelas artes exportadas do Figma                | Fidelidade               | ⏳ exportar e salvar com o mesmo nome em `assets/images`      |
-| Tag `v1.0.0` após o deploy                                             | Documentação             | ⏳                                                            |
+| Extra                                                                  | Critério reforçado       | Status |
+| ---------------------------------------------------------------------- | ------------------------ | ------ |
+| Painel de cenários visível no deploy (cenários, eventos, reset)        | Mocking, Documentação    | ✅     |
+| Validação de contratos em runtime com Zod na borda do Axios            | Integração e estado      | ✅     |
+| Testes unitários (Vitest) de ETH decimal e versionamento de eventos    | Arquitetura, Tempo real  | ✅     |
+| `@axe-core/playwright` + checagem de overflow horizontal               | Acessibilidade, Testes   | ✅     |
+| GitHub Actions: typecheck, lint, format, unit, build, E2E e Lighthouse | Testes, Documentação     | ✅     |
+| Commitlint (Conventional Commits) no CI                                | Arquitetura              | ✅     |
+| Code splitting por rota, preload por intenção, imagens AVIF/WebP       | Performance              | ✅     |
+| Pipeline de imagens com placeholders substituíveis pelo mesmo nome     | Fidelidade, Documentação | ✅     |
+| Referências do Figma versionadas em `docs/figma`                       | Fidelidade               | ✅     |
+| Deploy público na Vercel + E2E contra produção                         | Entrega, Testes          | ✅     |
+| Artes originais do Figma no lugar dos placeholders                     | Fidelidade               | ✅     |
+| Tag `v1.0.0` após o deploy                                             | Documentação             | ✅     |

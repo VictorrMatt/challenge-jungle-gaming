@@ -1,11 +1,10 @@
-# Assets e placeholders
+# Assets
 
-As imagens de arte (NFTs, banners e blog) são as **ilustrações originais do Figma** (exportadas em
-500 px e recortadas nas proporções de cada uso). Para trocar uma arte basta manter o **mesmo nome de
-arquivo**:
+As imagens de arte (NFTs, banners e blog) são as **ilustrações originais do Figma**, recortadas nas
+proporções de cada uso. Para trocar uma arte basta manter o **mesmo nome de arquivo**:
 
 1. Exporte a imagem do Figma em PNG (2x recomendado).
-2. Salve em `assets/images/<pasta>/<nome>.png`, sobrescrevendo o placeholder.
+2. Salve em `assets/images/<pasta>/<nome>.png`, sobrescrevendo a imagem atual.
 3. Rode `pnpm images` (também roda automaticamente antes de `pnpm build`).
 
 O script `scripts/build-images.mjs` gera versões AVIF e WebP em 240, 480 e 960 px dentro de
