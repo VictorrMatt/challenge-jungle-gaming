@@ -1,39 +1,68 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '@fontsource-variable/roboto-mono/wght.css';
 
 /*
- * Design tokens.
- * Semantic shadcn/ui variables are mapped to the Kurio palette extracted from Figma
- * (see docs/DESIGN_TOKENS.md). Components must consume semantic tokens only.
+ * Kurio design tokens — values sampled from the Figma exports (docs/figma).
+ * Components consume the semantic shadcn/ui variables only; see docs/DESIGN_TOKENS.md.
  */
 :root {
-  --radius: 0.5rem;
+  color-scheme: dark;
+  --radius: 0.375rem;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* Palette */
+  --kurio-950: #140d0a; /* page background */
+  --kurio-900: #241612; /* surfaces: cards, sidebar, modals */
+  --kurio-850: #2f1d15; /* raised surface: avatar, icon wells */
+  --kurio-800: #38220f; /* strong surface: footer strip */
+  --kurio-700: #3f2319; /* hairline borders, inputs */
+  --kurio-600: #8b5b33; /* accent divider (header) */
+  --kurio-500: #d28a4c; /* primary actions */
+  --kurio-400: #e89b55; /* accent text: prices, active links */
+  --kurio-300: #b39463; /* subtle text, placeholders */
+  --kurio-200: #cfb28c; /* muted body text */
+  --kurio-50: #f5f1eb; /* foreground */
+  --kurio-coral: #f0805f; /* required marks, errors */
+
+  /* Semantic (shadcn/ui contract) */
+  --background: var(--kurio-950);
+  --foreground: var(--kurio-50);
+  --card: var(--kurio-900);
+  --card-foreground: var(--kurio-50);
+  --popover: var(--kurio-900);
+  --popover-foreground: var(--kurio-50);
+  --primary: var(--kurio-500);
+  --primary-foreground: var(--kurio-950);
+  --secondary: var(--kurio-850);
+  --secondary-foreground: var(--kurio-50);
+  --muted: var(--kurio-900);
+  --muted-foreground: var(--kurio-200);
+  --subtle-foreground: var(--kurio-300);
+  --accent: var(--kurio-850);
+  --accent-foreground: var(--kurio-400);
+  --highlight: var(--kurio-400);
+  --surface-strong: var(--kurio-800);
+  --destructive: var(--kurio-coral);
+  --success: #7fc99a;
+  --warning: #f2c46d;
+  --border: var(--kurio-700);
+  --border-accent: var(--kurio-600);
+  --input: var(--kurio-700);
+  --ring: var(--kurio-500);
+
+  --shimmer-base: var(--kurio-900);
+  --shimmer-highlight: var(--kurio-850);
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: 'Roboto Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-mono: 'Roboto Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: 1.25rem;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -47,20 +76,71 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-highlight: var(--highlight);
+  --color-surface-strong: var(--surface-strong);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
   --color-border: var(--border);
+  --color-border-accent: var(--border-accent);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --container-content: 75rem; /* 1200px content width from the Figma grid */
+
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  @keyframes shimmer {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: calc(var(--container-content) + 2 * var(--page-gutter));
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+@utility gradient-primary {
+  background-image: linear-gradient(100deg, var(--kurio-500) 0%, #b27742 100%);
 }
 
 @layer base {
+  :root {
+    --page-gutter: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    :root {
+      --page-gutter: 2rem;
+    }
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--kurio-500) 45%, transparent);
   }
 }
 
