@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CircleCheck, Unplug, Wallet as WalletIcon } from 'lucide-react'
+import { CircleCheck, EllipsisVertical, Unplug, Wallet as WalletIcon } from 'lucide-react'
 import { useId } from 'react'
 
 import { WalletBadges } from '@/components/layout/site-footer'
@@ -72,46 +72,55 @@ export function RegisteredWallets({
           const checked = wallet.id === value
           const connected = session?.walletId === wallet.id && session.status === 'connected'
           return (
-            <button
-              key={wallet.id}
-              type="button"
-              role="radio"
-              aria-checked={checked}
-              onClick={() => onChange(wallet)}
-              className={cn(
-                'flex w-full items-center gap-4 rounded-xl border bg-card px-4 py-3 text-left transition-colors',
-                // Mobile (Figma): 93px card, 14px radius, soft drop shadow; selection via radio only.
-                'max-md:min-h-[93px] max-md:gap-[19px] max-md:rounded-[14px] max-md:border-0 max-md:pl-[19px] max-md:shadow-[0_20px_20px_rgba(10,6,4,0.45)]',
-                checked ? 'border-primary' : 'border-transparent hover:border-input',
-              )}
-            >
-              <Radio checked={checked} />
-              <span className="min-w-0 flex-1 max-md:text-sm max-md:leading-[22px]">
-                <span className="block font-bold text-foreground max-md:mb-1.5 max-md:text-base max-md:leading-4">
-                  {wallet.nickname}
-                  <span className="text-xs font-normal text-muted-foreground max-md:hidden">
-                    {' '}
-                    ({wallet.slot === 'primary' ? 'principal' : 'secundária'})
+            <div key={wallet.id} className="relative">
+              <button
+                type="button"
+                role="radio"
+                aria-checked={checked}
+                onClick={() => onChange(wallet)}
+                className={cn(
+                  'flex w-full items-center gap-4 rounded-xl border bg-card px-4 py-3 text-left transition-colors',
+                  // Mobile (Figma): 93px card, 14px radius, soft drop shadow; selection via radio only.
+                  'max-md:min-h-[93px] max-md:gap-[19px] max-md:rounded-[14px] max-md:border-0 max-md:pr-12 max-md:pl-[19px] max-md:shadow-[0_20px_20px_rgba(10,6,4,0.45)]',
+                  checked ? 'border-primary' : 'border-transparent hover:border-input',
+                )}
+              >
+                <Radio checked={checked} />
+                <span className="min-w-0 flex-1 max-md:text-sm max-md:leading-[22px]">
+                  <span className="block font-bold text-foreground max-md:mb-1.5 max-md:text-base max-md:leading-4">
+                    {wallet.nickname}
+                    <span className="text-xs font-normal text-muted-foreground max-md:hidden">
+                      {' '}
+                      ({wallet.slot === 'primary' ? 'principal' : 'secundária'})
+                    </span>
+                  </span>
+                  <span className="block truncate text-sm text-muted-foreground max-md:hidden">
+                    {wallet.ensName ? `${wallet.ensName}.eth · ` : ''}
+                    {shortAddress(wallet.address)}
+                  </span>
+                  <span className="block truncate text-muted-foreground md:hidden">
+                    {wallet.ensName ? `${wallet.ensName}.eth` : shortAddress(wallet.address)}
+                  </span>
+                  <span className="block text-sm text-muted-foreground">
+                    Rede {NETWORK_OPTIONS.find((option) => option.value === wallet.network)?.label}
+                    <span className="max-md:hidden"> · {WALLET_TYPE_LABEL[wallet.type]}</span>
                   </span>
                 </span>
-                <span className="block truncate text-sm text-muted-foreground max-md:hidden">
-                  {wallet.ensName ? `${wallet.ensName}.eth · ` : ''}
-                  {shortAddress(wallet.address)}
-                </span>
-                <span className="block truncate text-muted-foreground md:hidden">
-                  {wallet.ensName ? `${wallet.ensName}.eth` : shortAddress(wallet.address)}
-                </span>
-                <span className="block text-sm text-muted-foreground">
-                  Rede {NETWORK_OPTIONS.find((option) => option.value === wallet.network)?.label}
-                  <span className="max-md:hidden"> · {WALLET_TYPE_LABEL[wallet.type]}</span>
-                </span>
-              </span>
-              {connected && (
-                <span className="flex items-center gap-1 text-xs font-bold text-success">
-                  <CircleCheck className="size-4" aria-hidden="true" /> Conectada
-                </span>
-              )}
-            </button>
+                {connected && (
+                  <span className="flex items-center gap-1 text-xs font-bold text-success">
+                    <CircleCheck className="size-4" aria-hidden="true" /> Conectada
+                  </span>
+                )}
+              </button>
+              {/* Mobile Figma: kebab on each wallet card — opens wallet management. */}
+              <Link
+                to="/perfil/carteiras"
+                aria-label={`Gerenciar carteira ${wallet.nickname}`}
+                className="absolute top-1/2 right-2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-muted-foreground hover:text-highlight md:hidden"
+              >
+                <EllipsisVertical className="size-5" aria-hidden="true" />
+              </Link>
+            </div>
           )
         })}
       </div>

@@ -382,7 +382,7 @@ function CheckoutForm({
             <label className="mt-6 flex w-fit cursor-pointer items-center gap-2 text-base text-foreground">
               <input
                 type="checkbox"
-                className="size-4 accent-[var(--primary)]"
+                className="size-4 shrink-0 cursor-pointer appearance-none rounded-full border-2 border-primary transition-colors checked:bg-primary checked:shadow-[inset_0_0_0_2px_var(--background)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 checked={walletId === wallets.secondary.id}
                 onChange={(event) =>
                   selectWallet(event.target.checked ? wallets.secondary! : wallets.primary!)
