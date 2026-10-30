@@ -19,7 +19,9 @@
   --kurio-850: #2f1d15; /* raised surface: avatar, icon wells */
   --kurio-800: #38220f; /* strong surface: footer strip */
   --kurio-700: #3f2319; /* hairline borders, inputs */
-  --kurio-600: #8b5b33; /* accent divider (header) */
+  --kurio-600: #443525; /* hairline rules: Figma secondary (#b39463) 0.3px stroke as rendered */
+  --kurio-border-soft: #55321f; /* Figma color/border-soft: chips, edition ellipses */
+  --kurio-amber: #e3a44e; /* Figma color/amber: rating stars */
   --kurio-500: #d28a4c; /* primary actions */
   --kurio-400: #e89b55; /* accent text: prices, active links */
   --kurio-300: #b39463; /* subtle text, placeholders */
@@ -46,8 +48,10 @@
   --highlight: var(--kurio-400);
   --surface-strong: var(--kurio-800);
   --destructive: var(--kurio-coral);
-  --success: #7fc99a;
-  --warning: #f2c46d;
+  --success: #00a66c; /* Figma color/success */
+  --warning: var(--kurio-amber);
+  --border-soft: var(--kurio-border-soft);
+  --amber: var(--kurio-amber);
   --border: var(--kurio-700);
   --border-accent: var(--kurio-600);
   --input: var(--kurio-700);
@@ -88,6 +92,8 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-amber: var(--amber);
   --color-border-accent: var(--border-accent);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -121,7 +127,11 @@
 }
 
 @utility gradient-primary {
-  background-image: linear-gradient(100deg, var(--kurio-500) 0%, #b27742 100%);
+  background-image: linear-gradient(
+    100.37deg,
+    var(--kurio-500) 3.96%,
+    rgb(210 138 76 / 0.8) 121.97%
+  );
 }
 
 @layer base {
@@ -203,7 +213,7 @@
 
 /* Lazy artwork reveal: fade + a hint of focus pull. */
 @utility animate-image-in {
-  animation: kurio-image-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: kurio-image-in 480ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 @keyframes kurio-image-in {
   from {
