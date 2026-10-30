@@ -2,6 +2,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { sessionStore } from '@/features/auth/session-store'
+import { mergeGuestCart } from '@/features/cart/merge-guest-cart'
 import { checkoutStorage } from '@/features/checkout/checkout-storage'
 import { bindApiClient } from '@/lib/api/client'
 import { api } from '@/lib/api/endpoints'
@@ -17,7 +18,10 @@ import type { router as appRouter } from './router'
  *   switch, the previous user's persisted checkout draft;
  * - re-runs route guards so private screens redirect to login, keeping `redirect` to resume.
  */
+let boundQueryClient: QueryClient | null = null
+
 export function syncSession(queryClient: QueryClient, router: typeof appRouter) {
+  boundQueryClient = queryClient
   bindApiClient({
     getToken: sessionStore.getToken,
     getGuestCartId: sessionStore.getGuestCartId,
@@ -47,15 +51,20 @@ export function syncSession(queryClient: QueryClient, router: typeof appRouter) 
 }
 
 /**
- * Revalidates a persisted session against the API (expired tokens trigger the 401 flow above).
+ * Revalidates a persisted session against the API (expired tokens trigger the 401 flow above)
+ * and finishes a visitor-cart merge that failed during sign-in.
  *
  * Must run only once the app is bound to the transport (`main.tsx` calls it after evaluating the
  * app); requests themselves wait for the mock server through the transport gate.
  */
 export function revalidateSession() {
-  if (!sessionStore.getToken()) return
+  const queryClient = boundQueryClient
+  if (!queryClient || !sessionStore.getToken()) return
   api.auth
     .session()
-    .then((session) => sessionStore.updateUser(session.user))
+    .then(async (session) => {
+      sessionStore.updateUser(session.user)
+      await mergeGuestCart(queryClient, session.user.id)
+    })
     .catch(() => undefined)
 }

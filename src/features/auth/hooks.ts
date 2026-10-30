@@ -2,31 +2,28 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
+import { mergeGuestCart } from '@/features/cart/merge-guest-cart'
 import { api } from '@/lib/api/endpoints'
-import { queryKeys } from '@/lib/query/keys'
 import type { LoginRequest, RegisterRequest, Session } from '@/shared/contracts'
 
 import { sessionStore } from './session-store'
 
 /**
  * After authenticating: open the session, then move the visitor's cart into the account so
- * nothing the collector added before logging in is lost.
+ * nothing the collector added before logging in is lost. A failed merge keeps the visitor cart
+ * and is retried on the next boot.
  */
 function useCompleteSignIn() {
   const queryClient = useQueryClient()
   return async (session: Session) => {
-    const guestCartId = sessionStore.getGuestCartId()
     sessionStore.signIn(session)
-    if (guestCartId) {
-      try {
-        const merged = await api.cart.merge(guestCartId)
-        queryClient.setQueryData(queryKeys.user.cart(session.user.id), merged)
-      } catch {
-        // Merge failure is non-blocking: the user cart is fetched normally.
-      }
-      sessionStore.setGuestCartId(null)
+    const merged = await mergeGuestCart(queryClient, session.user.id)
+    if (!merged) {
+      toast.warning(
+        'Não foi possível trazer os itens do carrinho de visitante agora. Eles foram mantidos e serão adicionados na próxima visita.',
+        { id: 'guest-cart-merge' },
+      )
     }
-    queryClient.removeQueries({ queryKey: queryKeys.guestCart })
   }
 }
 
