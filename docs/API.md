@@ -154,4 +154,4 @@ Conexão em `VITE_SOCKET_URL` com `auth: { token }` (ou sem token para visitante
 | `nft.updated`   | `{ price, compareAtPrice, soldOut, editions[{ id, price, compareAtPrice, available }] }` | Atualiza catálogo, detalhe e carrinho; anuncia a mudança |
 | `order.updated` | `{ status, transactionHash, declineReason }`                                             | Atualiza o pedido; mostra confirmação ou recusa          |
 
-Cliente → servidor: `nft.subscribe(ids)` / `nft.unsubscribe(ids)` para receber apenas os NFTs em tela.
+`nft.updated` é público (todas as conexões); `order.updated` é privado (apenas sockets do dono).

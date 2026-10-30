@@ -23,6 +23,12 @@
       {
         "allow": ["**/*.css", "@fontsource*/**"]
       }
+    ],
+    "eslint/no-underscore-dangle": [
+      "warn",
+      {
+        "allow": ["__kurioMock"]
+      }
     ]
   },
   "overrides": [
