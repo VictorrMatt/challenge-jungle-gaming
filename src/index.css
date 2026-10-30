@@ -152,6 +152,34 @@
     scrollbar-gutter: stable;
     /* Breathing room when an in-page anchor (#catalogo, #criadores…) is scrolled into view. */
     scroll-padding-top: 1.5rem;
+    /* Themed scrollbar (Firefox + Chromium 121+); WebKit fallback below. */
+    scrollbar-color: var(--kurio-700) var(--kurio-950);
+  }
+  /*
+   * Radix (Select, Dialog, Sheet, DropdownMenu) locks scroll through react-remove-scroll, which
+   * compensates the vanished scrollbar with `margin-right` on <body>. The gutter is already
+   * reserved by `scrollbar-gutter: stable` on <html>, so that compensation doubled it and made the
+   * whole page jump sideways when a menu opened. Neutralise it (higher specificity than the
+   * library's `body[data-scroll-locked]`).
+   */
+  html body[data-scroll-locked] {
+    margin-right: 0 !important;
+    --removed-body-scroll-bar-size: 0px;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--kurio-950);
+  }
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid var(--kurio-950);
+    border-radius: 999px;
+    background: var(--kurio-700);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--kurio-600);
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;
