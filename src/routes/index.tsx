@@ -16,14 +16,7 @@ export const Route = createFileRoute('/')({
     void queryClient.prefetchQuery(featuredQueryOptions())
   },
   head: () => ({
-    meta: [
-      { title: 'Kurio — Marketplace de NFTs e arte digital' },
-      {
-        name: 'description',
-        content:
-          'Descubra, colecione e compre NFTs selecionados de criadores emergentes e consagrados na Kurio.',
-      },
-    ],
+    meta: [{ title: 'Kurio — Marketplace de NFTs e arte digital' }],
   }),
   component: HomePage,
 })

@@ -48,7 +48,7 @@ function RootLayout() {
       <main
         id="conteudo"
         tabIndex={-1}
-        className={cn('outline-none', withTabBar && 'pb-28 md:pb-0')}
+        className={cn('min-h-dvh outline-none', withTabBar && 'pb-28 md:pb-0')}
       >
         <Outlet />
       </main>

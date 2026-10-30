@@ -23,7 +23,7 @@ function Dots({
   className?: string
 }) {
   return (
-    <div role="group" aria-label="Destaques" className={cn('flex gap-2', className)}>
+    <div role="group" aria-label="Destaques" className={cn('flex', className)}>
       {Array.from({ length: count }, (_, index) => (
         <button
           key={index}
@@ -31,11 +31,17 @@ function Dots({
           onClick={() => onSelect(index)}
           aria-label={`Mostrar destaque ${index + 1} de ${count}`}
           aria-current={index === active ? 'true' : undefined}
-          className={cn(
-            'size-2 rounded-full bg-primary transition-opacity',
-            index === active ? 'opacity-100' : 'opacity-60 hover:opacity-100',
-          )}
-        />
+          className="group grid size-6 place-items-center rounded-full"
+        >
+          {/* 8px dot as in Figma inside a 24px touch target (WCAG 2.5.8). */}
+          <span
+            aria-hidden="true"
+            className={cn(
+              'size-2 rounded-full bg-primary transition-opacity',
+              index === active ? 'opacity-100' : 'opacity-60 group-hover:opacity-100',
+            )}
+          />
+        </button>
       ))}
     </div>
   )
@@ -84,7 +90,7 @@ export function HomeHero() {
               count={count}
               active={active}
               onSelect={setActive}
-              className="mt-10 lg:absolute lg:right-0 lg:bottom-0 lg:mt-0"
+              className="mt-10 lg:absolute lg:-right-2 lg:-bottom-2 lg:mt-0"
             />
           </div>
           <div className="aspect-square overflow-hidden rounded-[20px] lg:mt-0">
