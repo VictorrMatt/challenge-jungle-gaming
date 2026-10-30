@@ -5,6 +5,12 @@ import { addToCart, expect, login, test } from './fixtures'
 /**
  * Visual regression of the four key screens with deterministic data (seeded mocks, fixed
  * latency 0, no animations, panel hidden). Baselines live in e2e/__screenshots__/<project>/.
+ *
+ * Pixels depend on font rasterization, which varies between operating systems and Linux
+ * distributions, so baselines belong to ONE reference environment: the official Playwright image
+ * pinned to the installed version (scripts/e2e-docker.mjs). CI and `pnpm test:e2e:docker` run
+ * there with E2E_VISUAL=1; anywhere else these tests are skipped with the reason below instead of
+ * failing on anti-aliasing noise.
  * Update with: pnpm test:e2e:update
  */
 async function settle(page: Page) {
@@ -16,6 +22,11 @@ async function settle(page: Page) {
 }
 
 test.describe('Regressão visual', () => {
+  test.skip(
+    !process.env.E2E_VISUAL,
+    'Baselines são da imagem Docker de referência do Playwright: rode `pnpm test:e2e:docker`.',
+  )
+
   test('início', async ({ page, mock }) => {
     await mock.boot()
     await settle(page)

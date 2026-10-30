@@ -1,7 +1,8 @@
 name: Update visual baselines
 
-# Visual baselines are platform-specific (font rasterization). The CI runner is the reference
-# environment, so baselines are regenerated here and committed back to the branch.
+# Visual baselines are platform-specific (font rasterization). The reference environment is the
+# official Playwright image pinned to the installed version — the same one used by the CI E2E job
+# and by `pnpm test:e2e:docker` locally — so baselines are regenerated there and committed back.
 on:
   workflow_dispatch:
 
@@ -11,6 +12,12 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    env:
+      HOME: /root
+      E2E_VISUAL: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -19,12 +26,12 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm exec playwright test e2e/visual.spec.ts --update-snapshots
       - name: Commit baselines
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add e2e/__screenshots__
-          git diff --cached --quiet || git commit -m "test(visual): regenerate baselines on the CI runner"
+          git diff --cached --quiet || git commit -m "test(visual): regenerate baselines in the Playwright reference image"
           git push
