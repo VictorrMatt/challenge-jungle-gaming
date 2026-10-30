@@ -94,8 +94,11 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
   const favorites = useFavorites()
   const favorite = useToggleFavorite()
   const [quantity, setQuantity] = useState(1)
-  // Price seen when the page opened; realtime updates are compared against it.
-  const [firstPrice] = useState(nft.price)
+  // Prices seen when the page opened; realtime updates are compared against the selected edition.
+  const [initialPrices] = useState<{ base: string; editions: Record<string, string> }>(() => ({
+    base: nft.price,
+    editions: Object.fromEntries(nft.editions.map((candidate) => [candidate.id, candidate.price])),
+  }))
 
   const selectedId =
     search.edicao && nft.editions.some((edition) => edition.id === search.edicao)
@@ -111,7 +114,9 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
   const effectiveQuantity = Math.min(quantity, Math.max(maxQuantity, 1))
   const unavailable = !edition || edition.available === 0
   const isFavorite = favorites.data?.has(nft.id) ?? false
-  const priceChanged = !isEqual(firstPrice, nft.price)
+  const firstPrice = (edition && initialPrices.editions[edition.id]) ?? initialPrices.base
+  const currentPrice = edition ? edition.price : nft.price
+  const priceChanged = !isEqual(firstPrice, currentPrice)
   const shareUrl = typeof window === 'undefined' ? '' : window.location.href
 
   function selectEdition(id: EditionId) {
@@ -268,7 +273,7 @@ function NftDetailView({ nft }: { nft: NftDetail }) {
               className={cn('text-sm text-warning', priceChanged ? 'mt-2' : 'sr-only')}
             >
               {priceChanged
-                ? `Preço atualizado em tempo real: ${formatEth(firstPrice)} → ${formatEth(nft.price)}.`
+                ? `Preço atualizado em tempo real: ${formatEth(firstPrice)} → ${formatEth(currentPrice)}.`
                 : ''}
             </p>
 
