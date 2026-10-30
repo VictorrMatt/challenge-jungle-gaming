@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { ShoppingCart } from 'lucide-react'
+import { ChevronDown, ShoppingCart } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -369,8 +369,15 @@ function CheckoutForm({
               label="Nome ENS"
               required
               error={errors.ensName?.message}
-              inputClassName="rounded-none pr-14"
-              adornment={<span className="pr-2 text-base text-foreground">.eth</span>}
+              inputClassName="rounded-none pl-[96px]"
+              leading={
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 left-0 flex w-[78px] items-center justify-between border border-input px-3 text-base whitespace-nowrap text-foreground"
+                >
+                  .eth <ChevronDown className="size-4" />
+                </span>
+              }
               {...form.register('ensName')}
             />
           </div>
