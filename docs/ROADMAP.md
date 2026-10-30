@@ -126,7 +126,7 @@ usuários, eventos nunca simulados direto na UI e E2E executáveis.
 - Auditoria início e detalhe, mobile e desktop, 3 execuções com mediana, relatórios HTML/JSON,
   LCP/CLS/TBT registrados e justificativas.
 
-### F15 — Deploy e documentação 🚧 (docs ✅ · deploy aguarda conta Vercel)
+### F15 — Deploy e documentação ✅
 
 - Deploy Vercel com rewrites de SPA e mocks ativos no build de demonstração.
 - `README.md` (setup, env, credenciais, cenários, comandos, falhas) e `ARCHITECTURE.md`.

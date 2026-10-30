@@ -6,7 +6,7 @@ regressão visual com Playwright e auditoria Lighthouse versionada.
 
 |                              |                                                                                   |
 | ---------------------------- | --------------------------------------------------------------------------------- |
-| **Demo pública**             | _URL do deploy Vercel_ (ver [Deploy](#deploy))                                    |
+| **Demo pública**             | https://challenge-jungle-gaming.vercel.app                                        |
 | **Repositório**              | https://github.com/VictorrMatt/challenge-jungle-gaming                            |
 | **Arquitetura e decisões**   | [ARCHITECTURE.md](ARCHITECTURE.md)                                                |
 | **Contratos REST e eventos** | [docs/API.md](docs/API.md)                                                        |
@@ -219,7 +219,10 @@ completa, o que já foi otimizado e o que um backend real eliminaria estão em
 ## Deploy
 
 O build de demonstração inclui os mocks e funciona em qualquer host estático.
-**Vercel** (recomendado): importe o repositório; `vercel.json` já define install/build/output, o
+Publicado em **https://challenge-jungle-gaming.vercel.app** (Vercel). A suíte E2E completa roda contra
+essa URL pelo workflow `E2E (production)` (diariamente e sob demanda).
+
+**Vercel**: importe o repositório; `vercel.json` já define install/build/output, o
 fallback de SPA (acesso direto e refresh em qualquer rota) e cabeçalhos de cache (o
 `mockServiceWorker.js` nunca é cacheado). Nenhuma variável é obrigatória.
 
