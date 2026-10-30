@@ -246,6 +246,8 @@ function CheckoutForm({
       }
       await checkout.review.mutateAsync(values.network)
     } catch (error) {
+      // Session expiry is handled globally (single notice + login + resume).
+      if (isApiClientError(error) && error.is('SESSION_EXPIRED')) return
       if (isApiClientError(error) && error.is('WALLET_REJECTED')) {
         toast.error(
           'A carteira recusou a conexão. Aprove a solicitação na carteira e tente novamente.',
@@ -263,6 +265,7 @@ function CheckoutForm({
       { quote, buyer, network: chosen },
       {
         onError: (error) => {
+          if (isApiClientError(error) && error.is('SESSION_EXPIRED')) return
           if (isApiClientError(error) && error.is('QUOTE_OUTDATED')) {
             toast.warning('Os valores mudaram. Revise e confirme novamente.')
           } else if (isApiClientError(error) && error.is('WALLET_DISCONNECTED')) {
