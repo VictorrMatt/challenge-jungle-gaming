@@ -131,15 +131,24 @@ test.describe('3. Cadastro, login, expiração, logout e troca de usuário', () 
   })
 
   test('logout e troca de usuário não vazam dados privados', async ({ page, mock }) => {
+    const checkoutDrafts = () =>
+      page.evaluate(() =>
+        Object.keys(sessionStorage).filter((key) => key.startsWith('kurio:checkout:')),
+      )
     await mock.boot()
     await login(page, USERS.nova)
     await addToCart(page, 'golden-beat-207')
+    // The payment form keeps a draft (name, e-mail, wallet) to survive refreshes and expiry.
+    await page.goto('/pagamento')
+    await expect(page.getByRole('button', { name: 'Confirmar compra' })).toBeVisible()
+    await expect.poll(checkoutDrafts).toHaveLength(1)
     await page.goto('/favoritos')
     await expect(page.locator('article')).toContainText(['Emerald Ape #042'])
 
     await page.goto('/perfil')
     await page.getByRole('button', { name: 'Sair' }).click()
     await expect(page.getByText('Você saiu da sua conta.')).toBeVisible()
+    expect(await checkoutDrafts()).toHaveLength(0)
 
     await login(page, USERS.theo)
     await page.goto('/favoritos')
