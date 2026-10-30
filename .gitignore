@@ -34,3 +34,6 @@ blob-report
 # Raw Figma exports (optimized copies live in docs/figma)
 /Desktop
 /Mobile
+
+# TypeScript build info
+*.tsbuildinfo
