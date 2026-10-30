@@ -63,7 +63,7 @@ export function HomeHero() {
     <>
       {/* Desktop / tablet */}
       <section aria-labelledby="hero-titulo" className="container-page hidden pt-8 md:block">
-        <div className="grid items-center gap-8 md:grid-cols-[1fr_minmax(0,320px)] lg:grid-cols-[600px_450px] lg:justify-between lg:gap-0 lg:pl-10">
+        <div className="grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,320px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:justify-between lg:pl-10 xl:grid-cols-[600px_450px] xl:gap-0">
           <div className="relative lg:h-[364px]">
             <p className="text-sm leading-4 font-medium tracking-[1.4px] text-foreground">
               Bem-vindo à Kurio

@@ -109,7 +109,7 @@ export function HomeJournal() {
       <p className="mt-3 text-center text-sm text-muted-foreground">
         Histórias, guias e insights para colecionadores sobre o universo da propriedade digital.
       </p>
-      <ul className="mt-10 grid grid-cols-2 gap-6 lg:grid-cols-[repeat(4,268px)]">
+      <ul className="mt-10 grid grid-cols-2 gap-6 lg:grid-cols-4 xl:grid-cols-[repeat(4,268px)]">
         {POSTS.map((post, index) => (
           <li key={post.title}>
             <article className="overflow-hidden rounded-md bg-card">
