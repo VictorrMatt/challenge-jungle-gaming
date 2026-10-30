@@ -166,7 +166,7 @@ contexto de foco (o Figma mostra o fundo sem escurecer).
 ## 10. Performance
 
 Medianas de 3 execuções ([lighthouse/reports/summary.md](lighthouse/reports/summary.md)):
-desktop **97** em início e detalhe; mobile **62**; Accessibility, Best Practices e SEO **100** em todos.
+desktop **96–98** em início e detalhe; mobile **55–59**; Accessibility, Best Practices e SEO **100** em todos.
 
 **O que já foi feito:** code splitting por rota (TanStack Router), preload por intenção, imagens
 AVIF/WebP responsivas com `srcset`/`sizes` e `fetchpriority="high"` no LCP, dimensões reservadas
@@ -183,7 +183,7 @@ enunciado, e o backend simulado roda no thread principal do mesmo navegador sob 
   _bootup time_ (≈ 2,6 s de scripting simulado no início mobile);
 - o LCP depende de dados da “API”, que só existe depois que o worker inicia.
 
-Com um backend real esse custo sai do cliente (os mesmos componentes medem 97 no desktop). Não foram
+Com um backend real esse custo sai do cliente (os mesmos componentes medem 96–98 no desktop). Não foram
 aplicadas simplificações exclusivas para a auditoria (o painel e os mocks continuam ativos).
 
 ## 11. Desvios e decisões de UX em relação ao Figma

@@ -202,14 +202,14 @@ Referências do Figma: [docs/figma](docs/figma).
 Build otimizado, cenário padrão dos mocks, 3 execuções por página/perfil, **mediana**
 ([relatórios HTML/JSON e ambiente](lighthouse/reports)):
 
-| Página  | Perfil  | Performance | Accessibility | Best Practices | SEO |   LCP | CLS |    TBT |
-| ------- | ------- | ----------: | ------------: | -------------: | --: | ----: | --: | -----: |
-| Início  | mobile  |          62 |           100 |            100 | 100 | 4,9 s |   0 | 625 ms |
-| Início  | desktop |      **97** |           100 |            100 | 100 | 1,3 s |   0 |  63 ms |
-| Detalhe | mobile  |          62 |           100 |            100 | 100 | 4,8 s |   0 | 903 ms |
-| Detalhe | desktop |      **97** |           100 |            100 | 100 | 1,3 s |   0 |  51 ms |
+| Página  | Perfil  | Performance | Accessibility | Best Practices | SEO |   LCP | CLS |   TBT |
+| ------- | ------- | ----------: | ------------: | -------------: | --: | ----: | --: | ----: |
+| Início  | mobile  |          55 |           100 |            100 | 100 | 5,1 s |   0 | 1,3 s |
+| Início  | desktop |      **96** |           100 |            100 | 100 | 1,3 s |   0 | 87 ms |
+| Detalhe | mobile  |          59 |           100 |            100 | 100 | 4,9 s |   0 | 1,2 s |
+| Detalhe | desktop |      **98** |           100 |            100 | 100 | 1,2 s |   0 | 20 ms |
 
-Accessibility, Best Practices e SEO atingem 100 em todos os casos e Performance desktop 97. A
+Accessibility, Best Practices e SEO atingem 100 em todos os casos e Performance desktop 96–98. A
 performance **mobile** (4× CPU simulada) fica abaixo da meta por causa do **backend simulado rodando no
 próprio navegador**: o Service Worker do MSW encaminha cada requisição da página ao thread principal,
 e o banco em memória, os handlers e a emulação do Socket.IO competem com a renderização. A análise
