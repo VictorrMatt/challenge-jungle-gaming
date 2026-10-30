@@ -43,15 +43,15 @@ Contratos detalhados: [docs/API.md](docs/API.md).
 
 ## 3. Sessão
 
-| Aspecto                   | Política                                                                                                                                                                                          |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Armazenamento             | Token + usuário em `localStorage` (`kurio:session`); o servidor é a autoridade.                                                                                                                   |
-| Refresh                   | Sessão restaurada no boot e revalidada com `GET /auth/session`.                                                                                                                                   |
-| Expiração                 | Qualquer `401 SESSION_EXPIRED` chama `sessionStore.expire(href)`: um único aviso, guards reavaliados e redirecionamento para `/entrar?redirect=<origem>`.                                         |
-| Checkout                  | O rascunho (formulário, carteira, tentativa de pedido) fica em `sessionStorage` por usuário; após novo login o checkout é retomado.                                                               |
-| Logout / troca de usuário | Remove **todas** as queries `['user', <id>, …]` do usuário anterior e o carrinho de visitante; o `RealtimeClient` fecha o socket antigo (removendo listeners) e abre outro com a nova identidade. |
-| Segurança                 | Redirecionamentos só para caminhos internos (`safeRedirect`). Senhas no mock apenas como SHA-256 + salt.                                                                                          |
-| Multi-aba                 | Evento `storage` sincroniza login/logout entre abas.                                                                                                                                              |
+| Aspecto                   | Política                                                                                                                                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Armazenamento             | Token + usuário em `localStorage` (`kurio:session`); o servidor é a autoridade.                                                                                                                                                                               |
+| Refresh                   | Sessão restaurada no boot e revalidada com `GET /auth/session` — enviada só depois que o transporte (MSW) está pronto, nunca durante a avaliação dos módulos.                                                                                                 |
+| Expiração                 | Qualquer `401 SESSION_EXPIRED` chama `sessionStore.expire(href)`: um único aviso, guards reavaliados e redirecionamento para `/entrar?redirect=<origem>`.                                                                                                     |
+| Checkout                  | O rascunho (formulário, carteira, tentativa de pedido) fica em `sessionStorage` por usuário; após expiração e novo login do mesmo usuário o checkout é retomado.                                                                                              |
+| Logout / troca de usuário | Remove **todas** as queries `['user', <id>, …]` do usuário anterior, o carrinho de visitante e os rascunhos de checkout de outras contas (dados pessoais); o `RealtimeClient` fecha o socket antigo (removendo listeners) e abre outro com a nova identidade. |
+| Segurança                 | Redirecionamentos só para caminhos internos (`safeRedirect`). Senhas no mock apenas como SHA-256 + salt.                                                                                                                                                      |
+| Multi-aba                 | Evento `storage` sincroniza login/logout entre abas.                                                                                                                                                                                                          |
 
 Rotas privadas (`_private`: pagamento, pedido, perfil, carteiras, favoritos) usam `beforeLoad` com
 `redirect`, preservando o destino.
@@ -67,7 +67,9 @@ rotas privadas reabrem o modal sobre a página de `redirect` quando ela é públ
 
 - **Vive no servidor.** Visitantes recebem um `cart.id` (guardado em `localStorage` e enviado em
   `X-Cart-Id`). Ao autenticar, `POST /cart/merge` soma os itens do visitante ao carrinho do usuário,
-  respeitando a disponibilidade.
+  respeitando a disponibilidade. O merge é idempotente; o id do carrinho de visitante só é
+  esquecido depois de um merge bem-sucedido — se falhar, os itens ficam no servidor, o colecionador
+  é avisado e o merge é refeito no próximo boot.
 - Subtotal, desconto, taxa de rede e total **sempre vêm da API** (`cart.summary`); a UI não recalcula.
 - Mutations do carrinho compartilham `scope: { id: 'cart' }` no TanStack Query: rodam em série, então
   cliques rápidos nunca resolvem fora de ordem.
@@ -145,7 +147,10 @@ rotas privadas reabrem o modal sobre a página de `redirect` quando ela é públ
 ## 8. Mocks (MSW)
 
 - **Ativação por configuração** (`VITE_ENABLE_MOCKS`, padrão ligado) e presente no build de
-  demonstração. O app só renderiza depois que o worker está ativo.
+  demonstração. O worker inicia em paralelo com o app: o primeiro frame (shell, hero, skeletons) é
+  pintado logo, e um _gate_ de transporte (`lib/api/transport.ts`) segura toda requisição Axios e a
+  conexão Socket.IO até o MSW estar ativo — nada sai para a rede antes de poder ser interceptado. O
+  gate não conhece os mocks (recebe só uma promise) e, sem mocks, já nasce resolvido.
 - **Banco** em memória com persistência em `localStorage` (`kurio:mock-db`) e reset determinístico
   (seed fixa, PRNG `mulberry32`). Pedidos pendentes retomam a liquidação após refresh.
 - **Cenários** combináveis aplicados por um wrapper único `route()`: latência (fixa/variável/fora de
@@ -173,11 +178,12 @@ contexto de foco (o Figma mostra o fundo sem escurecer).
 ## 10. Performance
 
 Medianas de 3 execuções ([lighthouse/reports/summary.md](lighthouse/reports/summary.md)):
-desktop **96–98** em início e detalhe; mobile **55–59**; Accessibility, Best Practices e SEO **100** em todos.
+desktop **94–96** em início e detalhe; mobile **58**; Accessibility, Best Practices e SEO **100** em todos.
 
 **O que já foi feito:** code splitting por rota (TanStack Router), preload por intenção, imagens
 AVIF/WebP responsivas com `srcset`/`sizes` e `fetchpriority="high"` no LCP, dimensões reservadas
-(CLS 0), fonte variável self-hosted com `font-display: swap`, app e mocks carregados em paralelo,
+(CLS 0), fonte variável self-hosted com `font-display: swap`, app e mocks carregados em paralelo
+com o primeiro frame pintado antes de o worker terminar de iniciar (gate de transporte),
 `socket.io-client` sob demanda, painel de cenários em chunk lazy, cabeçalhos de cache imutável.
 
 **Por que o mobile fica abaixo de 90:** a auditoria usa o cenário padrão dos mocks, como pede o
@@ -185,12 +191,15 @@ enunciado, e o backend simulado roda no thread principal do mesmo navegador sob 
 
 - o Service Worker do MSW encaminha **toda** requisição da página (inclusive imagens e chunks) ao
   thread principal para decidir se há handler, atrasando o carregamento do LCP (_resource load delay_
-  ~1,3 s nos relatórios);
+  ~0,9–1,2 s nos relatórios);
 - o chunk dos mocks (MSW + banco + handlers + emulação Socket.IO) responde pela maior parte do
-  _bootup time_ (≈ 2,6 s de scripting simulado no início mobile);
+  _bootup time_ (de ≈ 2,1–2,7 s de scripting simulado no início mobile);
 - o LCP depende de dados da “API”, que só existe depois que o worker inicia.
 
-Com um backend real esse custo sai do cliente (os mesmos componentes medem 96–98 no desktop). Não foram
+Medido e descartado: pintar antes do worker iniciar rendeu ~+3 pontos no início mobile (mantido,
+pois também melhora a experiência); Zod em modo `jitless` não teve ganho mensurável (revertido).
+
+Com um backend real esse custo sai do cliente (os mesmos componentes medem 94–96 no desktop). Não foram
 aplicadas simplificações exclusivas para a auditoria (o painel e os mocks continuam ativos).
 
 ## 11. Desvios e decisões de UX em relação ao Figma
@@ -217,8 +226,9 @@ aplicadas simplificações exclusivas para a auditoria (o painel e os mocks cont
 
 ## 12. Testes
 
-- 12 suítes funcionais + visual, desktop e mobile, 106 testes no total; cada teste isola contexto e
-  dataset. Tempo real via `socket.io-client`, REST via handlers MSW, relógio controlado onde há
+- 12 suítes funcionais + visual, desktop e mobile, 108 testes no total; cada teste isola contexto e
+  dataset. A regressão visual roda na imagem Docker oficial do Playwright (ambiente de referência
+  das baselines, também usado pelo CI); fora dela é pulada com o motivo, nunca falha por fonte. Tempo real via `socket.io-client`, REST via handlers MSW, relógio controlado onde há
   dependência de tempo (expiração de sessão por TTL).
 - A suíte encontrou e motivou correções reais: WebSocket fora do MSW em produção, overflow no perfil
   mobile, `isDirty` não inscrito no formulário de perfil, toasts cobrindo ações no mobile e

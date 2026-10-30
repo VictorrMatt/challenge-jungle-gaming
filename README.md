@@ -64,7 +64,8 @@ pnpm dev                     # http://localhost:5173
 ```
 
 Não há backend externo: o app sobe com o servidor simulado (MSW) ativo. Para os testes E2E instale o
-Chromium do Playwright uma vez: `pnpm exec playwright install chromium`.
+Chromium do Playwright uma vez: `pnpm exec playwright install chromium`. A regressão visual roda na
+imagem Docker oficial do Playwright (`pnpm test:e2e:docker`, exige Docker) — ver [Testes](#testes).
 
 ## Comandos
 
@@ -78,8 +79,9 @@ Chromium do Playwright uma vez: `pnpm exec playwright install chromium`.
 | `pnpm format` / `pnpm format:check`              | Prettier com ordenação de classes Tailwind                                             |
 | `pnpm test:unit`                                 | Vitest (aritmética ETH e ordenação/deduplicação de eventos)                            |
 | `pnpm test:e2e`                                  | Playwright desktop + mobile (sobe build + preview automaticamente)                     |
+| `pnpm test:e2e:docker`                           | Suíte completa, **incluindo a regressão visual**, na imagem de referência (Docker)     |
 | `pnpm test:e2e:desktop` / `pnpm test:e2e:mobile` | Apenas um viewport                                                                     |
-| `pnpm test:e2e:update`                           | Atualiza as baselines de regressão visual                                              |
+| `pnpm test:e2e:update`                           | Regera as baselines de regressão visual na imagem de referência (Docker)               |
 | `pnpm test:e2e:report`                           | Abre o relatório HTML (traces das falhas incluídos)                                    |
 | `pnpm audit:lighthouse`                          | Lighthouse 3× por página/perfil com mediana (exige `pnpm preview --port 4173` rodando) |
 | `pnpm images`                                    | Regera as variantes AVIF/WebP a partir de `assets/images`                              |
@@ -213,11 +215,19 @@ Camada de acabamento sobre o layout do Figma, sem alterar composição, cores ou
 
 ## Testes
 
-- **E2E:** 53 cenários × 2 projetos (Chromium desktop 1440×900 e mobile 390×844) = **106 testes**,
-  cobrindo os 12 fluxos exigidos (arquivos `e2e/01…12-*.spec.ts`) + regressão visual (`visual.spec.ts`).
-  Cada teste parte de contexto isolado e reset do dataset; REST passa pelos handlers MSW e tempo real
-  pelo `socket.io-client`. Relógio controlado (`page.clock`) na expiração de sessão; latência e
-  eventos controlados por cenário e pelo `__kurioMock`.
+- **E2E:** 54 cenários × 2 projetos (Chromium desktop 1440×900 e mobile 390×844) = **108 testes**
+  (5 cenários são específicos de um layout e são pulados no outro), cobrindo os 12 fluxos exigidos
+  (arquivos `e2e/01…12-*.spec.ts`) + regressão visual (`visual.spec.ts`). Cada teste parte de
+  contexto isolado e reset do dataset; REST passa pelos handlers MSW e tempo real pelo
+  `socket.io-client`. Relógio controlado (`page.clock`) na expiração de sessão; latência e eventos
+  controlados por cenário e pelo `__kurioMock`.
+- **Regressão visual reproduzível:** screenshots dependem da rasterização de fontes do sistema, então
+  as baselines (`e2e/__screenshots__`) pertencem a um único ambiente de referência — a imagem
+  `mcr.microsoft.com/playwright` na versão instalada. O CI, a suíte contra produção e
+  `pnpm test:e2e:docker` rodam nela (com `E2E_VISUAL=1`), em Linux, macOS ou Windows. Em
+  `pnpm test:e2e` fora dessa imagem os 8 testes visuais aparecem como _skipped_ com o motivo, em vez
+  de falhar por diferença de anti-aliasing. Baselines: `pnpm test:e2e:update` (local, Docker) ou o
+  workflow _Update visual baselines_.
 - **Acessibilidade automatizada:** `@axe-core/playwright` (WCAG 2.1 AA) em início, detalhe, carrinho
   e login; verificação de overflow horizontal em 7 telas; foco preso em diálogos; skip link.
 - **Unitários:** 15 testes Vitest para aritmética ETH em `bigint` e o `EventGate` (duplicatas/versões).
@@ -228,14 +238,14 @@ Camada de acabamento sobre o layout do Figma, sem alterar composição, cores ou
 Build otimizado, cenário padrão dos mocks, 3 execuções por página/perfil, **mediana**
 ([relatórios HTML/JSON e ambiente](lighthouse/reports)):
 
-| Página  | Perfil  | Performance | Accessibility | Best Practices | SEO |   LCP | CLS |   TBT |
-| ------- | ------- | ----------: | ------------: | -------------: | --: | ----: | --: | ----: |
-| Início  | mobile  |          55 |           100 |            100 | 100 | 5,1 s |   0 | 1,3 s |
-| Início  | desktop |      **96** |           100 |            100 | 100 | 1,3 s |   0 | 87 ms |
-| Detalhe | mobile  |          59 |           100 |            100 | 100 | 4,9 s |   0 | 1,2 s |
-| Detalhe | desktop |      **98** |           100 |            100 | 100 | 1,2 s |   0 | 20 ms |
+| Página  | Perfil  | Performance | Accessibility | Best Practices | SEO |   LCP | CLS |    TBT |
+| ------- | ------- | ----------: | ------------: | -------------: | --: | ----: | --: | -----: |
+| Início  | mobile  |          58 |           100 |            100 | 100 | 5,3 s |   0 |  1,1 s |
+| Início  | desktop |      **96** |           100 |            100 | 100 | 1,1 s |   0 | 124 ms |
+| Detalhe | mobile  |          58 |           100 |            100 | 100 | 5,3 s |   0 |  1,0 s |
+| Detalhe | desktop |      **94** |           100 |            100 | 100 | 1,2 s |   0 | 122 ms |
 
-Accessibility, Best Practices e SEO atingem 100 em todos os casos e Performance desktop 96–98. A
+Accessibility, Best Practices e SEO atingem 100 em todos os casos e Performance desktop 94–96. A
 performance **mobile** (4× CPU simulada) fica abaixo da meta por causa do **backend simulado rodando no
 próprio navegador**: o Service Worker do MSW encaminha cada requisição da página ao thread principal,
 e o banco em memória, os handlers e a emulação do Socket.IO competem com a renderização. A análise
