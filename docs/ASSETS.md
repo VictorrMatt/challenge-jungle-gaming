@@ -1,7 +1,8 @@
 # Assets e placeholders
 
-As imagens de arte (NFTs, banners e blog) ainda são **placeholders** gerados localmente. Para
-substituí-las pelas exportações reais do Figma basta manter o **mesmo nome de arquivo**:
+As imagens de arte (NFTs, banners e blog) são as **ilustrações originais do Figma** (exportadas em
+500 px e recortadas nas proporções de cada uso). Para trocar uma arte basta manter o **mesmo nome de
+arquivo**:
 
 1. Exporte a imagem do Figma em PNG (2x recomendado).
 2. Salve em `assets/images/<pasta>/<nome>.png`, sobrescrevendo o placeholder.
