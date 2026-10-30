@@ -40,6 +40,9 @@ function useCartMutation<TVariables>(mutationFn: (variables: TVariables) => Prom
   const key = useCartKey()
   return useMutation({
     mutationFn,
+    // All cart mutations share one scope → they run serially, so rapid clicks can never
+    // resolve out of order and leave the UI with an older cart.
+    scope: { id: 'cart' },
     onSuccess: (cart) => {
       queryClient.setQueryData(key, cart)
     },
