@@ -70,12 +70,14 @@ export default function ScenarioPanel() {
         <button
           type="button"
           className={cn(
-            'fixed left-3 z-40 flex items-center gap-2 rounded-full border border-primary bg-card px-3 py-2 text-xs font-bold text-highlight shadow-lg md:bottom-4',
+            // Icon-only on phones so it never covers catalog cards; labelled from md up.
+            'fixed left-3 z-40 flex items-center gap-2 rounded-full border border-primary bg-card/90 p-2.5 text-xs font-bold text-highlight shadow-lg backdrop-blur-sm md:bottom-4 md:px-3 md:py-2',
             mobileBottom,
           )}
           aria-label="Abrir painel de cenários de simulação"
         >
-          <FlaskConical className="size-4" aria-hidden="true" /> Cenários
+          <FlaskConical className="size-4" aria-hidden="true" />
+          <span className="max-md:sr-only">Cenários</span>
         </button>
       </SheetTrigger>
       <SheetContent
