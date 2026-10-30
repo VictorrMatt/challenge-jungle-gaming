@@ -69,6 +69,9 @@ export async function request<TSchema extends z.ZodType>(
   data?: unknown,
   { timeoutMs, signal, ...config }: RequestOptions = {},
 ): Promise<z.infer<TSchema>> {
+  // The client-side timeout measures the server, not the transport startup: wait for the gate
+  // first (the interceptor waits too, which is then immediate and also covers `requestVoid`).
+  await whenTransportReady()
   const controller = new AbortController()
   const abortFromParent = () => controller.abort(signal?.reason)
   if (signal?.aborted) controller.abort(signal.reason)
