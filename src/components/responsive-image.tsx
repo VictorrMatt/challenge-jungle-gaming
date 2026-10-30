@@ -33,8 +33,8 @@ export function ResponsiveImage({
 }: ResponsiveImageProps) {
   return (
     <picture className="contents">
-      <source type="image/avif" srcSet={srcSet(src, 'avif')} sizes={sizes} />
-      <source type="image/webp" srcSet={srcSet(src, 'webp')} sizes={sizes} />
+      <source type="image/avif" srcSet={srcSet(src, 'avif')} sizes={sizes} className="hidden" />
+      <source type="image/webp" srcSet={srcSet(src, 'webp')} sizes={sizes} className="hidden" />
       <img
         src={`${src}-480.webp`}
         alt={alt}
