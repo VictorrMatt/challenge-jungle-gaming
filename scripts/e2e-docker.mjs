@@ -30,6 +30,11 @@ const docker = [
   `${process.cwd()}:/work`,
   '-v',
   'kurio-e2e-node-modules:/work/node_modules',
+  // Persistent pnpm store: later runs install from cache instead of downloading again.
+  '-v',
+  'kurio-e2e-pnpm-store:/pnpm-store',
+  '-e',
+  'npm_config_store_dir=/pnpm-store',
   '-w',
   '/work',
   '-e',
@@ -57,7 +62,16 @@ docker.push(image, 'bash', '-lc', command)
 console.log(`[e2e:docker] ${image}`)
 const result = spawnSync('docker', docker, { stdio: 'inherit' })
 if (result.error) {
-  console.error(`[e2e:docker] Could not start Docker: ${result.error.message}`)
+  console.error(
+    [
+      `[e2e:docker] Could not start Docker: ${result.error.message}`,
+      'Visual baselines are only valid in the reference image, so they are never compared or',
+      'regenerated on the host. Without Docker:',
+      '  - run the functional suite with `pnpm test:e2e` (visual tests are skipped with the reason);',
+      '  - compare or regenerate baselines through GitHub Actions (CI E2E job or the',
+      '    "Update visual baselines" workflow), which run in the same image.',
+    ].join('\n'),
+  )
   process.exit(1)
 }
 process.exit(result.status ?? 1)
