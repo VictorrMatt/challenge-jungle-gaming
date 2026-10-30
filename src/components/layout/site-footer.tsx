@@ -73,7 +73,7 @@ const SOCIAL = [
 ]
 
 function Heading({ children }: { children: ReactNode }) {
-  return <h2 className="mb-1 text-xl leading-[1.5] font-bold text-foreground">{children}</h2>
+  return <h2 className="text-lg leading-4 font-bold text-foreground">{children}</h2>
 }
 
 function Newsletter() {
@@ -94,10 +94,14 @@ function Newsletter() {
 
   return (
     <div>
-      <h2 className="text-lg leading-[0.9] font-bold text-foreground">
+      <h2 className="text-lg leading-4 font-bold text-foreground">
         Antecipe-se ao próximo lançamento
       </h2>
-      <form onSubmit={submit} noValidate className="mt-[22px] flex h-10 overflow-hidden rounded-md">
+      <form
+        onSubmit={submit}
+        noValidate
+        className="mt-4 flex h-10 overflow-hidden rounded-md bg-surface-strong shadow-[0_0_10px_rgba(10,6,4,0.45)]"
+      >
         <label htmlFor={inputId} className="sr-only">
           E-mail para a newsletter
         </label>
@@ -107,11 +111,11 @@ function Newsletter() {
           type="email"
           placeholder="digite seu e-mail..."
           aria-describedby={message ? messageId : undefined}
-          className="min-w-0 flex-1 bg-surface-strong px-3 text-base text-foreground outline-none placeholder:text-subtle-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+          className="min-w-0 flex-1 bg-transparent pl-3 text-sm leading-4 text-foreground outline-none placeholder:text-subtle-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
         />
         <button
           type="submit"
-          className="w-[85px] bg-primary text-xl font-bold text-primary-foreground hover:bg-highlight"
+          className="w-[85px] rounded-r-md bg-primary pr-1 pl-4 text-lg leading-4 font-bold text-primary-foreground hover:bg-highlight"
         >
           Enviar
         </button>
@@ -120,7 +124,7 @@ function Newsletter() {
         id={messageId}
         role="status"
         className={cn(
-          'mt-4 text-sm leading-[1.6] text-muted-foreground',
+          'mt-3 text-[13px] leading-[22px] text-muted-foreground',
           message && 'text-highlight',
         )}
       >
@@ -133,16 +137,17 @@ function Newsletter() {
 
 export function SiteFooter({ className }: { className?: string }) {
   return (
-    <footer className={cn('mt-24 md:mt-[100px]', className)}>
+    <footer className={cn('mt-24', className)}>
       <div className="container-page">
+        {/* Figma: 250px card, flex-1 + 264.67 + 264.67 + 357 columns split by 1px primary rules. */}
         <section
           aria-label="Por que a Kurio"
-          className="grid gap-8 bg-card px-6 py-8 md:grid-cols-2 md:px-12 lg:grid-cols-[249fr_266fr_265fr_324fr] lg:gap-0"
+          className="grid gap-8 bg-card p-8 md:grid-cols-2 lg:h-[250px] lg:grid-cols-[1fr_264.67px_264.67px_357px] lg:items-end lg:gap-0"
         >
           {FEATURES.map((feature) => (
             <div
               key={feature.letter}
-              className="lg:border-r lg:border-primary lg:pr-4 lg:not-first:pl-4"
+              className="flex flex-col gap-3 px-4 lg:h-full lg:justify-end lg:border-r lg:border-primary"
             >
               <span
                 aria-hidden="true"
@@ -150,20 +155,23 @@ export function SiteFooter({ className }: { className?: string }) {
               >
                 {feature.letter}
               </span>
-              <h2 className="mt-[19px] text-lg leading-[1.4] font-bold text-foreground">
-                {feature.title}
-              </h2>
-              <p className="mt-2 text-base leading-[1.4] text-muted-foreground">{feature.text}</p>
+              <h2 className="text-[17px] leading-4 font-bold text-foreground">{feature.title}</h2>
+              <p className="max-w-[204px] text-sm leading-[22px] text-muted-foreground">
+                {feature.text}
+              </p>
             </div>
           ))}
-          <div className="lg:pl-4">
+          <div className="px-4 lg:h-full">
             <Newsletter />
           </div>
         </section>
 
-        <div className="grid gap-3 bg-surface-strong px-6 py-6 text-base leading-[1.4] text-foreground sm:grid-cols-2 md:px-8 lg:h-[88px] lg:grid-cols-[303px_302px_303px_1fr] lg:items-center lg:py-0">
-          <span className="font-bold tracking-[0.12em]">KURIO</span>
-          <span>Feito para colecionadores, criadores e cultura</span>
+        <div className="grid gap-3 bg-surface-strong p-8 text-sm leading-[22px] text-foreground sm:grid-cols-2 lg:h-[88px] lg:grid-cols-[1fr_1fr_1fr_228px] lg:items-center lg:gap-[92px] lg:py-0">
+          <span className="font-bold tracking-[1.4px]">KURIO</span>
+          <span className="lg:whitespace-nowrap">
+            Feito para colecionadores,
+            <br className="max-lg:hidden" /> criadores e cultura
+          </span>
           <a href="mailto:contato@email.com" className="hover:text-highlight">
             contato@email.com
           </a>
@@ -172,13 +180,13 @@ export function SiteFooter({ className }: { className?: string }) {
           </a>
         </div>
 
-        <div className="grid gap-8 bg-card px-6 pt-10 pb-10 sm:grid-cols-2 md:px-8 lg:grid-cols-[303px_302px_303px_1fr] lg:gap-0">
+        <div className="grid gap-8 bg-card p-8 sm:grid-cols-2 lg:h-[236px] lg:grid-cols-[1fr_1fr_1fr_228px] lg:gap-[124px]">
           {COLUMNS.map((column) => (
             <nav key={column.title} aria-label={column.title}>
               <Heading>{column.title}</Heading>
-              <ul className="space-y-0">
+              <ul className="mt-2">
                 {column.links.map((link) => (
-                  <li key={link.label} className="text-base leading-[30px]">
+                  <li key={link.label} className="text-sm leading-[30px]">
                     {link.to ? (
                       <Link
                         to={link.to}
@@ -188,7 +196,7 @@ export function SiteFooter({ className }: { className?: string }) {
                         {link.label}
                       </Link>
                     ) : (
-                      <span className="text-foreground/60" title="Em breve">
+                      <span className="cursor-not-allowed text-foreground" title="Em breve">
                         {link.label} <span className="sr-only">(em breve)</span>
                       </span>
                     )}
@@ -199,7 +207,7 @@ export function SiteFooter({ className }: { className?: string }) {
           ))}
           <div>
             <Heading>Redes sociais</Heading>
-            <ul className="mt-3 flex gap-2.5">
+            <ul className="mt-5 flex gap-2.5">
               {SOCIAL.map(({ label, Icon, href }) => (
                 <li key={label}>
                   <a
@@ -207,21 +215,21 @@ export function SiteFooter({ className }: { className?: string }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${label} (abre em nova aba)`}
-                    className="grid size-8 place-items-center rounded-sm border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                    className="grid size-[30px] place-items-center rounded-sm border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                   >
-                    <Icon className="size-5" />
+                    <Icon className="size-[18px]" />
                   </a>
                 </li>
               ))}
             </ul>
-            <h2 className="mt-6 text-xl leading-[1.5] font-bold text-foreground">
+            <h2 className="mt-8 text-lg leading-4 font-bold whitespace-nowrap text-foreground">
               Carteiras compatíveis
             </h2>
-            <WalletBadges className="mt-2" />
+            <WalletBadges className="mt-3 flex w-full justify-center" />
           </div>
         </div>
       </div>
-      <p className="py-5 text-center text-base text-foreground">
+      <p className="mt-1.5 pb-6 text-center text-sm leading-[30px] text-foreground">
         © 2026 Kurio. Propriedade digital para todos.
       </p>
     </footer>
@@ -232,7 +240,7 @@ export function WalletBadges({ className }: { className?: string }) {
   return (
     <p
       className={cn(
-        'inline-flex h-[26px] items-center gap-2 rounded-sm border border-primary/40 bg-surface-strong px-2.5 text-[9px] font-bold tracking-wide text-highlight uppercase',
+        'inline-flex h-[26px] items-center gap-2 rounded-md border border-border-soft bg-surface-strong px-2 text-[9px] font-bold tracking-[0.1px] text-highlight uppercase',
         className,
       )}
     >

@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { LogIn, Search, ShoppingCart } from 'lucide-react'
+import { LogOut, Search, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 
 import { useCurrentUser } from '@/features/auth/session-store'
@@ -79,7 +79,7 @@ export function SiteHeader() {
               className="mt-1 grid size-7 place-items-center rounded-sm text-foreground hover:text-highlight"
               aria-label="Buscar NFTs"
             >
-              <Search className="size-6" strokeWidth={2} />
+              <Search className="size-5" strokeWidth={2.2} />
             </button>
             <Link
               to="/carrinho"
@@ -96,7 +96,7 @@ export function SiteHeader() {
                   key={bump}
                   aria-hidden="true"
                   className={cn(
-                    'absolute -top-1.5 -right-2 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] leading-4 font-bold text-primary-foreground',
+                    'absolute -top-1 -right-2 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] leading-4 font-medium text-primary-foreground',
                     bump > 0 && 'animate-pop',
                   )}
                 >
@@ -113,9 +113,9 @@ export function SiteHeader() {
                   redirect:
                     pathname === '/entrar' || pathname === '/cadastro' ? undefined : pathname,
                 }}
-                className="flex h-[35px] w-[100px] items-center justify-center gap-1 rounded-sm bg-primary text-base font-bold text-primary-foreground transition-colors hover:bg-highlight"
+                className="flex h-[35px] w-[100px] items-center justify-center gap-1 rounded-md bg-primary text-base font-medium text-primary-foreground transition-colors hover:bg-highlight"
               >
-                <LogIn className="size-5" strokeWidth={2.2} aria-hidden="true" />
+                <LogOut className="size-5" strokeWidth={2} aria-hidden="true" />
                 Entrar
               </Link>
             )}

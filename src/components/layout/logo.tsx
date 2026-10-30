@@ -9,8 +9,10 @@ export function Logo({ className, size = 'sm' }: { className?: string; size?: 's
       to="/"
       aria-label="Kurio — página inicial"
       className={cn(
-        'inline-block font-bold tracking-[0.12em] text-foreground',
-        size === 'sm' ? 'text-sm leading-[1.4]' : 'text-[32px] leading-none tracking-[0.08em]',
+        'inline-block font-bold text-foreground',
+        size === 'sm'
+          ? 'text-sm leading-[1.4] tracking-[1.4px]'
+          : 'text-[32px] leading-none tracking-[3.2px]',
         className,
       )}
     >
