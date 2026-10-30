@@ -4,7 +4,6 @@ import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 
 import { ResponsiveImage } from '@/components/responsive-image'
-import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 
 import { featuredQueryOptions } from '../queries'
@@ -134,19 +133,15 @@ export function HomeHero() {
             </Link>
           </div>
           <div className="absolute top-2.5 right-3 size-[118px] overflow-hidden rounded-[18px] min-[400px]:size-[138px]">
-            {data ? (
-              <ResponsiveImage
-                src={HERO_BANNER}
-                alt={alt}
-                sizes="140px"
-                width={138}
-                height={138}
-                priority
-                className="size-full"
-              />
-            ) : (
-              <Skeleton className="size-full" />
-            )}
+            <ResponsiveImage
+              src={image}
+              alt={alt}
+              sizes="140px"
+              width={138}
+              height={138}
+              priority
+              className="size-full"
+            />
           </div>
           {featured[1] && (
             <div className="absolute top-[88px] right-[92px] size-[52px] overflow-hidden rounded-xl border-2 border-card min-[400px]:top-[100px] min-[400px]:right-[100px] min-[400px]:size-[58px]">
