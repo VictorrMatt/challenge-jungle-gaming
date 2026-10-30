@@ -132,6 +132,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     scrollbar-gutter: stable;
+    /* Breathing room when an in-page anchor (#catalogo, #criadores…) is scrolled into view. */
+    scroll-padding-top: 1.5rem;
   }
   body {
     @apply bg-background font-sans text-foreground antialiased;
@@ -142,12 +144,70 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+  /* Tailwind v4 resets buttons to the default cursor: every interactive control shows the hand. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  [role='radio']:not(:disabled),
+  [role='tab'],
+  [role='option'],
+  [role='menuitem'],
+  select:not(:disabled),
+  summary,
+  label:has(input:not(:disabled)),
+  input[type='checkbox']:not(:disabled),
+  input[type='radio']:not(:disabled),
+  input[type='file'] {
+    cursor: pointer;
+  }
+  :disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
   ::selection {
     background: color-mix(in oklab, var(--kurio-500) 45%, transparent);
   }
 }
 
+/* ------------------------------------------------------------------------------- Motion */
+
+/* Route changes cross-fade with a short lift (View Transitions API, progressive enhancement). */
+::view-transition-old(root) {
+  animation: 160ms cubic-bezier(0.4, 0, 1, 1) both kurio-fade-out;
+}
+::view-transition-new(root) {
+  animation: 260ms cubic-bezier(0.16, 1, 0.3, 1) both kurio-fade-in-up;
+}
+@keyframes kurio-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes kurio-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@utility animate-enter {
+  animation: kurio-fade-in-up 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Small "pop" for state changes (favorite toggled, cart count changed). */
+@utility animate-pop {
+  animation: kurio-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes kurio-pop {
+  40% {
+    transform: scale(1.28);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
   *,
   *::before,
   *::after {
