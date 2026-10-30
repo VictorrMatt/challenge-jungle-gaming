@@ -21,7 +21,11 @@ export default defineConfig({
     timeout: 10_000,
     toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled', caret: 'hide' },
   },
-  reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
+  // In CI, failures are also published as GitHub annotations (visible without downloading logs).
+  reporter: [
+    [process.env.CI ? 'github' : 'list'],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+  ],
   use: {
     baseURL: BASE_URL,
     locale: 'pt-BR',
