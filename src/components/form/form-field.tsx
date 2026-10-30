@@ -113,12 +113,12 @@ export const PasswordField = forwardRef<HTMLInputElement, Omit<FieldProps, 'type
             onClick={() => setVisible((value) => !value)}
             aria-label={visible ? 'Ocultar senha' : 'Mostrar senha'}
             aria-pressed={visible}
-            className="grid size-8 place-items-center rounded-sm text-subtle-foreground hover:text-foreground"
+            className="grid size-8 place-items-center rounded-sm text-subtle-foreground/70 hover:text-foreground"
           >
             {visible ? (
-              <Eye className="size-5" aria-hidden="true" />
+              <Eye className="size-4" aria-hidden="true" />
             ) : (
-              <EyeOff className="size-5" aria-hidden="true" />
+              <EyeOff className="size-4" aria-hidden="true" />
             )}
           </button>
         }

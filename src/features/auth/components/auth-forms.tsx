@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -107,6 +108,7 @@ export function LoginForm({ redirect }: { redirect?: string }) {
         )}
         disabled={login.isPending}
       >
+        {login.isPending && <Loader2 className="animate-spin" aria-hidden="true" />}
         {login.isPending ? 'Entrando…' : 'Entrar'}
       </Button>
     </form>
@@ -210,6 +212,7 @@ export function RegisterForm({ redirect }: { redirect?: string }) {
         )}
         disabled={register.isPending}
       >
+        {register.isPending && <Loader2 className="animate-spin" aria-hidden="true" />}
         {register.isPending ? 'Criando…' : isDesktop ? 'Criar conta' : 'Criar perfil'}
       </Button>
     </form>
