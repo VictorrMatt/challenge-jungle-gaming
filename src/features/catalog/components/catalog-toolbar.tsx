@@ -5,6 +5,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useEffect, useRef, useState } from 'react'
+
+import { smooth } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 import { catalogSort, catalogTab } from '@/shared/contracts'
 
@@ -14,10 +17,45 @@ import { useCatalogSearch } from '../use-catalog-search'
 export function CatalogTabs({ className }: { className?: string }) {
   const { search, update } = useCatalogSearch()
   const current = search.tab ?? 'all'
+  const ref = useRef<HTMLElement>(null)
+  // Which edges have hidden tabs behind them (drives the fade masks on narrow screens).
+  const [edges, setEdges] = useState({ start: false, end: false })
+
+  useEffect(() => {
+    const nav = ref.current
+    if (!nav) return
+    const measure = () => {
+      const max = nav.scrollWidth - nav.clientWidth
+      setEdges({ start: nav.scrollLeft > 1, end: nav.scrollLeft < max - 1 })
+    }
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(nav)
+    nav.addEventListener('scroll', measure, { passive: true })
+    return () => {
+      observer.disconnect()
+      nav.removeEventListener('scroll', measure)
+    }
+  }, [])
+
+  const mask =
+    edges.start && edges.end
+      ? 'linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent)'
+      : edges.end
+        ? 'linear-gradient(to right, black calc(100% - 40px), transparent)'
+        : edges.start
+          ? 'linear-gradient(to right, transparent, black 40px)'
+          : undefined
+
   return (
     <nav
+      ref={ref}
       aria-label="Filtrar por destaque"
-      className={cn('flex gap-4 overflow-x-auto md:gap-5', className)}
+      style={mask ? { maskImage: mask, WebkitMaskImage: mask } : undefined}
+      className={cn(
+        'flex max-w-full min-w-0 snap-x [scrollbar-width:none] gap-4 overflow-x-auto overscroll-x-contain md:gap-5 [&::-webkit-scrollbar]:hidden',
+        className,
+      )}
     >
       {catalogTab.options.map((tab) => {
         const active = tab === current
@@ -26,9 +64,21 @@ export function CatalogTabs({ className }: { className?: string }) {
             key={tab}
             type="button"
             aria-pressed={active}
-            onClick={() => update({ tab: tab === 'all' ? undefined : tab })}
+            onClick={(event) => {
+              update({ tab: tab === 'all' ? undefined : tab })
+              // Bring a partly hidden tab fully into the strip (horizontal only, page stays put).
+              const nav = ref.current
+              const button = event.currentTarget
+              if (!nav) return
+              const left = button.offsetLeft - nav.offsetLeft
+              const target = Math.min(
+                Math.max(left - (nav.clientWidth - button.offsetWidth) / 2, 0),
+                nav.scrollWidth - nav.clientWidth,
+              )
+              nav.scrollTo({ left: target, behavior: smooth() })
+            }}
             className={cn(
-              'relative shrink-0 pb-1 text-sm leading-4 whitespace-nowrap transition-colors md:pb-[7px] md:text-[15px] md:font-medium',
+              'relative shrink-0 snap-start scroll-mx-(--page-gutter) pb-1 text-sm leading-4 whitespace-nowrap transition-colors md:pb-[7px] md:text-[15px] md:font-medium',
               active ? 'max-md:font-bold' : 'max-md:font-normal',
               active
                 ? 'text-highlight after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:rounded-full after:bg-primary'

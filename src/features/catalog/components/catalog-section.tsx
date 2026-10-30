@@ -57,7 +57,9 @@ export function CatalogSection() {
       <h2 id="catalogo-titulo" className="sr-only">
         Catálogo de NFTs
       </h2>
-      <div className="grid gap-12 lg:grid-cols-[310px_1fr]">
+      {/* minmax(0,1fr): grid items default to min-width:auto, so the tab strip's intrinsic width
+          used to stretch the column past narrow (< 375px) screens. */}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[310px_minmax(0,1fr)]">
         <aside aria-label="Filtros do catálogo" className="hidden lg:block">
           <div className="bg-card p-5">
             <CatalogFilters facets={data?.facets} />
@@ -65,9 +67,9 @@ export function CatalogSection() {
           <FeaturedPromo className="mt-6" />
         </aside>
 
-        <div>
+        <div className="min-w-0">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <CatalogTabs />
+            <CatalogTabs className="max-md:-mx-(--page-gutter) max-md:px-(--page-gutter)" />
             <div className="hidden items-center gap-3 md:flex">
               <CatalogSortSelect className="hidden md:flex" />
               <FiltersSheet
