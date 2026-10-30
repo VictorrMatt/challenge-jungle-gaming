@@ -48,9 +48,9 @@ function CartPage() {
   return (
     <>
       <MobileTopBar title="Carrinho de NFTs" />
-      <div className="container-page md:pt-6">
+      <div className="container-page max-md:px-7 md:pt-6">
         <nav aria-label="Trilha de navegação" className="hidden md:block">
-          <ol className="flex gap-2 text-base leading-[1.4] font-bold text-foreground">
+          <ol className="flex gap-2 text-[15px] leading-4 font-bold text-foreground">
             <li>
               <Link to="/" className="hover:text-highlight">
                 Início
@@ -83,7 +83,7 @@ function CartPage() {
             className="py-20"
           />
         ) : (
-          <div className="grid gap-10 pb-56 md:pb-0 lg:grid-cols-[782px_332px] lg:justify-between">
+          <div className="grid gap-10 pb-[360px] md:pb-0 lg:grid-cols-[782px_332px] lg:justify-between">
             <section aria-label="Itens do carrinho">
               {cart && <CartNotices cart={cart} />}
 
@@ -97,25 +97,26 @@ function CartPage() {
                       Itens no carrinho com preço, quantidade e total
                     </caption>
                     <thead>
-                      <tr className="text-base font-bold text-foreground">
-                        <th scope="col" className="border-b border-border-accent pb-2 font-bold">
+                      <tr className="text-base leading-4 font-bold text-foreground">
+                        <th scope="col" className="border-b border-border-accent pb-3 font-bold">
                           NFTs
                         </th>
-                        <th scope="col" className="border-b border-border-accent pb-2 font-bold">
+                        <th scope="col" className="border-b border-border-accent pb-3 font-bold">
                           Preço
                         </th>
-                        <th scope="col" className="border-b border-border-accent pb-2 font-bold">
+                        <th scope="col" className="border-b border-border-accent pb-3 font-bold">
                           Edições
                         </th>
-                        <th scope="col" className="border-b border-border-accent pb-2 font-bold">
+                        <th scope="col" className="border-b border-border-accent pb-3 font-bold">
                           Total
                         </th>
-                        <th scope="col" className="border-b border-border-accent pb-2">
+                        <th scope="col" className="border-b border-border-accent pb-3">
                           <span className="sr-only">Ações</span>
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
+                    {/* Chrome spaces row groups twice; pull the body up to keep Figma's 12px rhythm. */}
+                    <tbody className="relative -top-3">
                       {cart?.items.map((item) => (
                         <CartRow key={item.id} item={item} />
                       ))}
@@ -129,7 +130,7 @@ function CartPage() {
                 {isPending ? (
                   <CartLinesSkeleton />
                 ) : (
-                  <ul className="space-y-4">
+                  <ul className="space-y-5">
                     {cart?.items.map((item) => (
                       <CartCard key={item.id} item={item} />
                     ))}
@@ -142,7 +143,7 @@ function CartPage() {
             <aside aria-labelledby="resumo-titulo" className="hidden md:block">
               <h2
                 id="resumo-titulo"
-                className="border-b border-border-accent pb-2 text-lg font-bold text-foreground"
+                className="border-b border-border-accent pb-3 text-lg leading-4 font-bold text-foreground"
               >
                 Resumo da carteira
               </h2>
@@ -155,7 +156,7 @@ function CartPage() {
                       <CartTotal cart={cart} />
                     </div>
                     <Button
-                      className="mt-4 w-full"
+                      className="mt-6 h-10 w-full rounded-[3px] text-[15px] leading-4"
                       onClick={goToCheckout}
                       disabled={blocked || !purchasable}
                     >
@@ -165,8 +166,12 @@ function CartPage() {
                 ) : (
                   <SummarySkeleton />
                 )}
-                <p className="mt-4 text-center">
-                  <Link to="/" hash="catalogo" className="text-base text-highlight hover:underline">
+                <p className="mt-3 text-center">
+                  <Link
+                    to="/"
+                    hash="catalogo"
+                    className="text-[15px] leading-[normal] text-highlight hover:underline"
+                  >
                     Continuar explorando
                   </Link>
                 </p>
@@ -183,21 +188,20 @@ function CartPage() {
         </div>
       </div>
 
-      {/* Mobile summary panel */}
+      {/* Mobile summary panel (Figma "Payment Summary": 40px top radius, 24/36 padding). */}
       {hasItems && cart && (
         <aside
           aria-label="Resumo do pedido"
-          className="fixed inset-x-0 bottom-0 z-30 rounded-t-[28px] bg-card px-6 pt-5 pb-[max(20px,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.45)] md:hidden"
+          className="fixed inset-x-0 bottom-0 z-30 flex flex-col gap-8 rounded-t-[40px] bg-card px-6 pt-6 pb-[max(36px,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.45)] md:hidden"
         >
-          <CouponForm cart={cart} variant="mobile" />
-          <SummaryRows cart={cart} className="mt-3 text-sm" />
-          <div className="mt-2">
-            <CartTotal cart={cart} />
+          <div className="flex flex-col gap-3">
+            <CouponForm cart={cart} variant="mobile" />
+            <SummaryRows cart={cart} variant="mobile" />
+            <CartTotal cart={cart} variant="mobile" />
           </div>
           <Button
             variant="gradient"
-            size="xl"
-            className="mt-4 w-full"
+            className="h-[60px] w-full rounded-[40px] text-base leading-4"
             onClick={goToCheckout}
             disabled={blocked || !purchasable}
           >

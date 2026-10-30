@@ -73,7 +73,10 @@ export function CouponForm({
     <form onSubmit={onSubmit} noValidate>
       <label
         htmlFor={inputId}
-        className={cn('text-sm font-bold text-foreground', variant === 'mobile' && 'sr-only')}
+        className={cn(
+          'text-sm leading-4 font-bold text-foreground',
+          variant === 'mobile' && 'sr-only',
+        )}
       >
         Código promocional
       </label>
@@ -81,8 +84,8 @@ export function CouponForm({
         className={cn(
           'flex overflow-hidden',
           variant === 'desktop'
-            ? 'mt-2.5 h-10 rounded-sm border border-primary'
-            : 'h-[50px] rounded-full border border-input bg-background',
+            ? 'mt-2 h-10 rounded-[3px] border border-primary'
+            : 'h-[50px] rounded-[40px] border border-border bg-card shadow-[0_6px_10px_rgba(10,6,4,0.45)]',
           error && 'border-destructive',
         )}
       >
@@ -95,7 +98,7 @@ export function CouponForm({
           aria-describedby={error ? errorId : undefined}
           className={cn(
             'min-w-0 flex-1 bg-transparent text-foreground uppercase outline-none placeholder:text-subtle-foreground placeholder:normal-case',
-            variant === 'desktop' ? 'px-2 text-xs' : 'px-4 text-sm',
+            variant === 'desktop' ? 'px-2 text-xs leading-4' : 'pl-4 text-[13px] leading-[22px]',
           )}
         />
         <button
@@ -104,8 +107,8 @@ export function CouponForm({
           className={cn(
             'shrink-0 font-bold text-primary-foreground disabled:opacity-60',
             variant === 'desktop'
-              ? 'w-[102px] bg-primary text-base'
-              : 'm-0 w-[96px] rounded-full gradient-primary text-base',
+              ? 'w-[102px] bg-primary text-[15px] leading-4'
+              : 'm-0 w-[97px] rounded-[40px] bg-[linear-gradient(96deg,rgb(210_138_76/0.54)_0.94%,var(--kurio-500)_105%)] text-[15px] leading-4 text-foreground',
           )}
         >
           {apply.isPending ? '…' : 'Aplicar'}
@@ -120,32 +123,51 @@ export function CouponForm({
   )
 }
 
-export function SummaryRows({ cart, className }: { cart: Cart; className?: string }) {
+export function SummaryRows({
+  cart,
+  className,
+  variant = 'desktop',
+}: {
+  cart: Cart
+  className?: string
+  variant?: 'desktop' | 'mobile'
+}) {
   const { summary } = cart
+  const mobile = variant === 'mobile'
+  // Mobile (Figma): 15px labels, 16px amounts, 12px gaps; desktop keeps the 18px amounts.
+  const amount = mobile ? 'text-base leading-4' : 'text-lg leading-4'
   return (
-    <dl className={cn('space-y-2 text-base text-foreground', className)}>
-      <div className="flex justify-between">
+    <dl
+      className={cn(
+        'text-foreground',
+        'flex flex-col gap-3 text-[15px] leading-[normal]',
+        className,
+      )}
+    >
+      <div className="flex items-start justify-between">
         <dt>Subtotal</dt>
-        <dd className="text-lg md:text-lg">{formatEth(summary.subtotal)}</dd>
+        <dd className={amount}>{formatEth(summary.subtotal)}</dd>
       </div>
       <div className="flex justify-between">
         <dt>{cart.coupon ? cart.coupon.label : 'Desconto do lançamento'}</dt>
         <dd>(-) {formatEth(summary.discount, { withUnit: cart.coupon !== null })}</dd>
       </div>
       <div>
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <dt>Taxa de rede</dt>
-          <dd className="text-lg">{formatEth(summary.networkFee)}</dd>
+          <dd className={amount}>{formatEth(summary.networkFee)}</dd>
         </div>
-        <p className="text-right text-xs text-highlight">Taxa estimada</p>
+        <p className={cn('text-right text-xs leading-4 text-highlight', !mobile && 'mt-3')}>
+          Taxa estimada
+        </p>
       </div>
     </dl>
   )
 }
 
-export function CartTotal({ cart }: { cart: Cart }) {
+export function CartTotal({ cart }: { cart: Cart; variant?: 'desktop' | 'mobile' }) {
   return (
-    <p className="flex items-center justify-between text-base font-bold">
+    <p className={cn('flex items-center justify-between text-base leading-4 font-bold')}>
       <span>Total</span>
       <span className="text-lg text-highlight" aria-live="polite">
         {formatEth(cart.summary.total)}
