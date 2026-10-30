@@ -23,6 +23,7 @@ import {
 import { useOrder } from '@/features/checkout/use-checkout'
 import { errorMessage, isApiClientError } from '@/lib/api/errors'
 import type { Order } from '@/shared/contracts'
+import { cn } from '@/lib/utils'
 import { formatEth } from '@/shared/money/eth'
 
 export const Route = createFileRoute('/_private/pedido/$orderId')({
@@ -99,9 +100,10 @@ function Receipt({ order, onClose }: { order: Order; onClose: () => void }) {
           showCloseButton={false}
           className="max-h-[92dvh] w-[578px] max-w-[calc(100vw-1.5rem)] gap-0 overflow-y-auto rounded-none border-0 bg-card p-0 sm:max-w-[578px]"
         >
-          <div className="flex flex-col items-center px-6 pt-5 pb-7 text-center">
-            <ThankYouIllustration className="h-[82px] w-[68px] text-primary" />
-            <DialogTitle className="mt-3 text-lg font-bold text-muted-foreground">
+          {/* Figma: 156px header (80px illustration, 16px gap, 16px title). */}
+          <div className="flex h-[156px] shrink-0 flex-col items-center justify-center gap-4 px-6 text-center">
+            <ThankYouIllustration className="h-20 w-[65px] text-primary" />
+            <DialogTitle className="text-base leading-4 font-bold text-muted-foreground">
               Seus NFTs agora estão na sua carteira
             </DialogTitle>
             <DialogDescription className="sr-only">
@@ -109,40 +111,44 @@ function Receipt({ order, onClose }: { order: Order; onClose: () => void }) {
             </DialogDescription>
           </div>
 
-          <dl className="grid grid-cols-2 gap-y-3 border-y border-primary px-6 py-3 text-sm sm:grid-cols-4 sm:px-9">
+          <dl className="grid grid-cols-2 gap-y-3 border-y border-primary px-6 py-3 text-muted-foreground sm:flex sm:h-[65px] sm:items-center sm:justify-between sm:px-9 sm:py-1">
             {facts.map(([label, value, strong], index) => (
               <div key={label} className={index > 0 ? 'sm:border-l sm:border-primary sm:pl-4' : ''}>
-                <dt className={strong ? 'font-bold text-foreground' : 'text-muted-foreground'}>
-                  {label}
-                </dt>
-                <dd className="whitespace-nowrap text-muted-foreground">{value}</dd>
+                <dt className={cn('text-sm leading-4', strong && 'font-bold')}>{label}</dt>
+                <dd className="text-[15px] leading-[normal] whitespace-nowrap">{value}</dd>
               </div>
             ))}
           </dl>
 
-          <section aria-labelledby="detalhes-transacao" className="px-6 pt-6 sm:px-11">
-            <h2 id="detalhes-transacao" className="text-base font-bold text-foreground">
+          <section aria-labelledby="detalhes-transacao" className="px-6 pt-5 sm:px-11">
+            <h2 id="detalhes-transacao" className="text-[15px] leading-4 font-bold text-foreground">
               Detalhes da transação
             </h2>
-            <table className="mt-2 w-full text-left">
+            <table className="mt-3 w-full border-separate border-spacing-y-3 text-left">
               <caption className="sr-only">Itens comprados</caption>
               <thead>
-                <tr className="border-b border-border-accent text-base text-foreground">
-                  <th scope="col" className="pb-2 font-bold">
+                <tr className="text-base leading-4 text-foreground">
+                  <th scope="col" className="border-b border-border-accent pb-3 font-bold">
                     NFTs
                   </th>
-                  <th scope="col" className="pb-2 text-center font-bold">
+                  <th
+                    scope="col"
+                    className="border-b border-border-accent pb-3 text-center font-bold"
+                  >
                     Edições
                   </th>
-                  <th scope="col" className="pb-2 text-right font-bold">
+                  <th
+                    scope="col"
+                    className="border-b border-border-accent pb-3 text-right font-medium"
+                  >
                     Subtotal
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="relative -top-3">
                 {receipt.lines.map((line) => (
                   <tr key={line.itemId}>
-                    <td className="py-1.5">
+                    <td>
                       <div className="flex items-center gap-3">
                         <ResponsiveImage
                           src={line.image}
@@ -150,51 +156,52 @@ function Receipt({ order, onClose }: { order: Order; onClose: () => void }) {
                           sizes="70px"
                           width={70}
                           height={70}
-                          className="size-[66px] rounded-sm sm:size-[70px]"
+                          className="size-[66px] rounded-[8px] sm:size-[70px]"
                         />
-                        <div>
+                        <div className="space-y-1.5 leading-4">
                           <p className="font-bold text-foreground">{line.name}</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-subtle-foreground">
                             ID do token: {line.tokenId}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="text-center text-sm text-muted-foreground">
+                    <td className="text-center text-sm leading-4 text-muted-foreground">
                       (x {line.quantity})
                     </td>
-                    <td className="text-right text-lg font-bold whitespace-nowrap text-highlight">
+                    <td className="text-right text-lg leading-4 font-bold whitespace-nowrap text-highlight">
                       {formatEth(line.lineTotal)}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <dl className="mt-3 ml-auto w-full space-y-1 border-b border-border-accent pb-2 sm:w-[322px]">
+            <dl className="ml-auto w-full space-y-3 sm:w-[321px]">
               {receipt.coupon && (
                 <div className="flex justify-between text-base">
                   <dt>Desconto ({receipt.coupon.code})</dt>
                   <dd>(-) {formatEth(receipt.discount)}</dd>
                 </div>
               )}
-              <div className="flex justify-between text-base">
+              <div className="flex items-center justify-between text-[15px]">
                 <dt>Taxa de rede</dt>
-                <dd className="text-lg">{formatEth(receipt.networkFee)}</dd>
+                <dd className="text-lg leading-4">{formatEth(receipt.networkFee)}</dd>
               </div>
-              <div className="flex justify-between font-bold">
+              <div className="flex items-center justify-between text-base leading-4 font-bold">
                 <dt>Total</dt>
                 <dd className="text-lg text-highlight">{formatEth(receipt.total)}</dd>
               </div>
             </dl>
-            <p className="mt-5 text-center text-sm leading-[1.6] text-muted-foreground">
+            <div aria-hidden="true" className="mt-3 h-px bg-border-accent" />
+            <p className="mt-3 text-center text-sm leading-[22px] text-muted-foreground">
               Transação confirmada na {network}. A propriedade foi transferida para sua carteira
               conectada ({shortAddress(receipt.wallet.address)}) e registrada na rede.
             </p>
           </section>
 
-          <div className="flex justify-center px-6 pt-6 pb-8">
+          <div className="flex justify-center px-6 pt-6 pb-12">
             {transaction && (
-              <Button asChild className="h-11 px-6">
+              <Button asChild className="h-12 rounded-[5px] px-4 text-base leading-4">
                 <a href={transaction.explorerUrl} target="_blank" rel="noopener noreferrer">
                   Ver no {explorer}{' '}
                   <span className="sr-only">(link simulado, abre em nova aba)</span>
@@ -203,8 +210,9 @@ function Receipt({ order, onClose }: { order: Order; onClose: () => void }) {
               </Button>
             )}
           </div>
+          <div aria-hidden="true" className="h-2.5 shrink-0 bg-primary" />
           <DialogClose
-            className="absolute top-5 right-5 grid size-8 place-items-center text-highlight hover:text-foreground"
+            className="absolute top-2.5 right-2.5 grid size-8 place-items-center text-highlight hover:text-foreground"
             aria-label="Fechar e voltar ao início"
           >
             <X className="size-5" aria-hidden="true" />

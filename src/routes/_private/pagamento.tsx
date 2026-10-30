@@ -93,7 +93,7 @@ function CheckoutPage() {
 
   return (
     <>
-      <MobileTopBar title="Pagamento com carteira" fallback="/carrinho" />
+      <MobileTopBar title="Pagamento com carteira" fallback="/carrinho" align="start" />
       <div className="container-page md:pt-6">
         <nav aria-label="Trilha de navegação" className="hidden md:block">
           <ol className="flex gap-2 text-base leading-[1.4] font-bold text-foreground">
@@ -298,7 +298,6 @@ function CheckoutForm({
               label="Nome de exibição"
               required
               error={errors.displayName?.message}
-              inputClassName="rounded-none"
               {...form.register('displayName')}
             />
             <FormField
@@ -306,7 +305,6 @@ function CheckoutForm({
               required
               autoComplete="username"
               error={errors.username?.message}
-              inputClassName="rounded-none"
               {...form.register('username')}
             />
             <FormSelect
@@ -321,7 +319,6 @@ function CheckoutForm({
               label="Nome do perfil"
               required
               error={errors.profileName?.message}
-              inputClassName="rounded-none"
               {...form.register('profileName')}
             />
             <FormField
@@ -331,7 +328,7 @@ function CheckoutForm({
               value={wallet?.address ?? ''}
               placeholder="Endereço 0x da carteira"
               hint="Definido pela carteira selecionada."
-              inputClassName="rounded-none text-sm text-muted-foreground"
+              inputClassName="text-sm text-muted-foreground"
             />
             <FormField
               label="ENS ou carteira secundária (opcional)"
@@ -339,7 +336,7 @@ function CheckoutForm({
               value={wallet?.secondaryAddress || (wallet?.ensName ? `${wallet.ensName}.eth` : '')}
               placeholder="ENS ou carteira secundária (opcional)"
               className="md:[&>label]:invisible"
-              inputClassName="rounded-none text-sm text-muted-foreground"
+              inputClassName="text-sm text-muted-foreground"
             />
             <FormField
               label="Tipo de carteira"
@@ -347,13 +344,13 @@ function CheckoutForm({
               readOnly
               value={wallet ? WALLET_TYPE_LABEL[wallet.type] : ''}
               placeholder="Selecione uma carteira"
-              inputClassName="rounded-none text-muted-foreground"
+              inputClassName="text-muted-foreground"
             />
             <FormField
               label="Código de indicação"
               required
               error={errors.referralCode?.message}
-              inputClassName="rounded-none uppercase"
+              inputClassName="uppercase"
               {...form.register('referralCode')}
             />
             <FormField
@@ -362,14 +359,13 @@ function CheckoutForm({
               type="email"
               autoComplete="email"
               error={errors.email?.message}
-              inputClassName="rounded-none"
               {...form.register('email')}
             />
             <FormField
               label="Nome ENS"
               required
               error={errors.ensName?.message}
-              inputClassName="rounded-none pl-[96px]"
+              inputClassName="pl-[96px]"
               leading={
                 <span
                   aria-hidden="true"
@@ -464,9 +460,9 @@ function CheckoutForm({
         </div>
 
         <div className="max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:bg-background max-md:px-6 max-md:pt-3 max-md:pb-[max(16px,env(safe-area-inset-bottom))]">
-          <p className="flex items-center justify-end gap-6 text-xl font-bold md:hidden">
+          <p className="flex items-center justify-end gap-7 text-base leading-4 font-bold md:hidden">
             <span>Total:</span>
-            <span className="text-highlight">{formatEth(cart.summary.total)}</span>
+            <span className="text-lg text-highlight">{formatEth(cart.summary.total)}</span>
           </p>
           <Button
             type="submit"
