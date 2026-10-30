@@ -77,7 +77,7 @@ imagem Docker oficial do Playwright (`pnpm test:e2e:docker`, exige Docker) — v
 | `pnpm typecheck`                                 | TypeScript do app, Node e E2E                                                          |
 | `pnpm lint` / `pnpm lint:fix`                    | oxlint (react, jsx-a11y, import, typescript) falhando em warnings                      |
 | `pnpm format` / `pnpm format:check`              | Prettier com ordenação de classes Tailwind                                             |
-| `pnpm test:unit`                                 | Vitest (aritmética ETH e ordenação/deduplicação de eventos)                            |
+| `pnpm test:unit`                                 | Vitest (ETH, eventos, gate de transporte, merge do carrinho de visitante)              |
 | `pnpm test:e2e`                                  | Playwright desktop + mobile (sobe build + preview automaticamente)                     |
 | `pnpm test:e2e:docker`                           | Suíte completa, **incluindo a regressão visual**, na imagem de referência (Docker)     |
 | `pnpm test:e2e:desktop` / `pnpm test:e2e:mobile` | Apenas um viewport                                                                     |
@@ -230,7 +230,8 @@ Camada de acabamento sobre o layout do Figma, sem alterar composição, cores ou
   workflow _Update visual baselines_.
 - **Acessibilidade automatizada:** `@axe-core/playwright` (WCAG 2.1 AA) em início, detalhe, carrinho
   e login; verificação de overflow horizontal em 7 telas; foco preso em diálogos; skip link.
-- **Unitários:** 15 testes Vitest para aritmética ETH em `bigint` e o `EventGate` (duplicatas/versões).
+- **Unitários:** 20 testes Vitest: aritmética ETH em `bigint`, `EventGate` (duplicatas/versões), gate
+  de transporte e merge do carrinho de visitante (falha preserva os itens; nova tentativa conclui).
 - **Relatório:** `pnpm test:e2e:report` (HTML com traces, vídeos e screenshots das falhas).
 
 ## Performance (Lighthouse)
