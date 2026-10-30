@@ -23,7 +23,7 @@ export function UserMenu({ user }: { user: User }) {
         aria-label={`Conta de ${user.displayName}`}
       >
         <UserAvatar user={user} className="size-6" />
-        <span className="truncate">{user.displayName}</span>
+        <span className="hidden truncate lg:inline">{user.displayName}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="truncate font-normal text-muted-foreground">

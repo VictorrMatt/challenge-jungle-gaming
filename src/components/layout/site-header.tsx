@@ -48,7 +48,7 @@ export function SiteHeader() {
 
           <nav
             aria-label="Principal"
-            className="absolute left-1/2 flex -translate-x-1/2 gap-6 lg:left-[376px] lg:translate-x-0 lg:gap-10"
+            className="absolute left-1/2 flex -translate-x-1/2 gap-4 lg:left-[376px] lg:translate-x-0 lg:gap-10"
           >
             {NAV.map((item) => {
               const active = item.match(pathname)
@@ -59,7 +59,7 @@ export function SiteHeader() {
                   hash={item.hash}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'relative flex h-[45px] items-start pt-0 text-base leading-[1.4] text-foreground transition-colors hover:text-highlight',
+                    'relative flex h-[45px] items-start pt-0 text-sm leading-[1.4] text-foreground transition-colors hover:text-highlight lg:text-base',
                     active &&
                       'font-bold text-highlight after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:rounded-full after:bg-primary',
                   )}
@@ -70,7 +70,7 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-5 lg:gap-7">
+          <div className="flex items-center gap-3 lg:gap-7">
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
