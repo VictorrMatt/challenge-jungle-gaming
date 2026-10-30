@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useId, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -87,12 +87,8 @@ function PriceRange({
     Number(search.minPrice ?? floor),
     Number(search.maxPrice ?? ceil),
   ]
+  // The parent remounts this component (key) when the URL bounds change, re-seeding the state.
   const [range, setRange] = useState<[number, number]>(initial)
-
-  // Keep the slider in sync when the URL changes (back/forward, clear filters).
-  useEffect(() => {
-    setRange([Number(search.minPrice ?? floor), Number(search.maxPrice ?? ceil)])
-  }, [search.minPrice, search.maxPrice, floor, ceil])
 
   return (
     <section aria-labelledby={headingId}>

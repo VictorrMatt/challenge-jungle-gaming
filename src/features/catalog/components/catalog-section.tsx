@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { SearchX, SlidersHorizontal } from 'lucide-react'
 
 import { EmptyState } from '@/components/feedback/empty-state'
@@ -15,19 +14,14 @@ import {
 import { errorMessage } from '@/lib/api/errors'
 import { cn } from '@/lib/utils'
 
-import { catalogQueryOptions } from '../queries'
-import { CATALOG_PAGE_SIZE, hasActiveFilters, toCatalogQuery } from '../search'
+import { CATALOG_PAGE_SIZE, hasActiveFilters } from '../search'
+import { useCatalogQuery } from '../use-catalog-query'
 import { useCatalogSearch } from '../use-catalog-search'
 import { CatalogFilters } from './catalog-filters'
 import { CatalogPagination } from './catalog-pagination'
 import { CatalogSortSelect, CatalogTabs } from './catalog-toolbar'
 import { FeaturedPromo } from './featured-promo'
 import { NftCard, NftCardSkeleton } from './nft-card'
-
-export function useCatalogQuery() {
-  const { search } = useCatalogSearch()
-  return useQuery(catalogQueryOptions(toCatalogQuery(search)))
-}
 
 export function FiltersSheet({ trigger }: { trigger: React.ReactNode }) {
   const { data } = useCatalogQuery()

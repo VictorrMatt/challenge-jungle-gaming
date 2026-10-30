@@ -32,8 +32,8 @@ export type CatalogSearch = z.infer<typeof catalogSearchSchema>
 export function toCatalogQuery(search: CatalogSearch): CatalogQuery {
   return {
     q: search.q || undefined,
-    categories: search.categories?.length ? [...search.categories].sort() : undefined,
-    networks: search.networks?.length ? [...search.networks].sort() : undefined,
+    categories: search.categories?.length ? search.categories.toSorted() : undefined,
+    networks: search.networks?.length ? search.networks.toSorted() : undefined,
     minPrice: search.minPrice,
     maxPrice: search.maxPrice,
     tab: search.tab ?? 'all',
