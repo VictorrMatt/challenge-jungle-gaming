@@ -63,7 +63,7 @@ test.describe('11. Teclado, foco em diálogos e validação acessível', () => {
     })
   }
 
-  test('sem overflow horizontal nas telas principais', async ({ page, mock }) => {
+  test('sem overflow horizontal nas telas principais', async ({ page, mock }, testInfo) => {
     await mock.boot()
     await page.evaluate(async () => {
       const response = await fetch('/api/auth/login', {
@@ -73,21 +73,28 @@ test.describe('11. Teclado, foco em diálogos e validação acessível', () => {
       })
       localStorage.setItem('kurio:session', JSON.stringify(await response.json()))
     })
-    for (const path of [
-      '/',
-      '/nft/emerald-ape-042',
-      '/carrinho',
-      '/pagamento',
-      '/perfil',
-      '/perfil/carteiras',
-      '/favoritos',
-    ]) {
-      await page.goto(path)
-      await page.waitForLoadState('networkidle')
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
-      )
-      expect(overflow, `overflow horizontal em ${path}`).toBeLessThanOrEqual(0)
+    // Small Android phones (360px) and the narrowest supported width (320px) on mobile;
+    // tablet and small-laptop breakpoints on desktop.
+    const height = page.viewportSize()?.height ?? 800
+    const widths = testInfo.project.name === 'mobile' ? [390, 360, 320] : [1440, 1024, 768]
+    for (const width of widths) {
+      await page.setViewportSize({ width, height })
+      for (const path of [
+        '/',
+        '/nft/emerald-ape-042',
+        '/carrinho',
+        '/pagamento',
+        '/perfil',
+        '/perfil/carteiras',
+        '/favoritos',
+      ]) {
+        await page.goto(path)
+        await page.waitForLoadState('networkidle')
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth,
+        )
+        expect(overflow, `overflow horizontal em ${path} (${width}px)`).toBeLessThanOrEqual(0)
+      }
     }
   })
 })
