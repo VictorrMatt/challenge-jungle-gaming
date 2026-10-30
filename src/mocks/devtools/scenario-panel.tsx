@@ -24,6 +24,13 @@ function isHidden() {
   return sessionStorage.getItem(HIDE_KEY) === 'off'
 }
 
+function run(label: string, action: () => unknown) {
+  const result = action()
+  toast.info(result === false ? `${label}: nada a fazer.` : `${label}: executado.`, {
+    id: 'mock-action',
+  })
+}
+
 /**
  * Demo/evaluation panel for the simulated backend (mock layer only — it never touches app state;
  * every action changes the mock server and flows back through REST/Socket.IO).
@@ -44,13 +51,6 @@ export default function ScenarioPanel() {
       ? active.filter((item) => item !== name)
       : [...active.filter((item) => item !== 'default'), name]
     setActive(mockControls.setScenario(next.length ? next : ['default']))
-  }
-
-  const run = (label: string, action: () => unknown) => {
-    const result = action()
-    toast.info(result === false ? `${label}: nada a fazer.` : `${label}: executado.`, {
-      id: 'mock-action',
-    })
   }
 
   return (
