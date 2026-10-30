@@ -43,7 +43,7 @@ export function HomePromos() {
                 height={250}
                 className="h-full min-h-[250px] w-full rounded-[20px]"
               />
-              <div className="flex flex-col items-end px-5 pt-[38px] pb-[46px] text-right xl:px-[30px]">
+              <div className="flex flex-col items-end px-5 pt-[38px] pb-[46px] text-right xl:pr-[30px] xl:pl-2">
                 <h2 className="text-lg leading-[24px] font-bold text-foreground">{promo.title}</h2>
                 <p className="mt-2 mb-6 text-sm leading-[24px] text-muted-foreground">
                   {promo.text}
