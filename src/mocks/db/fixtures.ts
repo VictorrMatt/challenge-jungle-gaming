@@ -306,8 +306,9 @@ export function buildNfts(): NftRecord[] {
           : index % 17 === 0
             ? 'legendary'
             : 'common',
-      ratingAverage: Math.round((3.6 + random.next() * 1.4) * 10) / 10,
-      ratingCount: random.int(3, 48),
+      // Emerald Ape keeps the Figma rating (4.8 · 19 reviews); the rest is seeded.
+      ratingAverage: index === 0 ? 4.8 : Math.round((3.6 + random.next() * 1.4) * 10) / 10,
+      ratingCount: index === 0 ? 19 : random.int(3, 48),
       // Figma order first: the most recent listing is index 0.
       listedAt: new Date(baseDate - index * 36 * 60 * 60 * 1000).toISOString(),
       trendingScore: random.int(1, 100),
